@@ -1,0 +1,17 @@
+{
+  "home_title": "Flutter Demo Home Page",
+  "home_push": "You have pushed the button this many times:",
+  "chat_send_message_hint": "Send a message...",
+
+  "setting_title": "Setting",
+  "setting_night_mode": "Night mode",
+  "setting_language": "Language",
+  "setting_language_en": "English",
+  "setting_language_vi": "Tiếng Việt",
+  "setting_contact_us": "Contact Us",
+  "setting_share_app": "Share App",
+  "setting_restore_purchase": "Restore purchases",
+  "setting_policy": "Privacy Policy",
+  "setting_term": "Terms of use",
+  "setting_clear_history": "Clear all Chats and History"
+}

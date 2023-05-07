@@ -1,0 +1,17 @@
+{
+  "home_title": "Flutter Demo Trang Chủ",
+  "home_push": "Bạn đã click vào button số lần:",
+  "chat_send_message_hint": "Gửi tin nhắn...",
+
+  "setting_title": "Cài đặt",
+  "setting_night_mode": "Chế độ ban đêm",
+  "setting_language": "Ngôn ngữ",
+  "setting_language_en": "English",
+  "setting_language_vi": "Tiếng Việt",
+  "setting_contact_us": "Liên hệ",
+  "setting_share_app": "Chia sẻ",
+  "setting_restore_purchase": "Restore purchases",
+  "setting_policy": "Chính sách bảo mật",
+  "setting_term": "Điều khoản sử dụng",
+  "setting_clear_history": "Xóa trò chuyện và lịch sử"
+}
