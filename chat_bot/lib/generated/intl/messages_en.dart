@@ -24,10 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
-        "home_push": MessageLookupByLibrary.simpleMessage(
-            "You have pushed the button this many times:"),
-        "home_title":
-            MessageLookupByLibrary.simpleMessage("Flutter Demo Home Page"),
+        "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),
         "setting_clear_history":
             MessageLookupByLibrary.simpleMessage("Clear all Chats and History"),
         "setting_contact_us":
@@ -43,6 +41,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting_restore_purchase":
             MessageLookupByLibrary.simpleMessage("Restore purchases"),
         "setting_share_app": MessageLookupByLibrary.simpleMessage("Share App"),
+        "setting_subscribe": MessageLookupByLibrary.simpleMessage("Subscribe"),
+        "setting_subscribe_hint":
+            MessageLookupByLibrary.simpleMessage("Get Full Access to Chat"),
         "setting_term": MessageLookupByLibrary.simpleMessage("Terms of use"),
         "setting_title": MessageLookupByLibrary.simpleMessage("Setting")
       };

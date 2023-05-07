@@ -50,21 +50,11 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Flutter Demo Home Page`
-  String get home_title {
+  /// `Chat Bot`
+  String get chat_title {
     return Intl.message(
-      'Flutter Demo Home Page',
-      name: 'home_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You have pushed the button this many times:`
-  String get home_push {
-    return Intl.message(
-      'You have pushed the button this many times:',
-      name: 'home_push',
+      'Chat Bot',
+      name: 'chat_title',
       desc: '',
       args: [],
     );
@@ -85,6 +75,26 @@ class S {
     return Intl.message(
       'Setting',
       name: 'setting_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscribe`
+  String get setting_subscribe {
+    return Intl.message(
+      'Subscribe',
+      name: 'setting_subscribe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get Full Access to Chat`
+  String get setting_subscribe_hint {
+    return Intl.message(
+      'Get Full Access to Chat',
+      name: 'setting_subscribe_hint',
       desc: '',
       args: [],
     );
@@ -185,6 +195,16 @@ class S {
     return Intl.message(
       'Clear all Chats and History',
       name: 'setting_clear_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Premium`
+  String get premium_title {
+    return Intl.message(
+      'Premium',
+      name: 'premium_title',
       desc: '',
       args: [],
     );

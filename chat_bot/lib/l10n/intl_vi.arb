@@ -1,9 +1,10 @@
 {
-  "home_title": "Flutter Demo Trang Chủ",
-  "home_push": "Bạn đã click vào button số lần:",
+  "chat_title": "Chat Bot",
   "chat_send_message_hint": "Gửi tin nhắn...",
 
   "setting_title": "Cài đặt",
+  "setting_subscribe": "Subscribe",
+  "setting_subscribe_hint": "Get Full Access to Chat",
   "setting_night_mode": "Chế độ ban đêm",
   "setting_language": "Ngôn ngữ",
   "setting_language_en": "English",
@@ -13,5 +14,7 @@
   "setting_restore_purchase": "Restore purchases",
   "setting_policy": "Chính sách bảo mật",
   "setting_term": "Điều khoản sử dụng",
-  "setting_clear_history": "Xóa trò chuyện và lịch sử"
+  "setting_clear_history": "Xóa trò chuyện và lịch sử",
+
+  "premium_title": "Premium"
 }

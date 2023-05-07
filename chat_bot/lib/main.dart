@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:chat_bot/chat_screen.dart';
+import 'package:chat_bot/premium_screen.dart';
 import 'package:chat_bot/setting_language_screen.dart';
 import 'package:chat_bot/setting_sreen.dart';
 import 'package:chat_bot/utils/utils.dart';
@@ -116,7 +117,8 @@ class MyAppState extends State<MyApp> {
                   routes: {
                     '/': (context) => ChatScreen(),
                     '/setting': (context) => SettingScreen(),
-                    '/setting_language': (context) => SettingLanguageScreen()
+                    '/setting_language': (context) => SettingLanguageScreen(),
+                    '/premium': (context) => PremiumScreen()
                   }
                 ),
               )
@@ -168,53 +170,4 @@ class MyAppState extends State<MyApp> {
     Utils.instance.dispose();
   }
 
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      // var myAppState = MyApp.of(context);
-      // if (myAppState.getLanguageCode() == "vi") {
-      //   myAppState.setLanguageCode("en");
-      // } else {
-      //   myAppState.setLanguageCode("vi");
-      // }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).home_title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(S.of(context).home_push),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
 }

@@ -1,9 +1,10 @@
 {
-  "home_title": "Flutter Demo Home Page",
-  "home_push": "You have pushed the button this many times:",
+  "chat_title": "Chat Bot",
   "chat_send_message_hint": "Send a message...",
 
   "setting_title": "Setting",
+  "setting_subscribe": "Subscribe",
+  "setting_subscribe_hint": "Get Full Access to Chat",
   "setting_night_mode": "Night mode",
   "setting_language": "Language",
   "setting_language_en": "English",
@@ -13,5 +14,7 @@
   "setting_restore_purchase": "Restore purchases",
   "setting_policy": "Privacy Policy",
   "setting_term": "Terms of use",
-  "setting_clear_history": "Clear all Chats and History"
+  "setting_clear_history": "Clear all Chats and History",
+
+  "premium_title": "Premium"
 }

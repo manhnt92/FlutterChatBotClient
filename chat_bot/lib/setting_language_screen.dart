@@ -6,7 +6,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class SettingLanguageScreen extends BaseStatelessScreen {
 
-  const SettingLanguageScreen({super.key});
+  SettingLanguageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

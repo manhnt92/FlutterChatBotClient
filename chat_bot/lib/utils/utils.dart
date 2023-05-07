@@ -105,6 +105,10 @@ class Utils {
     navigatorKey.currentState?.pushNamed('/setting_language');
   }
 
+  void goToPremiumScreen() {
+    navigatorKey.currentState?.pushNamed('/premium');
+  }
+
   void goBack() {
     navigatorKey.currentState?.pop();
   }

@@ -66,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     var themeValue = MediaQuery.of(context).platformBrightness;
     return Scaffold(
-      appBar: AppBar(title: Text(S.current.home_title),
+      appBar: AppBar(title: Text(S.current.chat_title),
         actions: [
           IconButton(onPressed: () {
             Utils.instance.goToSettingScreen();

@@ -24,10 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
-        "home_push": MessageLookupByLibrary.simpleMessage(
-            "Bạn đã click vào button số lần:"),
-        "home_title":
-            MessageLookupByLibrary.simpleMessage("Flutter Demo Trang Chủ"),
+        "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),
         "setting_clear_history":
             MessageLookupByLibrary.simpleMessage("Xóa trò chuyện và lịch sử"),
         "setting_contact_us": MessageLookupByLibrary.simpleMessage("Liên hệ"),
@@ -42,6 +40,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting_restore_purchase":
             MessageLookupByLibrary.simpleMessage("Restore purchases"),
         "setting_share_app": MessageLookupByLibrary.simpleMessage("Chia sẻ"),
+        "setting_subscribe": MessageLookupByLibrary.simpleMessage("Subscribe"),
+        "setting_subscribe_hint":
+            MessageLookupByLibrary.simpleMessage("Get Full Access to Chat"),
         "setting_term":
             MessageLookupByLibrary.simpleMessage("Điều khoản sử dụng"),
         "setting_title": MessageLookupByLibrary.simpleMessage("Cài đặt")

@@ -28,26 +28,47 @@ class SettingScreen extends BaseStatelessScreen {
       ),
       body: Column(
         children: [
-          SizedBox(height: 100,
-            child: PlatformElevatedButton(
-              material: (BuildContext context, PlatformTarget target) {
-                return MaterialElevatedButtonData(
-                  style: ElevatedButton.styleFrom(
-                    onPrimary: Colors.black87,
-                    primary: Colors.grey[300],
-                    minimumSize: Size(88, 36),
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2)),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: PlatformElevatedButton(
+                    material: (BuildContext context, PlatformTarget target) {
+                      return MaterialElevatedButtonData(
+                        style: ElevatedButton.styleFrom(
+                          onPrimary: Colors.black87,
+                          primary: Colors.grey[300],
+                          minimumSize: Size(88, 36),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(2)),
+                          ),
+                        ));
+                    },
+                    cupertino: (BuildContext context, PlatformTarget target) {
+                      return CupertinoElevatedButtonData();
+                    },
+                    onPressed: () {
+                      Utils.instance.goToPremiumScreen();
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 15),
+                        PlatformText(S.current.setting_subscribe, style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 22
+                        )),
+                        PlatformText(S.current.setting_subscribe_hint),
+                        const SizedBox(height: 15),
+                      ],
                     ),
-                  ));
-              },
-              cupertino: (BuildContext context, PlatformTarget target) {
-                return CupertinoElevatedButtonData();
-              },
-              onPressed: () { },
-              child: Text('Looks like a RaisedButton'),
-            )
+                  ),
+                ),
+              ),
+            ],
           ),
           Expanded(
             child: ListView.separated(itemCount: entries.length,
