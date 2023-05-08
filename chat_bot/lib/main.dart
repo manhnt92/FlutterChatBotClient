@@ -65,24 +65,16 @@ class MyAppState extends State<MyApp> {
           builder: (context, themeMode) {
             ThemeMode currentThemeMode = themeMode.data ?? Utils.instance.currentThemeMode;
             final materialLightTheme = ThemeData(
-              fontFamily: 'Montserrat',
-              appBarTheme: const AppBarTheme(color: Colors.white,
-                iconTheme: IconThemeData(color: Colors.black),
-                titleTextStyle: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w700),
-                actionsIconTheme: IconThemeData(color: Colors.black),
-              ),
-              colorScheme: const ColorScheme.light(),
-              dividerColor: Colors.grey
+              useMaterial3: true,
+              textTheme: CustomStyle.textTheme(),
+              appBarTheme: AppBarTheme(titleTextStyle: CustomStyle.headline5B),
+              colorScheme: CustomStyle.colorScheme
             );
             final materialDarkTheme = ThemeData(
-              fontFamily: 'Montserrat',
-              appBarTheme: const AppBarTheme(color: Colors.black,
-                  iconTheme: IconThemeData(color: Colors.white),
-                  titleTextStyle: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
-                  actionsIconTheme: IconThemeData(color: Colors.white)
-              ),
-                colorScheme: const ColorScheme.dark(),
-                dividerColor: Colors.white
+              useMaterial3: true,
+              textTheme: CustomStyle.textThemeDark(),
+              appBarTheme: AppBarTheme(titleTextStyle: CustomStyle.headline5B),
+                colorScheme: CustomStyle.colorSchemeDark
             );
             final cupertinoLightTheme = MaterialBasedCupertinoThemeData(materialTheme: materialLightTheme);
             final cupertinoDarkTheme = MaterialBasedCupertinoThemeData(materialTheme: materialDarkTheme);
@@ -99,9 +91,6 @@ class MyAppState extends State<MyApp> {
                 cupertinoLightTheme: cupertinoLightTheme,
                 cupertinoDarkTheme: cupertinoDarkTheme,
                 matchCupertinoSystemChromeBrightness: true,
-                onThemeModeChanged: (themeMode) {
-                  debugPrint("on theme mode changed");
-                },
                 builder: (context) => PlatformApp(
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: const [
@@ -118,45 +107,11 @@ class MyAppState extends State<MyApp> {
                     '/': (context) => ChatScreen(),
                     '/setting': (context) => SettingScreen(),
                     '/setting_language': (context) => SettingLanguageScreen(),
-                    '/premium': (context) => PremiumScreen()
+                    '/premium': (context) => const PremiumScreen()
                   }
                 ),
               )
             );
-            /*return MaterialApp(
-              title: 'Flutter Demo',
-              themeMode: (currentThemeMode) == 0 ? ThemeMode.system : (currentThemeMode == 1 ? ThemeMode.light : ThemeMode.dark),
-              theme: ThemeData(primarySwatch: Colors.blue,
-                fontFamily: 'Montserrat',
-                appBarTheme: const AppBarTheme(color: Colors.blueAccent,
-                  iconTheme: IconThemeData(color: Colors.black),
-                  titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w700)
-                )
-              ),
-              darkTheme: ThemeData(primarySwatch: Colors.blueGrey,
-                fontFamily: 'Montserrat',
-                appBarTheme: const AppBarTheme(color: Colors.blueGrey,
-                    iconTheme: IconThemeData(color: Colors.white),
-                    titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700)
-                )
-              ),
-              localizationsDelegates: const [
-                S.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale('en', 'US'),
-                Locale('vi', 'VN'),
-              ],
-              locale: Locale(langCode.data ?? Utils.instance.currentLangCode),
-              initialRoute: '/',
-              routes: {
-                '/': (context) => ChatScreen(),
-                '/setting': (context) => SettingScreen()
-              }
-            );*/
           }
         );
       }

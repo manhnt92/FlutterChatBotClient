@@ -57,11 +57,8 @@ class SettingScreen extends BaseStatelessScreen {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const SizedBox(height: 15),
-                        PlatformText(S.current.setting_subscribe, style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 22
-                        )),
-                        PlatformText(S.current.setting_subscribe_hint),
+                        Text(S.current.setting_subscribe, style: CustomStyle.headline6B),
+                        Text(S.current.setting_subscribe_hint, style: CustomStyle.body1),
                         const SizedBox(height: 15),
                       ],
                     ),
@@ -78,7 +75,7 @@ class SettingScreen extends BaseStatelessScreen {
                   return SizedBox(height: Utils.defaultListViewItemHeight,
                       child: Row(
                         children: [
-                          Expanded(child: PlatformText(entries[index], style: const TextStyle(fontWeight: FontWeight.w700))),
+                          Expanded(child: Text(entries[index], style: CustomStyle.body1)),
                           PlatformSwitch(value: _isNightMode, onChanged: (value) {
                             _isNightMode = value;
                             Utils.instance.setThemeMode(_isNightMode ? ThemeMode.dark : ThemeMode.light);
@@ -92,7 +89,7 @@ class SettingScreen extends BaseStatelessScreen {
                     onTap: () => onSettingItemClicked(index),
                     child: Row(
                       children: [
-                        Expanded(child: PlatformText(entries[index], style: const TextStyle(fontWeight: FontWeight.w700))),
+                        Expanded(child: Text(entries[index], style: CustomStyle.body1)),
                         const Icon(Icons.chevron_right)
                       ],
                     ),

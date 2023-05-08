@@ -15,6 +15,10 @@ abstract class BaseStatefulScreen extends StatefulWidget {
     return brightness == Brightness.dark;
   }
 
+  void goBack() {
+    Utils.instance.goBack();
+  }
+
 }
 
 abstract class BaseStatelessScreen extends StatelessWidget {

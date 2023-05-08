@@ -16,5 +16,20 @@
   "setting_term": "Terms of use",
   "setting_clear_history": "Clear all Chats and History",
 
-  "premium_title": "Premium"
+  "premium_title": "Premium",
+  "premium_title_hint": "GO PREMIUM",
+  "premium_title_hint_1": "You will get full access to our chatbot with high limits. Cancel anytime",
+  "premium_week": "Weekly",
+  "premium_week_price": "2 USD / week",
+  "premium_month": "Monthly",
+  "premium_month_price": "10 USD / month",
+  "premium_promotion": "({value}% sale off)",
+  "@premium_promotion": {
+    "description": "",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }

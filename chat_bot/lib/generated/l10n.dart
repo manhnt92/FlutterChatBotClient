@@ -209,6 +209,76 @@ class S {
       args: [],
     );
   }
+
+  /// `GO PREMIUM`
+  String get premium_title_hint {
+    return Intl.message(
+      'GO PREMIUM',
+      name: 'premium_title_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You will get full access to our chatbot with high limits. Cancel anytime`
+  String get premium_title_hint_1 {
+    return Intl.message(
+      'You will get full access to our chatbot with high limits. Cancel anytime',
+      name: 'premium_title_hint_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly`
+  String get premium_week {
+    return Intl.message(
+      'Weekly',
+      name: 'premium_week',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `2 USD / week`
+  String get premium_week_price {
+    return Intl.message(
+      '2 USD / week',
+      name: 'premium_week_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly`
+  String get premium_month {
+    return Intl.message(
+      'Monthly',
+      name: 'premium_month',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `10 USD / month`
+  String get premium_month_price {
+    return Intl.message(
+      '10 USD / month',
+      name: 'premium_month_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `({value}% sale off)`
+  String premium_promotion(String value) {
+    return Intl.message(
+      '($value% sale off)',
+      name: 'premium_promotion',
+      desc: '',
+      args: [value],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

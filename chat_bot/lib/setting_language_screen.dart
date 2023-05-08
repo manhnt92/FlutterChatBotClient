@@ -2,11 +2,10 @@ import 'package:chat_bot/base/base_screen.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class SettingLanguageScreen extends BaseStatelessScreen {
 
-  SettingLanguageScreen({super.key});
+  const SettingLanguageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,7 @@ class SettingLanguageScreen extends BaseStatelessScreen {
                 },
                 child: Row(
                   children: [
-                    Expanded(child: PlatformText(content)),
+                    Expanded(child: Text(content, style: CustomStyle.body1)),
                     Visibility(visible: isCurrentLang, child: const Icon(Icons.done))
                   ],
                 ),

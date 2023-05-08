@@ -20,12 +20,25 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'vi';
 
+  static String m0(value) => "(Giảm giá ${value}%)";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "premium_month": MessageLookupByLibrary.simpleMessage("Gói tháng"),
+        "premium_month_price":
+            MessageLookupByLibrary.simpleMessage("1.000.000đ / tháng"),
+        "premium_promotion": m0,
         "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),
+        "premium_title_hint":
+            MessageLookupByLibrary.simpleMessage("GO PREMIUM"),
+        "premium_title_hint_1": MessageLookupByLibrary.simpleMessage(
+            "You will get full access to our chatbot with high limits. Cancel anytime"),
+        "premium_week": MessageLookupByLibrary.simpleMessage("Gói tuần"),
+        "premium_week_price":
+            MessageLookupByLibrary.simpleMessage("100.000đ / tuần"),
         "setting_clear_history":
             MessageLookupByLibrary.simpleMessage("Xóa trò chuyện và lịch sử"),
         "setting_contact_us": MessageLookupByLibrary.simpleMessage("Liên hệ"),

@@ -16,5 +16,20 @@
   "setting_term": "Điều khoản sử dụng",
   "setting_clear_history": "Xóa trò chuyện và lịch sử",
 
-  "premium_title": "Premium"
+  "premium_title": "Premium",
+  "premium_title_hint": "GO PREMIUM",
+  "premium_title_hint_1": "You will get full access to our chatbot with high limits. Cancel anytime",
+  "premium_week": "Gói tuần",
+  "premium_week_price": "100.000đ / tuần",
+  "premium_month": "Gói tháng",
+  "premium_month_price": "1.000.000đ / tháng",
+  "premium_promotion": "(Giảm giá {value}%)",
+  "@premium_promotion": {
+    "description": "",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }
