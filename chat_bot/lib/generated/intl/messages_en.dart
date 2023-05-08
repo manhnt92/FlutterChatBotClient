@@ -27,10 +27,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "premium_feature_1":
+            MessageLookupByLibrary.simpleMessage("Unlimited chat"),
+        "premium_feature_2": MessageLookupByLibrary.simpleMessage("No ads"),
         "premium_month": MessageLookupByLibrary.simpleMessage("Monthly"),
         "premium_month_price":
             MessageLookupByLibrary.simpleMessage("10 USD / month"),
         "premium_promotion": m0,
+        "premium_purchase": MessageLookupByLibrary.simpleMessage("Purchase"),
+        "premium_purchase_term": MessageLookupByLibrary.simpleMessage(
+            "By clicking \'Purchase\', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt\'s not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased."),
         "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),
         "premium_title_hint":
             MessageLookupByLibrary.simpleMessage("GO PREMIUM"),

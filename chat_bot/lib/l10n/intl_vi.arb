@@ -31,5 +31,11 @@
         "type": "String"
       }
     }
-  }
+  },
+  "premium_feature_1": "Chat không giới hạn",
+  "premium_feature_2": "Loại bỏ quảng cáo",
+  "premium_purchase": "Mua",
+  "premium_purchase_term": "By clicking 'Purchase', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased."
+
+
 }

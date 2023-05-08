@@ -279,6 +279,46 @@ class S {
       args: [value],
     );
   }
+
+  /// `Unlimited chat`
+  String get premium_feature_1 {
+    return Intl.message(
+      'Unlimited chat',
+      name: 'premium_feature_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No ads`
+  String get premium_feature_2 {
+    return Intl.message(
+      'No ads',
+      name: 'premium_feature_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase`
+  String get premium_purchase {
+    return Intl.message(
+      'Purchase',
+      name: 'premium_purchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By clicking 'Purchase', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.`
+  String get premium_purchase_term {
+    return Intl.message(
+      'By clicking \'Purchase\', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt\'s not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.',
+      name: 'premium_purchase_term',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

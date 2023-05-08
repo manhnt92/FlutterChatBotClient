@@ -27,10 +27,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "premium_feature_1":
+            MessageLookupByLibrary.simpleMessage("Chat không giới hạn"),
+        "premium_feature_2":
+            MessageLookupByLibrary.simpleMessage("Loại bỏ quảng cáo"),
         "premium_month": MessageLookupByLibrary.simpleMessage("Gói tháng"),
         "premium_month_price":
             MessageLookupByLibrary.simpleMessage("1.000.000đ / tháng"),
         "premium_promotion": m0,
+        "premium_purchase": MessageLookupByLibrary.simpleMessage("Mua"),
+        "premium_purchase_term": MessageLookupByLibrary.simpleMessage(
+            "By clicking \'Purchase\', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt\'s not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased."),
         "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),
         "premium_title_hint":
             MessageLookupByLibrary.simpleMessage("GO PREMIUM"),

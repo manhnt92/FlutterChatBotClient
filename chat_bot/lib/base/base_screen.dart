@@ -2,9 +2,9 @@ import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_bot/main.dart';
 
-abstract class BaseStatefulScreen extends StatefulWidget {
+abstract class BaseStatefulWidget extends StatefulWidget {
 
-  const BaseStatefulScreen({super.key});
+  const BaseStatefulWidget({super.key});
 
   MyAppState getRootState(BuildContext context) {
     return context.findAncestorStateOfType<MyAppState>()!;
@@ -21,9 +21,9 @@ abstract class BaseStatefulScreen extends StatefulWidget {
 
 }
 
-abstract class BaseStatelessScreen extends StatelessWidget {
+abstract class BaseStatelessWidget extends StatelessWidget {
 
-  const BaseStatelessScreen({super.key});
+  const BaseStatelessWidget({super.key});
 
   MyAppState getRootState(BuildContext context) {
     return context.findAncestorStateOfType<MyAppState>()!;

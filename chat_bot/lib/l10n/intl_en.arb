@@ -31,5 +31,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "premium_feature_1": "Unlimited chat",
+  "premium_feature_2": "No ads",
+  "premium_purchase": "Purchase",
+  "premium_purchase_term": "By clicking 'Purchase', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased."
 }

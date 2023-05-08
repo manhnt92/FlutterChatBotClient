@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:chat_bot/utils/hexcolor.dart';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -17,6 +17,8 @@ class Utils {
     Locale('vi', 'VN')
   ];
   static const double defaultListViewItemHeight = 50;
+  static const String urlPolicy = "https://flutter.dev";
+  static const String urlTerm = "https://google.com.vn";
 
   static final Utils instance = Utils._internal();
 
@@ -26,7 +28,7 @@ class Utils {
   late Stream _wsChannelStream;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  String currentLangCode = "";
+  String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
 
   factory Utils() {
@@ -109,6 +111,18 @@ class Utils {
 
   void goToPremiumScreen() {
     navigatorKey.currentState?.pushNamed('/premium');
+  }
+
+  void goToPrivacy() {
+    if (Platform.isAndroid || Platform.isIOS) {
+      navigatorKey.currentState?.pushNamed('/privacy');
+    }
+  }
+
+  void goToTerm() {
+    if (Platform.isAndroid || Platform.isIOS) {
+      navigatorKey.currentState?.pushNamed('/term');
+    }
   }
 
   void goBack() {
@@ -203,8 +217,8 @@ class CustomStyle {
   static TextStyle labelMediumBI = labelMediumB.apply(fontStyle: FontStyle.italic);
   static TextStyle overlineBI = overlineB.apply(fontStyle: FontStyle.italic);
 
-  static TextTheme textTheme() {
-    /*var color = Colors.black;
+  static TextTheme textTheme(bool darkMode) {
+    /*var color = isDark ? Colors.white : Colors.black;
     return TextTheme(displayLarge: headline1.apply(color: color),
       displayMedium: headline2.apply(color: color),
       displaySmall: headline3.apply(color: color),
@@ -239,134 +253,14 @@ class CustomStyle {
     );
   }
 
-  static TextTheme textThemeDark() {
-    /*var color = Colors.white;
-    return TextTheme(displayLarge: headline1.apply(color: color),
-        displayMedium: headline2.apply(color: color),
-        displaySmall: headline3.apply(color: color),
-        headlineLarge: headlineLarge.apply(color: color),
-        headlineMedium: headline4.apply(color: color),
-        headlineSmall: headline5.apply(color: color),
-        titleLarge: headline6.apply(color: color),
-        titleMedium: subtitle1.apply(color: color),
-        titleSmall: subtitle2.apply(color: color),
-        bodyLarge: body1.apply(color: color),
-        bodyMedium: body2.apply(color: color),
-        bodySmall: caption.apply(color: color),
-        labelLarge: button.apply(color: color),
-        labelMedium: labelMedium.apply(color: color),
-        labelSmall: overline.apply(color: color)
-    );*/
-    return TextTheme(displayLarge: headline1,
-        displayMedium: headline2,
-        displaySmall: headline3,
-        headlineLarge: headlineLarge,
-        headlineMedium: headline4,
-        headlineSmall: headline5,
-        titleLarge: headline6,
-        titleMedium: subtitle1,
-        titleSmall: subtitle2,
-        bodyLarge: body1,
-        bodyMedium: body2,
-        bodySmall: caption,
-        labelLarge: button,
-        labelMedium: labelMedium,
-        labelSmall: overline
-    );
+  static ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.light);
+  static ColorScheme colorSchemeDark = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.dark);
+
+  static Color colorLikeButtonBg(BuildContext context, bool isSelected) {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      return isSelected ? CustomStyle.colorSchemeDark.surfaceTint.withAlpha(48) : CustomStyle.colorSchemeDark.surfaceTint.withAlpha(12);
+    }
+    return isSelected ? CustomStyle.colorScheme.surfaceTint.withAlpha(48) : CustomStyle.colorScheme.surfaceTint.withAlpha(12);
   }
-
-  // static const MaterialColor primarySwatch = MaterialColor(0xFF386A20, {
-  //   50: Color(0xFFF6F8F4),
-  //   100: Color(0xFFECF1E9),
-  //   200: Color(0xFFCEDAC8),
-  //   300: Color(0xFFAEC2A4),
-  //   400: Color(0xFF749763),
-  //   500: Color(0xFF386A20),
-  //   600: Color(0xFF325F1D),
-  //   700: Color(0xFF224014),
-  //   800: Color(0xFF1A300F),
-  //   900: Color(0xFF111F0A),
-  // });
-  //
-  // static const MaterialColor primarySwatchDark = MaterialColor(0xFF1A1C18, {
-  //   50: Color(0xFFF4F4F4),
-  //   100: Color(0xFFE9E9E8),
-  //   200: Color(0xFFC6C7C6),
-  //   300: Color(0xFFA2A2A1),
-  //   400: Color(0xFF5F615E),
-  //   500: Color(0xFF1A1C18),
-  //   600: Color(0xFF181916),
-  //   700: Color(0xFF10110F),
-  //   800: Color(0xFF0C0D0B),
-  //   900: Color(0xFF080907),
-  // });
-
-  static ColorScheme colorScheme = const ColorScheme(
-    brightness: Brightness.light,
-    primary: Color(0xFF006A6A),
-    onPrimary: Color(0xFFFFFFFF),
-    primaryContainer: Color(0xFF6FF7F6),
-    onPrimaryContainer: Color(0xFF002020),
-    secondary: Color(0xFF00696F),
-    onSecondary: Color(0xFFFFFFFF),
-    secondaryContainer: Color(0xFF79F5FF),
-    onSecondaryContainer: Color(0xFF002022),
-    tertiary: Color(0xFF596400),
-    onTertiary: Color(0xFFFFFFFF),
-    tertiaryContainer: Color(0xFFDDEB78),
-    onTertiaryContainer: Color(0xFF1A1E00),
-    error: Color(0xFFBA1A1A),
-    errorContainer: Color(0xFFFFDAD6),
-    onError: Color(0xFFFFFFFF),
-    onErrorContainer: Color(0xFF410002),
-    background: Color(0xFFFFFBFF),
-    onBackground: Color(0xFF3E0021),
-    surface: Color(0xFFFFFBFF),
-    onSurface: Color(0xFF3E0021),
-    surfaceVariant: Color(0xFFDAE5E4),
-    onSurfaceVariant: Color(0xFF3F4948),
-    outline: Color(0xFF6F7979),
-    onInverseSurface: Color(0xFFFFECF0),
-    inverseSurface: Color(0xFF5D1137),
-    inversePrimary: Color(0xFF4CDADA),
-    shadow: Color(0xFF000000),
-    surfaceTint: Color(0xFF006A6A),
-    outlineVariant: Color(0xFFBEC9C8),
-    scrim: Color(0xFF000000),
-  );
-
-  static ColorScheme colorSchemeDark = const ColorScheme(
-    brightness: Brightness.dark,
-    primary: Color(0xFF4CDADA),
-    onPrimary: Color(0xFF003737),
-    primaryContainer: Color(0xFF004F4F),
-    onPrimaryContainer: Color(0xFF6FF7F6),
-    secondary: Color(0xFF4DD9E4),
-    onSecondary: Color(0xFF00363A),
-    secondaryContainer: Color(0xFF004F54),
-    onSecondaryContainer: Color(0xFF79F5FF),
-    tertiary: Color(0xFFC1CF5F),
-    onTertiary: Color(0xFF2D3400),
-    tertiaryContainer: Color(0xFF434B00),
-    onTertiaryContainer: Color(0xFFDDEB78),
-    error: Color(0xFFFFB4AB),
-    errorContainer: Color(0xFF93000A),
-    onError: Color(0xFF690005),
-    onErrorContainer: Color(0xFFFFDAD6),
-    background: Color(0xFF3E0021),
-    onBackground: Color(0xFFFFD9E4),
-    surface: Color(0xFF3E0021),
-    onSurface: Color(0xFFFFD9E4),
-    surfaceVariant: Color(0xFF3F4948),
-    onSurfaceVariant: Color(0xFFBEC9C8),
-    outline: Color(0xFF889392),
-    onInverseSurface: Color(0xFF3E0021),
-    inverseSurface: Color(0xFFFFD9E4),
-    inversePrimary: Color(0xFF006A6A),
-    shadow: Color(0xFF000000),
-    surfaceTint: Color(0xFF4CDADA),
-    outlineVariant: Color(0xFF3F4948),
-    scrim: Color(0xFF000000),
-  );
 
 }

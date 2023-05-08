@@ -5,14 +5,20 @@ import 'package:chat_bot/setting_language_screen.dart';
 import 'package:chat_bot/setting_sreen.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
+import 'package:chat_bot/webview_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'dart:io' show Platform;
 
 void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   Utils.instance.init();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const MyApp());
 }
 
@@ -33,6 +39,9 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(seconds: 2)).then((value) {
+      FlutterNativeSplash.remove();
+    });
     _socketListener = Utils.instance.getWebSocketStream().listen((event) {
       //debugPrint("receive event $event");
     });
@@ -66,19 +75,26 @@ class MyAppState extends State<MyApp> {
             ThemeMode currentThemeMode = themeMode.data ?? Utils.instance.currentThemeMode;
             final materialLightTheme = ThemeData(
               useMaterial3: true,
-              textTheme: CustomStyle.textTheme(),
-              appBarTheme: AppBarTheme(titleTextStyle: CustomStyle.headline5B),
-              colorScheme: CustomStyle.colorScheme
+              textTheme: CustomStyle.textTheme(false),
+              colorScheme: CustomStyle.colorScheme,
+              appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light)
             );
             final materialDarkTheme = ThemeData(
               useMaterial3: true,
-              textTheme: CustomStyle.textThemeDark(),
-              appBarTheme: AppBarTheme(titleTextStyle: CustomStyle.headline5B),
-                colorScheme: CustomStyle.colorSchemeDark
+              textTheme: CustomStyle.textTheme(true),
+              colorScheme: CustomStyle.colorSchemeDark,
+              appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark)
             );
             final cupertinoLightTheme = MaterialBasedCupertinoThemeData(materialTheme: materialLightTheme);
             final cupertinoDarkTheme = MaterialBasedCupertinoThemeData(materialTheme: materialDarkTheme);
-            
+            var routes = {
+              '/': (context) => ChatScreen(),
+              '/setting': (context) => SettingScreen(),
+              '/setting_language': (context) => const SettingLanguageScreen(),
+              '/premium': (context) => const PremiumScreen(),
+              '/privacy': (context) => WebViewScreen(url: Utils.urlPolicy),
+              '/term': (context) => WebViewScreen(url: Utils.urlTerm),
+            };
             return PlatformProvider(
               settings: PlatformSettingsData(
                 iosUsesMaterialWidgets: true,
@@ -102,13 +118,10 @@ class MyAppState extends State<MyApp> {
                   supportedLocales: Utils.supportedLocale,
                   locale: Locale(langCode.data ?? Utils.instance.currentLangCode),
                   navigatorKey: Utils.instance.navigatorKey,
-                  initialRoute: '/setting',
-                  routes: {
-                    '/': (context) => ChatScreen(),
-                    '/setting': (context) => SettingScreen(),
-                    '/setting_language': (context) => SettingLanguageScreen(),
-                    '/premium': (context) => const PremiumScreen()
-                  }
+                  initialRoute: '/',
+                  onGenerateRoute: (settings) {
+                    return CupertinoPageRoute(builder: (context) => routes[settings.name]!(context));
+                  },
                 ),
               )
             );
