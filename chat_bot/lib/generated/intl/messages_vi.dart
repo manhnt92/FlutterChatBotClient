@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "home_chat_history": MessageLookupByLibrary.simpleMessage("Lịch sử"),
+        "home_suggestion": MessageLookupByLibrary.simpleMessage("Gợi ý"),
         "home_title": MessageLookupByLibrary.simpleMessage("Trang chủ"),
         "premium_feature_1":
             MessageLookupByLibrary.simpleMessage("Chat không giới hạn"),

@@ -1,5 +1,7 @@
 {
   "home_title": "Trang chủ",
+  "home_chat_history": "Lịch sử",
+  "home_suggestion": "Gợi ý",
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Gửi tin nhắn...",
 

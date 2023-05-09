@@ -36,7 +36,7 @@ class _SettingLanguageState extends State<SettingLanguageScreen> {
               child: Row(
                 children: [
                   const SizedBox(width: 15),
-                  Expanded(child: Text(content, style: CustomStyle.body1)),
+                  Expanded(child: Text(content, style: CustomStyle.body2)),
                   Visibility(visible: isCurrentLang, child: const Icon(Icons.done)),
                   const SizedBox(width: 15)
                 ],

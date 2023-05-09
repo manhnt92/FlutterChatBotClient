@@ -6,7 +6,17 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class SettingScreen extends BaseStatelessWidget {
 
-  final List<String> _entries = <String>[ S.current.setting_night_mode, S.current.setting_language,
+  final List<IconData> _settingIcons = [
+    Icons.nightlight,
+    Icons.language,
+    Icons.support_agent,
+    Icons.share,
+    Icons.reset_tv,
+    Icons.privacy_tip,
+    Icons.privacy_tip,
+    Icons.delete_forever
+  ];
+  final List<String> _settings = [ S.current.setting_night_mode, S.current.setting_language,
     S.current.setting_contact_us, S.current.setting_share_app, S.current.setting_restore_purchase,
     S.current.setting_policy, S.current.setting_term, S.current.setting_clear_history
   ];
@@ -27,64 +37,28 @@ class SettingScreen extends BaseStatelessWidget {
           ),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: PlatformElevatedButton(
-                      onPressed: onGoToPremium,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 15),
-                          Text(S.current.setting_subscribe, style: CustomStyle.headline6B),
-                          Text(S.current.setting_subscribe_hint, style: CustomStyle.body1),
-                          const SizedBox(height: 15),
-                        ],
-                      ),
-                    ),
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+              child: PlatformElevatedButton(
+                onPressed: () { CustomNavigator.goToPremiumScreen();} ,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    Text(S.current.setting_subscribe, style: CustomStyle.body1B),
+                    Text(S.current.setting_subscribe_hint, style: CustomStyle.body2),
+                    const SizedBox(height: 10),
+                  ],
                 ),
-              ],
+              ),
             ),
             Expanded(
-              child: ListView.separated(itemCount: _entries.length,
+              child: ListView.separated(itemCount: _settings.length,
                   itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return SizedBox(height: Utils.defaultListViewItemHeight,
-                          child: InkWell(
-                            onTap: () {
-                              updateNightMode(!_isNightMode);
-                            },
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 15),
-                                Expanded(child: Text(_entries[index], style: CustomStyle.body1)),
-                                PlatformSwitch(value: _isNightMode, onChanged: (value) {
-                                  updateNightMode(value);
-                                }),
-                                const SizedBox(width: 15)
-                              ],
-                            ),
-                          )
-                      );
-                    }
-                    return SizedBox(height: Utils.defaultListViewItemHeight,
-                      child: InkWell(
-                        onTap: () => onSettingItemClicked(index),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 15),
-                            Expanded(child: Text(_entries[index], style: CustomStyle.body1)),
-                            const Icon(Icons.chevron_right),
-                            const SizedBox(width: 15)
-                          ],
-                        ),
-                      ),
-                    );
+                    return uiForSettingItem(context, index);
                   }, separatorBuilder: (BuildContext context, int index) {
                     return const Divider(height: 1);
                   }),
@@ -99,13 +73,9 @@ class SettingScreen extends BaseStatelessWidget {
     Utils.instance.setThemeMode(_isNightMode ? ThemeMode.dark : ThemeMode.light);
   }
 
-  void onGoToPremium() {
-    Utils.instance.goToPremiumScreen();
-  }
-
   void onSettingItemClicked(int index) {
     if (index == 1) {
-      Utils.instance.goToSettingLanguageScreen();
+      CustomNavigator.goToSettingLanguageScreen();
     } else if (index == 2) { // contact us
 
     } else if (index == 3) { // share app
@@ -113,12 +83,51 @@ class SettingScreen extends BaseStatelessWidget {
     } else if (index == 4) { // restore purchase
 
     } else if (index == 5) { // privacy
-      Utils.instance.goToPrivacy();
+      CustomNavigator.goToPrivacy();
     } else if (index == 6) { // term
-      Utils.instance.goToTerm();
+      CustomNavigator.goToTerm();
     } else if (index == 7) { // clear chat history
 
     }
+  }
+
+  Widget uiForSettingItem(BuildContext context, int index) {
+    if (index == 0) {
+      return SizedBox(height: Utils.defaultListViewItemHeight,
+          child: InkWell(
+            onTap: () {
+              updateNightMode(!_isNightMode);
+            },
+            child: Row(
+              children: [
+                const SizedBox(width: 15),
+                Icon(_settingIcons[index]),
+                const SizedBox(width: 15),
+                Expanded(child: Text(_settings[index], style: CustomStyle.body2)),
+                PlatformSwitch(value: _isNightMode, onChanged: (value) {
+                  updateNightMode(value);
+                }),
+                const SizedBox(width: 15)
+              ],
+            ),
+          )
+      );
+    }
+    return SizedBox(height: Utils.defaultListViewItemHeight,
+      child: InkWell(
+        onTap: () => onSettingItemClicked(index),
+        child: Row(
+          children: [
+            const SizedBox(width: 15),
+            Icon(_settingIcons[index]),
+            const SizedBox(width: 15),
+            Expanded(child: Text(_settings[index], style: CustomStyle.body2)),
+            const Icon(Icons.chevron_right),
+            const SizedBox(width: 15)
+          ],
+        ),
+      ),
+    );
   }
 
 }

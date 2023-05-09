@@ -11,12 +11,13 @@ class Utils {
   static const String urlWebSocket = "wss://ketqualive.vnnplus.vn:8443/one2many";
   static const String prefLanguageCode = "pref_language_code";
   static const String prefThemeMode = "pref_theme_mode";
+  static const String prefHistory = "pref_chat_history";
 
   static const List<Locale> supportedLocale = [
     Locale('en', 'US'),
     Locale('vi', 'VN')
   ];
-  static const double defaultListViewItemHeight = 50;
+  static const double defaultListViewItemHeight = 45;
   static const String urlPolicy = "https://flutter.dev";
   static const String urlTerm = "https://google.com.vn";
   static const int chatMaxLength = 500;
@@ -27,7 +28,6 @@ class Utils {
   late StreamController<String> _languageCode;
   late WebSocketChannel _wsChannel;
   late Stream _wsChannelStream;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
@@ -102,35 +102,37 @@ class Utils {
     return _themeMode.stream;
   }
 
-  void goToChatScreen() {
-    navigatorKey.currentState?.pushNamed('/chat');
-  }
+}
 
-  void goToSettingScreen() {
+class CustomNavigator {
+
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  static void goToSettingScreen() {
     navigatorKey.currentState?.pushNamed('/setting');
   }
 
-  void goToSettingLanguageScreen() {
+  static void goToSettingLanguageScreen() {
     navigatorKey.currentState?.pushNamed('/setting_language');
   }
 
-  void goToPremiumScreen() {
+  static void goToPremiumScreen() {
     navigatorKey.currentState?.pushNamed('/premium');
   }
 
-  void goToPrivacy() {
+  static void goToPrivacy() {
     if (Platform.isAndroid || Platform.isIOS) {
       navigatorKey.currentState?.pushNamed('/privacy');
     }
   }
 
-  void goToTerm() {
+  static void goToTerm() {
     if (Platform.isAndroid || Platform.isIOS) {
       navigatorKey.currentState?.pushNamed('/term');
     }
   }
 
-  void goBack() {
+  static void goBack() {
     navigatorKey.currentState?.pop();
   }
 
@@ -268,11 +270,11 @@ class CustomStyle {
     return isSelected ? CustomStyle.colorScheme.surfaceTint.withAlpha(48) : CustomStyle.colorScheme.surfaceTint.withAlpha(12);
   }
 
-  static Color colorTextField(BuildContext context) {
+  static Color colorExpandableTextField(BuildContext context) {
     if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return CustomStyle.colorSchemeDark.surfaceTint.withAlpha(12);
+      return CustomStyle.colorSchemeDark.surfaceTint.withAlpha(48);
     }
-    return CustomStyle.colorScheme.surfaceTint.withAlpha(12);
+    return CustomStyle.colorScheme.surfaceTint.withAlpha(48);
   }
 
   static Color bgColorButton(BuildContext context) {
@@ -280,6 +282,13 @@ class CustomStyle {
       return CustomStyle.colorSchemeDark.primary;
     }
     return CustomStyle.colorScheme.primary;
+  }
+
+  static Color colorBorder(BuildContext context, bool isSelected) {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      return isSelected ? CustomStyle.colorSchemeDark.surfaceTint.withAlpha(122) : Colors.transparent;
+    }
+    return isSelected ? CustomStyle.colorScheme.surfaceTint.withAlpha(122) : Colors.transparent;
   }
 
 }

@@ -60,6 +60,26 @@ class S {
     );
   }
 
+  /// `My history`
+  String get home_chat_history {
+    return Intl.message(
+      'My history',
+      name: 'home_chat_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suggestions`
+  String get home_suggestion {
+    return Intl.message(
+      'Suggestions',
+      name: 'home_suggestion',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Chat Bot`
   String get chat_title {
     return Intl.message(

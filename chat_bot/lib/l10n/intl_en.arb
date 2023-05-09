@@ -1,5 +1,7 @@
 {
   "home_title": "Home",
+  "home_chat_history": "My history",
+  "home_suggestion": "Suggestions",
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Send a message...",
 

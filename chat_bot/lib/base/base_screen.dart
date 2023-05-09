@@ -16,7 +16,7 @@ abstract class BaseStatefulWidget extends StatefulWidget {
   }
 
   void goBack() {
-    Utils.instance.goBack();
+    CustomNavigator.goBack();
   }
 
 }
@@ -35,7 +35,7 @@ abstract class BaseStatelessWidget extends StatelessWidget {
   }
 
   void goBack() {
-    Utils.instance.goBack();
+    CustomNavigator.goBack();
   }
 
 }
