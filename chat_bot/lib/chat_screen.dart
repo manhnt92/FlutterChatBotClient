@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:chat_bot/base/base_screen.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
@@ -9,7 +9,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 class ChatScreen extends BaseStatefulWidget {
 
-  ChatScreen({super.key});
+  const ChatScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _ChatScreenState();
@@ -18,7 +18,6 @@ class ChatScreen extends BaseStatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
 
-  final TextEditingController messageController = TextEditingController();
   List<Message> messages = [];
   late StreamSubscription<dynamic> _socketListener;
   String _accessToken = "";
@@ -51,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Message msg = Message();
           msg.text = content;
           msg.isFromUser = r.nextBool();
+          msg.isAnimated = false;
           messages.add(msg);
         }
         setState(() {
@@ -64,6 +64,10 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(S.current.chat_title),
+        leading: InkWell(
+          onTap: widget.goBack,
+          child: const Icon(Icons.arrow_back),
+        ),
         actions: [
           IconButton(onPressed: () {
             Utils.instance.goToSettingScreen();
@@ -73,41 +77,27 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(child: ChatBody(messages: messages)),
-            const Divider(height: 1),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 5,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: messageController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintStyle: CustomStyle.body1I,
-                        labelStyle: CustomStyle.body1,
-                        hintText: S.current.chat_send_message_hint,
-                      ),
-                    ),
-                  ),
-                  IconButton(icon: const Icon(Icons.send), onPressed: sendMessage),
-                ],
-              ),
+            Expanded(child: ListView.separated (itemCount: messages.length,
+              reverse: true,
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              itemBuilder: (context, i) {
+                  var msg = messages[messages.length - 1 - i];
+                  return MessageContainer(message: msg);
+                }, separatorBuilder: (_, i) => Container(height: 5),
+              )
             ),
+            ExpandableTextField(sendMessageCallback: (text) => sendMessage(text), enable: true),
           ],
         ),
       ),
     );
   }
 
-  void sendMessage() {
-    if (messageController.text.isNotEmpty) {
+  void sendMessage(String text) {
+    if (text.isNotEmpty) {
       setState(() {
         Message msg = Message();
-        msg.text = messageController.text;
+        msg.text = text;
         msg.isFromUser = true;
         messages.add(msg);
       });
@@ -115,42 +105,19 @@ class _ChatScreenState extends State<ChatScreen> {
         setState(() {
           Message msg = Message();
           msg.isFromUser = false;
-          msg.isAnimated = false;
+          msg.isAnimated = true;
           messages.add(msg);
         });
       });
     }
-    messageController.clear();
   }
 
   @override
   void dispose() {
     super.dispose();
-    messageController.dispose();
     _socketListener.cancel();
   }
 
-}
-
-class ChatBody extends StatelessWidget {
-
-  final List<Message> messages;
-
-  const ChatBody({Key? key, this.messages = const [] }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated (
-      itemBuilder: (context, i) {
-        var msg = messages[messages.length - 1 - i];
-        return MessageContainer(message: msg);
-      },
-      separatorBuilder: (_, i) => Container(height: 5),
-      itemCount: messages.length,
-      reverse: true,
-      padding: const EdgeInsets.symmetric(vertical: 15),
-    );
-  }
 }
 
 class Message {
@@ -165,7 +132,7 @@ class MessageContainer extends StatelessWidget {
 
   final Message message;
 
-  MessageContainer({ Key? key, required this.message}) : super(key: key);
+  const MessageContainer({ Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -198,17 +165,19 @@ class MessageContainer extends StatelessWidget {
                 Row(
                   children: [
                     const SizedBox(width: 15),
-                    Expanded(child: message.isAnimated ? Flexible(child: Text(message.text, style: CustomStyle.body1, softWrap: true)) : AnimatedTextKit(
+                    Expanded(child: message.isAnimated ? AnimatedTextKit(
                       repeatForever: false,
                       isRepeatingAnimation:false,
                       totalRepeatCount: 0,
+                      pause: const Duration(milliseconds: 200),
                       animatedTexts: [
                         TyperAnimatedText(message.text, textStyle: CustomStyle.body1)
                       ],
                       onFinished: () {
-                        message.isAnimated = true;
+                        message.isAnimated = false;
                       },
-                    )),
+                    ) : Text(message.text, style: CustomStyle.body1, softWrap: true)
+                    ),
                     const SizedBox(width: 15)
                   ],
                 ),
@@ -220,4 +189,149 @@ class MessageContainer extends StatelessWidget {
       },
     );
   }
+}
+
+class ExpandableTextField extends StatefulWidget {
+
+  final VoidCallback? clickCallback;
+  final void Function(String)? sendMessageCallback;
+  final bool enable;
+
+  const ExpandableTextField({Key? key, this.sendMessageCallback, this.clickCallback, required this.enable}) : super(key: key);
+
+
+  @override
+  State<StatefulWidget> createState() => _ExpandableTextFieldState();
+}
+
+class _ExpandableTextFieldState extends State<ExpandableTextField>  {
+
+  late double _height, _minHeight, _maxHeight;
+  bool _swipeUp = true;
+  int _heightAnimDuration = 0;
+  final TextEditingController messageController = TextEditingController();
+  String currentChatLength = "0/${Utils.chatMaxLength}";
+
+  @override
+  void initState() {
+    super.initState();
+    _minHeight = 50;
+    _maxHeight = 270;
+    _height = _minHeight;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    messageController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.clickCallback,
+      onPanUpdate: (details) => widget.enable ? handlePanUpdate(isEnd: false, dy: details.delta.dy) : null,
+      onPanEnd: (details) => widget.enable ? handlePanUpdate(isEnd: true) : null,
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(color: CustomStyle.colorTextField(context)),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            color: CustomStyle.colorTextField(context)
+        ),
+        child: Column(
+          children: <Widget>[
+            Container(height: 15),
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: AnimatedContainer(
+                constraints: BoxConstraints(minHeight: _height),
+                duration: Duration(milliseconds: _heightAnimDuration),
+                child: TextFormField(
+                    enabled: widget.enable,
+                    controller: messageController,
+                    decoration: InputDecoration(border: InputBorder.none,
+                      hintStyle: CustomStyle.body2I,
+                      labelStyle: CustomStyle.body2,
+                      hintText: S.current.chat_send_message_hint,
+                      counter: const Offstage(),
+                      // constraints: /*_swipeUp ?*/ BoxConstraints(minHeight: _height) /*: BoxConstraints(minHeight: _height, maxHeight: _height)*/,
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    onChanged: (text) => onMessageChanged(text),
+                    maxLength: Utils.chatMaxLength,
+                    minLines: 1,
+                    maxLines: 10
+                ),
+              ),
+            ),
+            const Divider(height: 1),
+            SizedBox(height: 45,
+                child: Row(
+                  children: [
+                    Container(width: 5),
+                    Visibility(visible: messageController.text.isNotEmpty, child: IconButton(icon: const Icon(Icons.clear), onPressed: clearMessage)),
+                    const Spacer(),
+                    Text(currentChatLength, style: CustomStyle.caption),
+                    Container(width: 5),
+                    IconButton(onPressed: widget.enable ? sendMessage : null, icon: Icon(Icons.send_rounded, color: CustomStyle.bgColorButton(context))),
+                    Container(width: 5)
+                  ],
+                )
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void handlePanUpdate({required bool isEnd, double dy = 0}) {
+    if (isEnd) {
+      setState(() {
+        _heightAnimDuration = 200;
+        double distance = _maxHeight - _minHeight;
+        if (_swipeUp) {
+          _height = _height > (_minHeight + 0.3 * distance) ? _maxHeight : _minHeight;
+        } else {
+          _height = _height < (_maxHeight - 0.3 * distance) ? _minHeight : _maxHeight;
+        }
+      });
+    } else {
+      _swipeUp = dy <= 0;
+      setState(() {
+        _heightAnimDuration = 0;
+        _height -= dy;
+        if (_height > _maxHeight) {
+          _height = _maxHeight;
+        } else if (_height < _minHeight) {
+          _height = _minHeight;
+        }
+      });
+    }
+  }
+
+  void clearMessage() {
+    messageController.clear();
+    setState(() {
+      currentChatLength = "0/${Utils.chatMaxLength}";
+    });
+  }
+
+  void onMessageChanged(String text) {
+    setState(() {
+      currentChatLength = "${text.length}/${Utils.chatMaxLength}";
+      final numLines = '\n'.allMatches(text).length + 1;
+      debugPrint('current line count = $numLines');
+    });
+  }
+
+  void sendMessage() {
+    if (messageController.text.isNotEmpty) {
+      if (widget.sendMessageCallback != null) {
+        widget.sendMessageCallback!(messageController.text);
+      }
+    }
+    clearMessage();
+  }
+
 }

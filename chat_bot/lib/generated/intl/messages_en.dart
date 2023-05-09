@@ -27,6 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "home_title": MessageLookupByLibrary.simpleMessage("Home"),
         "premium_feature_1":
             MessageLookupByLibrary.simpleMessage("Unlimited chat"),
         "premium_feature_2": MessageLookupByLibrary.simpleMessage("No ads"),

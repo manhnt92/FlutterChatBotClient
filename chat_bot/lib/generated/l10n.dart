@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Home`
+  String get home_title {
+    return Intl.message(
+      'Home',
+      name: 'home_title',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Chat Bot`
   String get chat_title {
     return Intl.message(

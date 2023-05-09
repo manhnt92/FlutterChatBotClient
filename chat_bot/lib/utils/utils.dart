@@ -19,6 +19,7 @@ class Utils {
   static const double defaultListViewItemHeight = 50;
   static const String urlPolicy = "https://flutter.dev";
   static const String urlTerm = "https://google.com.vn";
+  static const int chatMaxLength = 500;
 
   static final Utils instance = Utils._internal();
 
@@ -99,6 +100,10 @@ class Utils {
 
   Stream<ThemeMode> getThemeModeStream() {
     return _themeMode.stream;
+  }
+
+  void goToChatScreen() {
+    navigatorKey.currentState?.pushNamed('/chat');
   }
 
   void goToSettingScreen() {
@@ -261,6 +266,20 @@ class CustomStyle {
       return isSelected ? CustomStyle.colorSchemeDark.surfaceTint.withAlpha(48) : CustomStyle.colorSchemeDark.surfaceTint.withAlpha(12);
     }
     return isSelected ? CustomStyle.colorScheme.surfaceTint.withAlpha(48) : CustomStyle.colorScheme.surfaceTint.withAlpha(12);
+  }
+
+  static Color colorTextField(BuildContext context) {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      return CustomStyle.colorSchemeDark.surfaceTint.withAlpha(12);
+    }
+    return CustomStyle.colorScheme.surfaceTint.withAlpha(12);
+  }
+
+  static Color bgColorButton(BuildContext context) {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      return CustomStyle.colorSchemeDark.primary;
+    }
+    return CustomStyle.colorScheme.primary;
   }
 
 }
