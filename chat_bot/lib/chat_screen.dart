@@ -1,7 +1,7 @@
 // import 'dart:async';
 // import 'dart:math';
 // import 'dart:convert';
-// import 'package:chat_bot/models/chat_message.dart';
+// import 'package:chat_bot/models/qa_message.dart';
 // import 'package:chat_bot/utils/expandable_text_field.dart';
 // import 'package:chat_bot/utils/lv_chat_message_item.dart';
 // import 'package:flutter/material.dart';

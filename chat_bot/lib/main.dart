@@ -3,6 +3,8 @@ import 'package:chat_bot/home_screen.dart';
 import 'package:chat_bot/premium_screen.dart';
 import 'package:chat_bot/setting_language_screen.dart';
 import 'package:chat_bot/setting_sreen.dart';
+import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/webview_screen.dart';
@@ -10,17 +12,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_udid/flutter_udid.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  Utils.instance.init();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Utils.instance.init();
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatefulWidget {
 
@@ -38,29 +36,16 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2)).then((value) {
-      FlutterNativeSplash.remove();
-    });
     _socketListener = Utils.instance.getWebSocketStream().listen((event) {
       //debugPrint("receive event $event");
     });
-    if (Utils.instance.currentPlatform == Platforms.win32) {
+    /*Utils.instance.getUDID((udid) {
       Map<String, dynamic> loginRq = <String, dynamic>{};
       loginRq['id'] = 'loginguest';
       loginRq['token'] = '984725b6c4f55963cc52fca0f943f9a8060b1c71900d542c79669b6dc718a64b';
-      loginRq['os'] = 'android';
+      loginRq['os'] = Utils.instance.osName;
       Utils.instance.sendSocketMessage(loginRq);
-    } else {
-      // FlutterUdid.consistentUdid.then((value) {
-      //   debugPrint("token = $value");
-      //   Map<String, dynamic> loginRq = <String, dynamic>{};
-      //   loginRq['id'] = 'loginguest';
-      //   loginRq['token'] = value;
-      //   loginRq['os'] = 'android';
-      //   _wsChannel.sink.add(loginRq);
-      // });
-    }
-
+    });*/
   }
 
   @override

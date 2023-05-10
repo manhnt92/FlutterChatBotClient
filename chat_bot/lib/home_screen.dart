@@ -1,11 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:chat_bot/base/base_screen.dart';
 import 'package:chat_bot/generated/l10n.dart';
-import 'package:chat_bot/models/chat_message.dart';
+import 'package:chat_bot/models/qa_message.dart';
+import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/expandable_text_field.dart';
-import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class HomeScreen extends BaseStatefulWidget {
 
@@ -19,6 +19,7 @@ class HomeScreen extends BaseStatefulWidget {
 class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
 
   bool _isSuggest = true;
+  bool _canSendMessage = true;
   late TabController _tabSuggestController;
   int _currentTabIndex = 0;
   List<String> tabsTitle = [
@@ -137,9 +138,8 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     }
   ];
 
-  List<ChatMessage> messages = [
-    ChatMessage()..isFromUser = true..isAnimated = false..text='hello',
-    ChatMessage()..isAnimated = false
+  List<QAMessage> messages = [
+    QAMessage.createQAMsgTest(question: 'hello', canPlayAnswerAnim: false)
   ];
 
   @override
@@ -251,7 +251,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
       Container(
         height: 30,
         decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, isSelectedTab)),
-            color: CustomStyle.colorLikeButtonBg(context, isSelectedTab),
+            color: CustomStyle.colorBgElevatedButton(context, isSelectedTab),
             borderRadius: const BorderRadius.all(Radius.circular(10))
         ),
         child: Row(
@@ -279,7 +279,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
         child: Container(
             padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
             decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
-                color: CustomStyle.colorLikeButtonBg(context, false),
+                color: CustomStyle.colorBgElevatedButton(context, false),
                 borderRadius: const BorderRadius.all(Radius.circular(25))
             ),
             child: Center(child: Text(keys[i], style: CustomStyle.body2, textAlign: TextAlign.center)),
@@ -298,97 +298,105 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
         padding: const EdgeInsets.symmetric(vertical: 10),
         itemBuilder: (context, i) {
           var msg = messages[messages.length - 1 - i];
-          return msg.isFromUser ? uiForUserMessage(context, msg) : uiForBotMessage(context, msg);
+          return uiForQAMessage(context, msg);
         }, separatorBuilder: (_, i) => Container(height: 0),
       ),
     );
   }
 
-  Container uiForUserMessage(BuildContext context, ChatMessage message) {
-    return Container(
-      color: CustomStyle.colorLikeButtonBg(context, false),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Row(
+  Widget uiForQAMessage(BuildContext context, QAMessage message) {
+    return Column(
+      children: [
+        Container(
+          color: CustomStyle.colorBgElevatedButton(context, false),
+          child: Column(
             children: [
-              const SizedBox(width: 15),
-              const Icon(Icons.person),
-              const SizedBox(width: 5),
-              Text('Me', style: CustomStyle.body2B, softWrap: true)
-            ]
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              const SizedBox(width: 15),
-              Flexible(child: Text(message.text, style: CustomStyle.body2, softWrap: true)),
-              const SizedBox(width: 15)
-            ],
-          ),
-          const SizedBox(height: 10)
-        ],
-      ),
-    );
-  }
-
-  Container uiForBotMessage(BuildContext context, ChatMessage message) {
-    return Container(
-        color: CustomStyle.colorLikeButtonBg(context, true),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Row(
+              const SizedBox(height: 10),
+              Row(
                 children: [
                   const SizedBox(width: 15),
-                  const Icon(Icons.computer),
+                  const Icon(Icons.person),
                   const SizedBox(width: 5),
-                  Text('Bot', style: CustomStyle.body2B, softWrap: true)
+                  Text('Me', style: CustomStyle.body2B, softWrap: true)
                 ]
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const SizedBox(width: 15),
-                Expanded(child: message.isAnimated ? AnimatedTextKit(
-                  repeatForever: false,
-                  isRepeatingAnimation:false,
-                  totalRepeatCount: 0,
-                  pause: const Duration(milliseconds: 200),
-                  animatedTexts: [
-                    TyperAnimatedText(message.text, textStyle: CustomStyle.body2)
-                  ],
-                  onFinished: () {
-                    message.isAnimated = false;
-                  },
-                ) : Text(message.text, style: CustomStyle.body2, softWrap: true)
-                ),
-                const SizedBox(width: 15)
-              ],
-            ),
-            const SizedBox(height: 10)
-          ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(width: 15),
+                  Flexible(child: Text(message.question, style: CustomStyle.body2, softWrap: true)),
+                  const SizedBox(width: 15)
+                ],
+              ),
+              const SizedBox(height: 10)
+            ],
+          ),
+        ),
+        Visibility(
+          visible: message.answer.isNotEmpty,
+          child: Container(
+              color: CustomStyle.colorBgElevatedButton(context, true),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  Row(
+                      children: [
+                        const SizedBox(width: 15),
+                        const Icon(Icons.computer),
+                        const SizedBox(width: 5),
+                        Text('Bot', style: CustomStyle.body2B, softWrap: true)
+                      ]
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const SizedBox(width: 15),
+                      Expanded(child: message.canPlayAnswerAnim ? AnimatedTextKit(
+                        repeatForever: false,
+                        isRepeatingAnimation:false,
+                        totalRepeatCount: 0,
+                        pause: const Duration(milliseconds: 200),
+                        animatedTexts: [
+                          TyperAnimatedText('', textStyle: CustomStyle.body2),
+                          TyperAnimatedText(message.answer, textStyle: CustomStyle.body2)
+                        ],
+                        onNext: (index, isLast) {
+                          debugPrint('onNext : $index, $isLast');
+                          _canSendMessage = false;
+                          message.canPlayAnswerAnim = false;
+                        },
+                        onFinished: () {
+                          debugPrint('onFinish');
+                          _canSendMessage = true;
+                        },
+                      ) : Text(message.answer, style: CustomStyle.body2, softWrap: true)
+                      ),
+                      const SizedBox(width: 15)
+                    ],
+                  ),
+                  const SizedBox(height: 10)
+                ],
+              )
+          ),
         )
+      ],
     );
   }
 
-  void sendMessage(String text) {
-    if (text.isNotEmpty) {
+  bool sendMessage(String text) {
+    if (text.isNotEmpty && _canSendMessage) {
+      QAMessage message = QAMessage.createQAMsgTest(question: text, answer : "", canPlayAnswerAnim: true);
       setState(() {
-        ChatMessage msg = ChatMessage();
-        msg.text = text;
-        msg.isFromUser = true;
-        messages.add(msg);
+        messages.add(message);
       });
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
-          ChatMessage msg = ChatMessage();
-          msg.isFromUser = false;
-          msg.isAnimated = true;
-          messages.add(msg);
+          message.setAnswerTest();
         });
       });
+      return true;
     }
+    return false;
   }
 
 }

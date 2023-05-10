@@ -1,7 +1,8 @@
 import 'package:chat_bot/base/base_screen.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/sub_data.dart';
-import 'package:chat_bot/utils/utils.dart';
+import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/custom_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -94,7 +95,7 @@ class Subscription extends BaseStatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, isSelected)),
-            color: CustomStyle.colorLikeButtonBg(context, isSelected),
+            color: CustomStyle.colorBgElevatedButton(context, isSelected),
             borderRadius: const BorderRadius.all(Radius.circular(15))
           ),
           child: Padding(

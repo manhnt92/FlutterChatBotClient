@@ -1,11 +1,12 @@
 import 'package:chat_bot/generated/l10n.dart';
+import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ExpandableTextField extends StatefulWidget {
 
   final VoidCallback? clickCallback;
-  final void Function(String)? sendMessageCallback;
+  final bool Function(String)? sendMessageCallback;
   final bool enable;
 
   const ExpandableTextField({Key? key, this.sendMessageCallback, this.clickCallback, required this.enable}) : super(key: key);
@@ -152,18 +153,16 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   void onMessageChanged(String text) {
     setState(() {
       currentChatLength = "${text.length}/${Utils.chatMaxLength}";
-      final numLines = '\n'.allMatches(text).length + 1;
-      debugPrint('current line count = $numLines');
     });
   }
 
   void sendMessage() {
-    if (_messageController.text.isNotEmpty) {
-      if (widget.sendMessageCallback != null) {
-        widget.sendMessageCallback!(_messageController.text);
+    if (_messageController.text.isNotEmpty && widget.sendMessageCallback != null) {
+      bool success = widget.sendMessageCallback!(_messageController.text);
+      if (success) {
+        clearMessage();
       }
     }
-    clearMessage();
   }
 
 }

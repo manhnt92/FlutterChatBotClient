@@ -1,4 +1,4 @@
-import 'package:chat_bot/utils/utils.dart';
+import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_bot/main.dart';
 

@@ -1,5 +1,6 @@
 import 'package:chat_bot/base/base_screen.dart';
 import 'package:chat_bot/generated/l10n.dart';
+import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 
