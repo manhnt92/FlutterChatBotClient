@@ -20,7 +20,9 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   late double _height, _minHeight, _maxHeight;
   bool _swipeUp = true;
   int _heightAnimDuration = 0;
-  final TextEditingController messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+  bool canFocus = false;
+  final FocusNode focusNode = FocusNode();
   String currentChatLength = "0/${Utils.chatMaxLength}";
 
   @override
@@ -34,7 +36,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   @override
   void dispose() {
     super.dispose();
-    messageController.dispose();
+    _messageController.dispose();
   }
 
   @override
@@ -42,7 +44,18 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
     setState(() {
       if (!widget.enable) {
         _height = _minHeight;
-        messageController.clear();
+        _messageController.clear();
+        canFocus = true;
+      } else {
+        if (canFocus) {
+          canFocus = false;
+          Future.delayed(const Duration(milliseconds: 200), () {
+            setState(() {
+              debugPrint("request focus");
+              focusNode.requestFocus();
+            });
+          });
+        }
       }
     });
     return GestureDetector(
@@ -64,9 +77,10 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
                 constraints: BoxConstraints(minHeight: _height),
                 duration: Duration(milliseconds: _heightAnimDuration),
                 child: TextFormField(
-                    autofocus: true,
                     enabled: widget.enable,
-                    controller: messageController,
+                    focusNode: focusNode,
+                    autofocus: widget.enable,
+                    controller: _messageController,
                     decoration: InputDecoration(border: InputBorder.none,
                       hintStyle: CustomStyle.body2I,
                       labelStyle: CustomStyle.body2,
@@ -79,7 +93,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
                     onChanged: (text) => onMessageChanged(text),
                     maxLength: Utils.chatMaxLength,
                     minLines: 1,
-                    maxLines: 10
+                    maxLines: 10,
                 ),
               ),
             ),
@@ -88,7 +102,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
                 child: Row(
                   children: [
                     Container(width: 5),
-                    Visibility(visible: messageController.text.isNotEmpty, child: IconButton(icon: const Icon(Icons.clear), onPressed: clearMessage)),
+                    Visibility(visible: _messageController.text.isNotEmpty, child: IconButton(icon: const Icon(Icons.clear), onPressed: clearMessage)),
                     const Spacer(),
                     Visibility(visible: widget.enable, child: Text(currentChatLength, style: CustomStyle.caption)),
                     Container(width: 5),
@@ -129,7 +143,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   }
 
   void clearMessage() {
-    messageController.clear();
+    _messageController.clear();
     setState(() {
       currentChatLength = "0/${Utils.chatMaxLength}";
     });
@@ -144,9 +158,9 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   }
 
   void sendMessage() {
-    if (messageController.text.isNotEmpty) {
+    if (_messageController.text.isNotEmpty) {
       if (widget.sendMessageCallback != null) {
-        widget.sendMessageCallback!(messageController.text);
+        widget.sendMessageCallback!(_messageController.text);
       }
     }
     clearMessage();

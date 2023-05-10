@@ -273,20 +273,20 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     Map<String, String> map = tabsContent[_currentTabIndex];
     List<String> keys = map.entries.map((e) => e.key).toList();
     for (int i = 0 ; i < keys.length; i++) {
-      double paddingTop = 5;
-      double paddingBottom = 5;
-      if (i == 0) {
-        paddingTop = 10;
-      } else if (i == keys.length - 1) {
-        paddingBottom = 10;
-      }
-      contents.add(Padding(
-        padding: EdgeInsets.only(bottom: paddingBottom, top: paddingTop),
-        child: PlatformElevatedButton(onPressed: () => {},
-            padding: const EdgeInsets.all(10),
-            child: Text(keys[i], style: CustomStyle.body2, textAlign: TextAlign.center)
-        ),
-      ));
+      contents.add(InkWell(
+        customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        onTap: () => {},
+        child: Container(
+            padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+            decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
+                color: CustomStyle.colorLikeButtonBg(context, false),
+                borderRadius: const BorderRadius.all(Radius.circular(25))
+            ),
+            child: Center(child: Text(keys[i], style: CustomStyle.body2, textAlign: TextAlign.center)),
+          ),
+      )
+      );
+      contents.add(Container(height: 10));
     }
     return contents;
   }

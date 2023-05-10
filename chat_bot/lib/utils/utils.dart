@@ -1,10 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+enum Platforms {
+  web, android, iOS, win32
+}
 
 class Utils {
 
@@ -31,6 +36,7 @@ class Utils {
 
   String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
+  late Platforms currentPlatform;
 
   factory Utils() {
     return instance;
@@ -39,6 +45,17 @@ class Utils {
   Utils._internal();
 
   void init() {
+    if (kIsWeb) {
+      currentPlatform = Platforms.web;
+    } else {
+      if (Platform.isWindows) {
+        currentPlatform = Platforms.win32;
+      } else if (Platform.isAndroid) {
+        currentPlatform = Platforms.android;
+      } else if (Platform.isIOS) {
+        currentPlatform = Platforms.iOS;
+      }
+    }
     _languageCode = StreamController.broadcast();
     _themeMode = StreamController.broadcast();
     _wsChannel = WebSocketChannel.connect(Uri.parse(Utils.urlWebSocket));
@@ -121,13 +138,13 @@ class CustomNavigator {
   }
 
   static void goToPrivacy() {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Utils.instance.currentPlatform == Platforms.android || Utils.instance.currentPlatform == Platforms.iOS) {
       navigatorKey.currentState?.pushNamed('/privacy');
     }
   }
 
   static void goToTerm() {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Utils.instance.currentPlatform == Platforms.android || Utils.instance.currentPlatform == Platforms.iOS) {
       navigatorKey.currentState?.pushNamed('/term');
     }
   }

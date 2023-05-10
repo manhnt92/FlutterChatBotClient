@@ -13,7 +13,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'dart:io' show Platform;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -45,21 +44,21 @@ class MyAppState extends State<MyApp> {
     _socketListener = Utils.instance.getWebSocketStream().listen((event) {
       //debugPrint("receive event $event");
     });
-    if (Platform.isWindows) {
+    if (Utils.instance.currentPlatform == Platforms.win32) {
       Map<String, dynamic> loginRq = <String, dynamic>{};
       loginRq['id'] = 'loginguest';
       loginRq['token'] = '984725b6c4f55963cc52fca0f943f9a8060b1c71900d542c79669b6dc718a64b';
       loginRq['os'] = 'android';
       Utils.instance.sendSocketMessage(loginRq);
     } else {
-      FlutterUdid.consistentUdid.then((value) {
-        debugPrint("token = $value");
-        // Map<String, dynamic> loginRq = <String, dynamic>{};
-        // loginRq['id'] = 'loginguest';
-        // loginRq['token'] = value;
-        // loginRq['os'] = 'android';
-        // _wsChannel.sink.add(loginRq);
-      });
+      // FlutterUdid.consistentUdid.then((value) {
+      //   debugPrint("token = $value");
+      //   Map<String, dynamic> loginRq = <String, dynamic>{};
+      //   loginRq['id'] = 'loginguest';
+      //   loginRq['token'] = value;
+      //   loginRq['os'] = 'android';
+      //   _wsChannel.sink.add(loginRq);
+      // });
     }
 
   }
