@@ -1,24 +1,34 @@
 import 'dart:async';
-import 'package:chat_bot/home_screen.dart';
-import 'package:chat_bot/premium_screen.dart';
-import 'package:chat_bot/setting_language_screen.dart';
-import 'package:chat_bot/setting_screen.dart';
+import 'package:chat_bot/screens/home_screen.dart';
+import 'package:chat_bot/screens/home_vm.dart';
+import 'package:chat_bot/screens/premium_screen.dart';
+import 'package:chat_bot/screens/setting_language_screen.dart';
+import 'package:chat_bot/screens/setting_screen.dart';
 import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:chat_bot/utils/custom_scroll_behavior.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
-import 'package:chat_bot/webview_screen.dart';
+import 'package:chat_bot/screens/webview_screen.dart';
+import 'package:chat_bot/widgets/chat_vm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Utils.instance.init();
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => HomeViewModel()),
+          ChangeNotifierProvider(create: (_) => ChatViewModel())
+        ],
+        child: const MyApp())
+  );
 }
 
 class MyApp extends StatefulWidget {

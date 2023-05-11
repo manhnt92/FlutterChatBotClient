@@ -34,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Lịch sử"),
         "home_conversation_rename":
             MessageLookupByLibrary.simpleMessage("Đổi tên"),
+        "home_conversation_rename_cancel":
+            MessageLookupByLibrary.simpleMessage("Hủy"),
         "home_conversation_view_all":
             MessageLookupByLibrary.simpleMessage("Xem tất cả"),
         "home_suggestion": MessageLookupByLibrary.simpleMessage("Gợi ý"),

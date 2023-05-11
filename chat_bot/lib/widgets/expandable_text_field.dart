@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ExpandableTextField extends StatefulWidget {
 
   final VoidCallback? clickCallback;
-  final bool Function(String)? sendMessageCallback;
+  final void Function(String)? sendMessageCallback;
   final bool enable;
 
   const ExpandableTextField({Key? key, this.sendMessageCallback, this.clickCallback, required this.enable}) : super(key: key);
@@ -158,10 +158,8 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
 
   void sendMessage() {
     if (_messageController.text.isNotEmpty && widget.sendMessageCallback != null) {
-      bool success = widget.sendMessageCallback!(_messageController.text);
-      if (success) {
-        clearMessage();
-      }
+      widget.sendMessageCallback!(_messageController.text);
+      clearMessage();
     }
   }
 

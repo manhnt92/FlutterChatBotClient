@@ -34,6 +34,7 @@ dependencies:
     sdk: flutter
   sqflite:
   path:
+  provider: ^6.0.5
   shared_preferences: ^2.1.0
   web_socket_channel: ^2.4.0
   flutter_udid: ^2.0.1

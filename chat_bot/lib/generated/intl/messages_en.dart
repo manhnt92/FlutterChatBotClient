@@ -35,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("My history"),
         "home_conversation_rename":
             MessageLookupByLibrary.simpleMessage("Rename"),
+        "home_conversation_rename_cancel":
+            MessageLookupByLibrary.simpleMessage("Cancel"),
         "home_conversation_view_all":
             MessageLookupByLibrary.simpleMessage("View all"),
         "home_suggestion": MessageLookupByLibrary.simpleMessage("Suggestions"),

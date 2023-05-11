@@ -3,6 +3,7 @@ import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
+import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -58,12 +59,20 @@ class SettingScreen extends BaseStatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.separated(itemCount: _settings.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return uiForSettingItem(context, index);
-                  }, separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(height: 1);
-                  }),
+              child: ListView.separated(
+                itemCount: _settings.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return SimpleListViewItem(
+                    onTap: () => updateNightMode(!_isNightMode),
+                    content: _settings[index],
+                    leftWidget: Icon(_settingIcons[index]),
+                    rightWidget: index == 0 ? PlatformSwitch(value: _isNightMode, onChanged: (value) {
+                      updateNightMode(value);
+                    }) : const Icon(Icons.chevron_right),
+                  );
+                }, separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(height: 1);
+                })
             ),
           ],
         )
@@ -91,45 +100,6 @@ class SettingScreen extends BaseStatelessWidget {
     } else if (index == 7) { // clear chat history
 
     }
-  }
-
-  Widget uiForSettingItem(BuildContext context, int index) {
-    if (index == 0) {
-      return SizedBox(height: Utils.defaultListViewItemHeight,
-          child: InkWell(
-            onTap: () {
-              updateNightMode(!_isNightMode);
-            },
-            child: Row(
-              children: [
-                const SizedBox(width: 15),
-                Icon(_settingIcons[index]),
-                const SizedBox(width: 15),
-                Expanded(child: Text(_settings[index], style: CustomStyle.body2)),
-                PlatformSwitch(value: _isNightMode, onChanged: (value) {
-                  updateNightMode(value);
-                }),
-                const SizedBox(width: 15)
-              ],
-            ),
-          )
-      );
-    }
-    return SizedBox(height: Utils.defaultListViewItemHeight,
-      child: InkWell(
-        onTap: () => onSettingItemClicked(index),
-        child: Row(
-          children: [
-            const SizedBox(width: 15),
-            Icon(_settingIcons[index]),
-            const SizedBox(width: 15),
-            Expanded(child: Text(_settings[index], style: CustomStyle.body2)),
-            const Icon(Icons.chevron_right),
-            const SizedBox(width: 15)
-          ],
-        ),
-      ),
-    );
   }
 
 }

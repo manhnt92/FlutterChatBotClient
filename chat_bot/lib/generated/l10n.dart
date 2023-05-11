@@ -100,6 +100,16 @@ class S {
     );
   }
 
+  /// `Cancel`
+  String get home_conversation_rename_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'home_conversation_rename_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete`
   String get home_conversation_delete {
     return Intl.message(

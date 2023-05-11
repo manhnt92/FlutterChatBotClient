@@ -39,7 +39,7 @@ class SQLite {
           '$conversationColumnId INTEGER PRIMARY KEY,'
           '$conversationColumnTitle TEXT,'
           '$conversationColumnDesc TEXT,'
-          '$conversationColumnType INTEGER DEFAULT 1'
+          '$conversationColumnType INTEGER DEFAULT 1,'
           'created_at DATETIME DEFAULT CURRENT_TIMESTAMP'
       ')'
     ]
@@ -127,8 +127,9 @@ class SQLite {
       chatHistoryColumnAnswer : answer,
       chatHistoryColumnConversationId : conv.id
     };
+    debugPrint('insert QA Message: $map');
     int id = await _database.insert(chatHistoryTable, map, conflictAlgorithm: ConflictAlgorithm.replace);
-    return QAMessage(id: id, question: question, answer: answer, canPlayAnswerAnim: true);
+    return QAMessage(id: id, question: question, answer: answer, conversationId: conv.id, canPlayAnswerAnim: true);
   }
 
   Future<void> updateQAMessage(QAMessage message) async {
@@ -137,6 +138,7 @@ class SQLite {
       chatHistoryColumnAnswer : message.answer,
       chatHistoryColumnConversationId : message.conversationId
     };
+    debugPrint('update QA Message: $map');
     await _database.update(chatHistoryTable, map, where: 'id = ?', whereArgs: [message.id]);
   }
 
@@ -146,6 +148,21 @@ class SQLite {
 
   Future<List<QAMessage>> getAllQAMessage(Conversation conv) async {
     final List<Map<String, dynamic>> maps = await _database.query(chatHistoryTable, where: '$chatHistoryColumnConversationId = ?', whereArgs: [conv.id]);
+    debugPrint('getAllQAMessage: conv_id=${conv.id} - $maps');
+    return List.generate(maps.length, (i) {
+      return QAMessage(
+          id: maps[i][chatHistoryColumnId],
+          question: maps[i][chatHistoryColumnQuestion],
+          answer: maps[i][chatHistoryColumnAnswer],
+          conversationId: maps[i][chatHistoryColumnConversationId],
+          canPlayAnswerAnim: false
+      );
+    });
+  }
+
+  Future<List<QAMessage>> getAllQAMessages() async {
+    final List<Map<String, dynamic>> maps = await _database.query(chatHistoryTable);
+    debugPrint('getAllQAMessage: - $maps');
     return List.generate(maps.length, (i) {
       return QAMessage(
           id: maps[i][chatHistoryColumnId],

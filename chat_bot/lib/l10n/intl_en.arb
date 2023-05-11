@@ -4,6 +4,7 @@
   "home_conversation_view_all": "View all",
   "home_conversation_empty": "No history found.",
   "home_conversation_rename": "Rename",
+  "home_conversation_rename_cancel": "Cancel",
   "home_conversation_delete": "Delete",
   "home_suggestion": "Suggestions",
   "chat_title": "Chat Bot",
