@@ -5,6 +5,8 @@ import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/expandable_text_field.dart';
+import 'package:chat_bot/utils/sqlite.dart';
+import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends BaseStatefulWidget {
@@ -22,6 +24,10 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   bool _canSendMessage = true;
   late TabController _tabSuggestController;
   int _currentTabIndex = 0;
+  final List<Conversation> _conversations = [
+    Conversation(id: 1, title: "Hello world c++ Hello world c++ Hello world c++", desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", type: 0),
+    Conversation(id: 1, title: "Hello world c++", desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", type: 0)
+  ];
   List<String> tabsTitle = [
     'Education', 'Fun', 'Daily Lifestyle', 'Health & Nutrition', 'Astrology',
     'Art', 'Travel', 'Business & Marketing', 'Social', 'Career', 'E-mail'
@@ -153,6 +159,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
         }
       });
     });
+    _getAllConversations();
   }
 
   @override
@@ -181,9 +188,9 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _isSuggest ? uiForSuggestMode() : uiForChatMode(),
+              _isSuggest ? uiForSuggestMode() : _uiForChatMode(),
               ExpandableTextField(clickCallback: _isSuggest ? () => updateUI(!_isSuggest) : null,
-                  sendMessageCallback: _isSuggest ? null : (text) => sendMessage(text),
+                  sendMessageCallback: _isSuggest ? null : (text) => _sendMessage(text),
                   enable: !_isSuggest
               )
             ],
@@ -196,6 +203,9 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   void updateUI(bool isSuggest) {
     setState(() {
       _isSuggest = isSuggest;
+      if (_isSuggest) {
+        _getAllConversations();
+      }
     });
   }
 
@@ -208,12 +218,41 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(S.current.home_chat_history, style: CustomStyle.body1B),
-                Container(height: 10)
+                Row(
+                  children: [
+                    Expanded(child: Text(S.current.home_conversation_history, style: CustomStyle.body1B)),
+                    TextButton(onPressed: () {
+                        CustomNavigator.goToConversationHistory();
+                      },
+                      child: Text(S.current.home_conversation_view_all, style: CustomStyle.body2)
+                    )
+                  ],
+                ),
+                Container(height: 10),
+                Visibility(
+                  visible: _conversations.isNotEmpty,
+                  child: SizedBox(
+                    height: Utils.conversationItemHeight,
+                    child: ListView.separated(itemCount: _conversations.length, scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext ctx, int idx) {
+                        return _uiForConversationItem(_conversations[idx]);
+                      }, separatorBuilder: (BuildContext ctx, int idx) {
+                        return Container(width: 10);
+                      },
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _conversations.isEmpty,
+                  child: SizedBox(
+                    height: Utils.conversationItemHeight,
+                    child: Center(child: Text(S.current.home_conversation_empty, style: CustomStyle.body2)),
+                  ),
+                )
               ],
             ),
           );
-        } else /*if (index == 1)*/ {
+        } else {
           List<Widget> children = [];
           children.add(Text(S.current.home_suggestion, style: CustomStyle.body1B));
           children.add(Container(height: 10));
@@ -227,9 +266,9 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
             indicatorColor: Colors.transparent,
             indicatorPadding: EdgeInsets.zero,
             labelPadding: const EdgeInsets.only(right: 5),
-            tabs: getTabListWidget(),
+            tabs: _getTabListWidget(),
           ));
-          children.addAll(getTabListContentWidget());
+          children.addAll(_getTabListContentWidget());
           return Padding(
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Column(
@@ -243,7 +282,65 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     );
   }
 
-  List<Tab> getTabListWidget() {
+  Widget _uiForConversationItem(Conversation conv) {
+    return Container(width: Utils.conversationItemWidth,
+      decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
+        color: CustomStyle.colorBgElevatedButton(context, false),
+        borderRadius: const BorderRadius.all(Radius.circular(10))
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+              child: Column(mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: Text(conv.title, style: CustomStyle.body2B, maxLines: 2, overflow: TextOverflow.ellipsis)),
+                  Text(conv.desc, style: CustomStyle.body2, maxLines: 1, overflow: TextOverflow.ellipsis),
+                ]
+              ),
+            ),
+          ),
+          Container(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: () => _showConversationOptionSheet(context, conv),
+                customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomRight: Radius.circular(10))),
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Icon(Icons.more_horiz_outlined),
+                )
+              )
+            ],
+          )
+        ],
+      )
+    );
+  }
+
+  void _showConversationOptionSheet(BuildContext context, Conversation conv) {
+    showModalBottomSheet<void>(context: context, builder: (BuildContext context) {
+        return Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Modal BottomSheet'),
+              ElevatedButton(
+                child: const Text(S.current.home_conversation_delete),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Tab> _getTabListWidget() {
     List<Tab> tabs = [];
     for (int i = 0; i < tabsTitle.length; i++) {
       bool isSelectedTab = _currentTabIndex == i;
@@ -268,7 +365,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     return tabs;
   }
 
-  List<Widget> getTabListContentWidget() {
+  List<Widget> _getTabListContentWidget() {
     List<Widget> contents = [];
     Map<String, String> map = tabsContent[_currentTabIndex];
     List<String> keys = map.entries.map((e) => e.key).toList();
@@ -291,20 +388,20 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     return contents;
   }
 
-  Widget uiForChatMode() {
+  Widget _uiForChatMode() {
     return Expanded(
       child: ListView.separated (itemCount: messages.length,
         reverse: true,
         padding: const EdgeInsets.symmetric(vertical: 10),
         itemBuilder: (context, i) {
           var msg = messages[messages.length - 1 - i];
-          return uiForQAMessage(context, msg);
+          return _uiForQAMessage(context, msg);
         }, separatorBuilder: (_, i) => Container(height: 0),
       ),
     );
   }
 
-  Widget uiForQAMessage(BuildContext context, QAMessage message) {
+  Widget _uiForQAMessage(BuildContext context, QAMessage message) {
     return Column(
       children: [
         Container(
@@ -383,7 +480,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     );
   }
 
-  bool sendMessage(String text) {
+  bool _sendMessage(String text) {
     if (text.isNotEmpty && _canSendMessage) {
       QAMessage message = QAMessage.createQAMsgTest(question: text, answer : "", canPlayAnswerAnim: true);
       setState(() {
@@ -397,6 +494,14 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
       return true;
     }
     return false;
+  }
+
+  void _getAllConversations() {
+    SQLite.instance.getAllConversation().then((value) {
+      setState(() {
+        _conversations.addAll(value);
+      });
+    });
   }
 
 }

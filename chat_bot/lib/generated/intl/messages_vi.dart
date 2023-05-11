@@ -27,7 +27,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
-        "home_chat_history": MessageLookupByLibrary.simpleMessage("Lịch sử"),
+        "home_conversation_delete": MessageLookupByLibrary.simpleMessage("Xóa"),
+        "home_conversation_empty":
+            MessageLookupByLibrary.simpleMessage("Không tìm thấy lịch sử."),
+        "home_conversation_history":
+            MessageLookupByLibrary.simpleMessage("Lịch sử"),
+        "home_conversation_rename":
+            MessageLookupByLibrary.simpleMessage("Đổi tên"),
+        "home_conversation_view_all":
+            MessageLookupByLibrary.simpleMessage("Xem tất cả"),
         "home_suggestion": MessageLookupByLibrary.simpleMessage("Gợi ý"),
         "home_title": MessageLookupByLibrary.simpleMessage("Trang chủ"),
         "premium_feature_1":

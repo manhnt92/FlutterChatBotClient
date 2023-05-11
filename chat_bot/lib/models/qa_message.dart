@@ -1,9 +1,16 @@
 
 class Conversation {
 
-  List<QAMessage> messages = [];
+  static const int typeQA = 1;
+  static const int typeConversation = 2;
 
-  Conversation();
+  int id;
+  String title;
+  String desc;
+  List<QAMessage> messages = [];
+  int type;
+
+  Conversation({required this.id, required this.title, required this.desc, required this.type});
 
   void addMessage(QAMessage message) {
     messages.add(message);
@@ -20,9 +27,10 @@ class QAMessage {
   int id;
   String question;
   String answer = "";
+  int conversationId = 0;
   bool canPlayAnswerAnim;
 
-  QAMessage({required this.id, required this.question, this.answer = "", required this.canPlayAnswerAnim});
+  QAMessage({required this.id, required this.question, this.answer = "", this.conversationId = 0, required this.canPlayAnswerAnim});
 
   void setAnswer(String answer) {
     this.answer = answer;

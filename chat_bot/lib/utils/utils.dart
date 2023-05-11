@@ -28,6 +28,8 @@ class Utils {
     Locale('vi', 'VN')
   ];
   static const double defaultListViewItemHeight = 45;
+  static const double conversationItemHeight = 110;
+  static const double conversationItemWidth = 250;
   static const String urlPolicy = "https://flutter.dev";
   static const String urlTerm = "https://google.com.vn";
   static const int chatMaxLength = 500;
@@ -77,13 +79,14 @@ class Utils {
     } else {
       setThemeMode(ThemeMode.system);
     }
-    // await SQLite.instance.init();
+    await SQLite.instance.init();
   }
 
   void dispose() {
     _wsChannel.sink.close();
     _languageCode.close();
     _themeMode.close();
+    SQLite.instance.dispose();
   }
 
   void setLangCode(String code) {

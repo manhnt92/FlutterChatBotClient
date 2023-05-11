@@ -1,6 +1,10 @@
 {
   "home_title": "Trang chủ",
-  "home_chat_history": "Lịch sử",
+  "home_conversation_history": "Lịch sử",
+  "home_conversation_view_all": "Xem tất cả",
+  "home_conversation_empty": "Không tìm thấy lịch sử.",
+  "home_conversation_rename": "Đổi tên",
+  "home_conversation_delete": "Xóa",
   "home_suggestion": "Gợi ý",
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Gửi tin nhắn...",

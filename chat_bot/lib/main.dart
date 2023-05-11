@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:chat_bot/home_screen.dart';
 import 'package:chat_bot/premium_screen.dart';
 import 'package:chat_bot/setting_language_screen.dart';
-import 'package:chat_bot/setting_sreen.dart';
+import 'package:chat_bot/setting_screen.dart';
 import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/custom_scroll_behavior.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
@@ -99,12 +100,14 @@ class MyAppState extends State<MyApp> {
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
+                  scrollBehavior: CustomScrollBehavior(),
                   supportedLocales: Utils.supportedLocale,
                   locale: Locale(langCode.data ?? Utils.instance.currentLangCode),
                   navigatorKey: CustomNavigator.navigatorKey,
                   initialRoute: '/',
                   onGenerateRoute: (settings) {
-                    return CupertinoPageRoute(builder: (context) => routes[settings.name]!(context));
+                    return Utils.instance.os == Platforms.android ?  MaterialPageRoute(builder: (context) => routes[settings.name]!(context))
+                      : CupertinoPageRoute(builder: (context) => routes[settings.name]!(context));
                   },
                 ),
               )

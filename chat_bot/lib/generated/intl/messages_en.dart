@@ -27,7 +27,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
-        "home_chat_history": MessageLookupByLibrary.simpleMessage("My history"),
+        "home_conversation_delete":
+            MessageLookupByLibrary.simpleMessage("Delete"),
+        "home_conversation_empty":
+            MessageLookupByLibrary.simpleMessage("No history found."),
+        "home_conversation_history":
+            MessageLookupByLibrary.simpleMessage("My history"),
+        "home_conversation_rename":
+            MessageLookupByLibrary.simpleMessage("Rename"),
+        "home_conversation_view_all":
+            MessageLookupByLibrary.simpleMessage("View all"),
         "home_suggestion": MessageLookupByLibrary.simpleMessage("Suggestions"),
         "home_title": MessageLookupByLibrary.simpleMessage("Home"),
         "premium_feature_1":

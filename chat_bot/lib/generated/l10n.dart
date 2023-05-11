@@ -61,10 +61,50 @@ class S {
   }
 
   /// `My history`
-  String get home_chat_history {
+  String get home_conversation_history {
     return Intl.message(
       'My history',
-      name: 'home_chat_history',
+      name: 'home_conversation_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View all`
+  String get home_conversation_view_all {
+    return Intl.message(
+      'View all',
+      name: 'home_conversation_view_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No history found.`
+  String get home_conversation_empty {
+    return Intl.message(
+      'No history found.',
+      name: 'home_conversation_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rename`
+  String get home_conversation_rename {
+    return Intl.message(
+      'Rename',
+      name: 'home_conversation_rename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get home_conversation_delete {
+    return Intl.message(
+      'Delete',
+      name: 'home_conversation_delete',
       desc: '',
       args: [],
     );

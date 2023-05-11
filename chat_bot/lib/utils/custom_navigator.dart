@@ -5,6 +5,10 @@ class CustomNavigator {
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+  static void goToConversationHistory() {
+
+  }
+
   static void goToSettingScreen() {
     navigatorKey.currentState?.pushNamed('/setting');
   }

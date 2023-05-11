@@ -1,6 +1,10 @@
 {
   "home_title": "Home",
-  "home_chat_history": "My history",
+  "home_conversation_history": "My history",
+  "home_conversation_view_all": "View all",
+  "home_conversation_empty": "No history found.",
+  "home_conversation_rename": "Rename",
+  "home_conversation_delete": "Delete",
   "home_suggestion": "Suggestions",
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Send a message...",
