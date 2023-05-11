@@ -1,4 +1,5 @@
 import 'package:chat_bot/base/base_screen.dart';
+import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -17,7 +18,7 @@ class WebViewScreen extends BaseStatefulWidget {
 
 }
 
-class _WebViewScreenState extends State<WebViewScreen> {
+class _WebViewScreenState extends BaseState<WebViewScreen> {
 
   late final WebViewController _controller;
 
@@ -86,7 +87,7 @@ Page resource error:
       appBar: PlatformAppBar(
         title: Text(widget._title),
         leading: InkWell(
-          onTap: widget.goBack,
+          onTap: () { CustomNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         ),
       ),

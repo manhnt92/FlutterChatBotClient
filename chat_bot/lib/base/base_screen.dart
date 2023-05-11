@@ -15,10 +15,6 @@ abstract class BaseStatefulWidget extends StatefulWidget {
     return brightness == Brightness.dark;
   }
 
-  void goBack() {
-    CustomNavigator.goBack();
-  }
-
 }
 
 abstract class BaseStatelessWidget extends StatelessWidget {
@@ -34,8 +30,27 @@ abstract class BaseStatelessWidget extends StatelessWidget {
     return brightness == Brightness.dark;
   }
 
-  void goBack() {
-    CustomNavigator.goBack();
+}
+
+abstract class BaseState<T extends BaseStatefulWidget> extends State<T> with WidgetsBindingObserver {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    debugPrint("didChangeAppLifecycleState state = $state");
+  }
+
 
 }

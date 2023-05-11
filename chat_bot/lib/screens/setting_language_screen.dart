@@ -1,5 +1,6 @@
 import 'package:chat_bot/base/base_screen.dart';
 import 'package:chat_bot/generated/l10n.dart';
+import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class SettingLanguageScreen extends BaseStatefulWidget {
 
 }
 
-class _SettingLanguageState extends State<SettingLanguageScreen> {
+class _SettingLanguageState extends BaseState<SettingLanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class _SettingLanguageState extends State<SettingLanguageScreen> {
       appBar: AppBar(
         title: Text(S.current.setting_language),
         leading: InkWell(
-          onTap: widget.goBack,
+          onTap: () { CustomNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         ),
       ),

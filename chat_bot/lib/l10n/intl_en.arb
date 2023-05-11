@@ -7,6 +7,9 @@
   "home_conversation_rename_cancel": "Cancel",
   "home_conversation_delete": "Delete",
   "home_suggestion": "Suggestions",
+
+  "chat_history_title": "History",
+
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Send a message...",
 

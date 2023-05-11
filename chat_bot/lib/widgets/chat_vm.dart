@@ -15,6 +15,8 @@ class ChatViewModel with ChangeNotifier {
         messages.addAll(value);
         notifyListeners();
       });
+    } else {
+      messages.add(QAMessage.createQAMsgTest(question: 'hello', canPlayAnswerAnim: false));
     }
   }
 

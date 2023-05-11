@@ -7,6 +7,9 @@
   "home_conversation_rename_cancel": "Hủy",
   "home_conversation_delete": "Xóa",
   "home_suggestion": "Gợi ý",
+
+  "chat_history_title": "Lịch sử chat",
+
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Gửi tin nhắn...",
 

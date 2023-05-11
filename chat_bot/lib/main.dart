@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chat_bot/screens/conversation_screen.dart';
 import 'package:chat_bot/screens/home_screen.dart';
 import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/screens/premium_screen.dart';
@@ -84,6 +85,7 @@ class MyAppState extends State<MyApp> {
             final cupertinoDarkTheme = MaterialBasedCupertinoThemeData(materialTheme: materialDarkTheme);
             var routes = {
               '/': (context) => HomeScreen(),
+              '/conversations': (context) => ConversationsScreen(),
               '/setting': (context) => SettingScreen(),
               '/setting_language': (context) => const SettingLanguageScreen(),
               '/premium': (context) => const PremiumScreen(),

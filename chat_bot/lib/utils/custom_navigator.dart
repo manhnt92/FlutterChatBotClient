@@ -5,8 +5,8 @@ class CustomNavigator {
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  static void goToConversationHistory() {
-
+  static Future<dynamic>? goToConversationsScreen() {
+    return navigatorKey.currentState?.pushNamed('/conversations');
   }
 
   static void goToSettingScreen() {

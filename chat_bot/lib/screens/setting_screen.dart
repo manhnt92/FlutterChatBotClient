@@ -35,7 +35,7 @@ class SettingScreen extends BaseStatelessWidget {
         appBar: AppBar(
           title: Text(S.current.setting_title),
           leading: InkWell(
-            onTap: goBack,
+            onTap: () { CustomNavigator.goBack(); },
             child: const Icon(Icons.arrow_back),
           ),
         ),

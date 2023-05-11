@@ -21,7 +21,7 @@ class HomeScreen extends BaseStatefulWidget {
 
 }
 
-class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMixin {
 
   bool _isSuggest = true;
   late TabController _tabSuggestController;
@@ -31,7 +31,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    HomeViewModel viewModel = Provider.of<HomeViewModel>(context, listen: false);
+    var viewModel = context.read<HomeViewModel>();
     viewModel.getAllConversation();
     _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: viewModel.tabsTitle.length, vsync: this);
     _tabSuggestController.addListener(() {
@@ -105,7 +105,9 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
                   children: [
                     Expanded(child: Text(S.current.home_conversation_history, style: CustomStyle.body1B)),
                     TextButton(onPressed: () {
-                        CustomNavigator.goToConversationHistory();
+                        CustomNavigator.goToConversationsScreen()?.then((value) {
+                          context.read<HomeViewModel>().getAllConversation();
+                        });
                       },
                       child: Text(S.current.home_conversation_view_all, style: CustomStyle.body2)
                     )
@@ -179,9 +181,23 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
         ),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                    onTap: () => _showConversationOptionSheet(context, conv),
+                    customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomLeft: Radius.circular(10))),
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: Icon(Icons.more_horiz_outlined),
+                    )
+                )
+              ],
+            ),
+            Container(height: 5),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+                padding: const EdgeInsets.only(left: 15, bottom: 15, right: 15),
                 child: Column(mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -191,20 +207,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            Container(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () => _showConversationOptionSheet(context, conv),
-                  customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomRight: Radius.circular(10))),
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    child: Icon(Icons.more_horiz_outlined),
-                  )
-                )
-              ],
-            )
+
           ],
         )
       ),
@@ -214,8 +217,9 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   void _showConversationOptionSheet(BuildContext context, Conversation conv) {
     TextEditingController renameController = TextEditingController();
     FocusNode focusNode = FocusNode();
-    showModalBottomSheet<void>(context: context, builder: (BuildContext ctx) {
-        return SafeArea(
+    showModalBottomSheet<void>(context: context, isScrollControlled: true, builder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

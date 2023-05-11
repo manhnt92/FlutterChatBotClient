@@ -15,7 +15,7 @@ class PremiumScreen extends BaseStatefulWidget {
 
 }
 
-class _PremiumScreenState extends State<PremiumScreen> {
+class _PremiumScreenState extends BaseState<PremiumScreen> {
 
   int _selectedIndex = 1;
   List<SubData> subs = [
@@ -29,7 +29,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       appBar: AppBar(
         title: Text(S.current.premium_title),
         leading: InkWell(
-          onTap: widget.goBack,
+          onTap: () { CustomNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         ),
       ),

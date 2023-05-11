@@ -130,6 +130,16 @@ class S {
     );
   }
 
+  /// `History`
+  String get chat_history_title {
+    return Intl.message(
+      'History',
+      name: 'chat_history_title',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Chat Bot`
   String get chat_title {
     return Intl.message(
