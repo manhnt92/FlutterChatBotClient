@@ -5,6 +5,7 @@ import 'package:chat_bot/utils/sqlite.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_udid/flutter_udid.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -80,6 +81,11 @@ class Utils {
       setThemeMode(ThemeMode.system);
     }
     await SQLite.instance.init();
+
+    if (os == Platforms.android || os == Platforms.iOS) {
+      MobileAds.instance.initialize();
+    }
+
   }
 
   void dispose() {

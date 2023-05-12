@@ -1,42 +1,22 @@
-
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/utils/custom_style.dart';
-import 'package:chat_bot/widgets/chat_vm.dart';
+import 'package:chat_bot/widgets/type_writer_text.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class Chat extends StatefulWidget {
+class Chat extends StatelessWidget {
 
-  Conversation? conversation;
+  final List<QAMessage> messages;
 
-  Chat({super.key, this.conversation});
-
-  @override
-  State<StatefulWidget> createState() => _ChatState();
-
-}
-
-class _ChatState extends State<Chat> {
-
-  @override
-  void initState() {
-    super.initState();
-    debugPrint("conversation  != null : ${widget.conversation != null}");
-    var viewModel = context.read<ChatViewModel>();
-    viewModel.conversation = widget.conversation;
-    viewModel.getAllMessage();
-  }
+  const Chat({super.key, required this.messages});
 
   @override
   Widget build(BuildContext context) {
-    var viewModel = context.watch<ChatViewModel>();
     return Expanded(
-      child: ListView.separated (itemCount: viewModel.messages.length,
+      child: ListView.separated (itemCount: messages.length,
         reverse: true,
         padding: const EdgeInsets.symmetric(vertical: 10),
         itemBuilder: (context, i) {
-          var message = viewModel.messages[viewModel.messages.length - 1 - i];
+          var message = messages[messages.length - 1 - i];
           return Column(
             children: [
               Container(
@@ -83,23 +63,15 @@ class _ChatState extends State<Chat> {
                         Row(
                           children: [
                             const SizedBox(width: 15),
-                            Expanded(child: message.canPlayAnswerAnim ? AnimatedTextKit(
-                              repeatForever: false,
-                              isRepeatingAnimation:false,
-                              totalRepeatCount: 0,
-                              pause: const Duration(milliseconds: 200),
-                              animatedTexts: [
-                                TyperAnimatedText('', textStyle: CustomStyle.body2),
-                                TyperAnimatedText(message.answer, textStyle: CustomStyle.body2)
-                              ],
-                              onNext: (index, isLast) {
-                                debugPrint('onNext : $index, $isLast');
-                                message.canPlayAnswerAnim = false;
-                              },
-                              onFinished: () {
-                                debugPrint('onFinish');
-                              },
-                            ) : Text(message.answer, style: CustomStyle.body2, softWrap: true)
+                            Expanded(child: TypeWriterText (
+                                play: message.canPlayAnswerAnim,
+                                text: Text(message.answer, style: CustomStyle.body2, softWrap: true),
+                                maintainSize: false,
+                                duration: const Duration(milliseconds: 16),
+                                startCallback: () {
+                                  message.canPlayAnswerAnim = false;
+                                },
+                              )
                             ),
                             const SizedBox(width: 15)
                           ],
@@ -115,5 +87,4 @@ class _ChatState extends State<Chat> {
       ),
     );
   }
-
 }

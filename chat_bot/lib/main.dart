@@ -1,18 +1,11 @@
 import 'dart:async';
-import 'package:chat_bot/screens/conversation_screen.dart';
-import 'package:chat_bot/screens/home_screen.dart';
 import 'package:chat_bot/screens/home_vm.dart';
-import 'package:chat_bot/screens/premium_screen.dart';
-import 'package:chat_bot/screens/setting_language_screen.dart';
-import 'package:chat_bot/screens/setting_screen.dart';
 import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:chat_bot/utils/custom_scroll_behavior.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
-import 'package:chat_bot/screens/webview_screen.dart';
-import 'package:chat_bot/widgets/chat_vm.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -83,15 +76,6 @@ class MyAppState extends State<MyApp> {
             );
             final cupertinoLightTheme = MaterialBasedCupertinoThemeData(materialTheme: materialLightTheme);
             final cupertinoDarkTheme = MaterialBasedCupertinoThemeData(materialTheme: materialDarkTheme);
-            var routes = {
-              '/': (context) => HomeScreen(),
-              '/conversations': (context) => ConversationsScreen(),
-              '/setting': (context) => SettingScreen(),
-              '/setting_language': (context) => const SettingLanguageScreen(),
-              '/premium': (context) => const PremiumScreen(),
-              '/privacy': (context) => WebViewScreen(url: Utils.urlPolicy),
-              '/term': (context) => WebViewScreen(url: Utils.urlTerm),
-            };
             return PlatformProvider(
               settings: PlatformSettingsData(
                 iosUsesMaterialWidgets: true,
@@ -117,10 +101,7 @@ class MyAppState extends State<MyApp> {
                   locale: Locale(langCode.data ?? Utils.instance.currentLangCode),
                   navigatorKey: CustomNavigator.navigatorKey,
                   initialRoute: '/',
-                  onGenerateRoute: (settings) {
-                    return Utils.instance.os == Platforms.android ?  MaterialPageRoute(builder: (context) => routes[settings.name]!(context))
-                      : CupertinoPageRoute(builder: (context) => routes[settings.name]!(context));
-                  },
+                  onGenerateRoute: (settings) => CustomNavigator.generateRoute(settings),
                 ),
               )
             );

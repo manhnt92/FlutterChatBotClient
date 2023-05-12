@@ -4,8 +4,7 @@ import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
-import 'package:chat_bot/utils/utils.dart';
-import 'package:chat_bot/widgets/list_view_item.dart';
+import 'package:chat_bot/widgets/conversation_option_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,24 +28,29 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var viewModel = context.watch<HomeViewModel>();
+    var conversations = context.watch<HomeViewModel>().conversations;
     return Scaffold(
       appBar: AppBar(title: Text(S.current.chat_history_title),
         leading: InkWell(
           onTap : () { CustomNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         ),
+        actions: [
+          IconButton(onPressed: () {
+
+          }, icon: const Icon(Icons.delete_forever))
+        ],
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: ListView.separated(
-            itemCount: viewModel.conversations.length,
+            itemCount: conversations.length,
             itemBuilder: (BuildContext context, int index) {
-              var conv = viewModel.conversations[index];
+              var conv = conversations[index];
               return InkWell(
                 customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                onTap: () {},
+                onTap: () { CustomNavigator.goToChatScreen(conv); },
                 child: Container(//height: Utils.conversationItemHeight,
                     decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
                         color: CustomStyle.colorBgElevatedButton(context, false),
@@ -54,18 +58,17 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
                     ),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                        Row(mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             InkWell(
-                                onTap: () => _showConversationOptionSheet(context, conv),
-                                customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomLeft: Radius.circular(10))),
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 10, right: 10),
-                                  child: Icon(Icons.more_horiz_outlined),
-                                )
+                              onTap: () => _showConversationOption(conv),
+                              customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomLeft: Radius.circular(10))),
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                child: Icon(Icons.more_horiz_outlined),
+                              )
                             )
-                          ],
+                          ]
                         ),
                         Container(height: 5),
                         Container(
@@ -92,59 +95,13 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
     );
   }
 
-  void _showConversationOptionSheet(BuildContext context, Conversation conv) {
-    TextEditingController renameController = TextEditingController();
-    FocusNode focusNode = FocusNode();
-    showModalBottomSheet<void>(context: context, isScrollControlled: true, builder: (BuildContext ctx) {
-      return Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(height: 30),
-            TextFormField(
-              focusNode: focusNode,
-              controller: renameController,
-              decoration: InputDecoration(border: InputBorder.none,
-                  hintStyle: CustomStyle.body2I,
-                  labelStyle: CustomStyle.body2,
-                  hintText: conv.title,
-                  counter: const Offstage(),
-                  contentPadding: const EdgeInsets.only(left: 15, right: 15)
-              ),
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              maxLength: Utils.chatMaxLength,
-              maxLines: 1,
-            ),
-            SimpleListViewItem(
-              onTap: () {
-                if (renameController.text.isNotEmpty) {
-                  context.read<HomeViewModel>().updateConversation(conv, renameController.text);
-                  Navigator.pop(ctx);
-                } else {
-                  focusNode.requestFocus();
-                }
-              },
-              content: S.current.home_conversation_rename,
-              leftWidget: const Icon(Icons.edit),
-            ),
-            const Divider(height: 1),
-            SimpleListViewItem(
-              onTap: () {
-                context.read<HomeViewModel>().deleteConversation(conv);
-                renameController.dispose();
-                Navigator.pop(ctx);
-              },
-              content: S.current.home_conversation_delete,
-              leftWidget: const Icon(Icons.delete),
-            ),
-            Container(height: 30)
-          ],
-        ),
-      );
-    },
+  void _showConversationOption(Conversation conv) {
+    ConversationOptionSheet.show(context: context, conversation: conv, rename: (newName) {
+        context.read<HomeViewModel>().updateConversation(conv, newName);
+      },
+      delete: () {
+        context.read<HomeViewModel>().deleteConversation(conv);
+      }
     );
   }
 

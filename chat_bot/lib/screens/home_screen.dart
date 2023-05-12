@@ -5,10 +5,10 @@ import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/utils/custom_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/widgets/chat.dart';
-import 'package:chat_bot/widgets/chat_vm.dart';
+import 'package:chat_bot/screens/chat_vm.dart';
+import 'package:chat_bot/widgets/conversation_option_sheet.dart';
 import 'package:chat_bot/widgets/expandable_text_field.dart';
 import 'package:chat_bot/utils/utils.dart';
-import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,10 +69,13 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _isSuggest ? uiForSuggestMode() : Chat(conversation: _currentConversation),
+              _isSuggest ? uiForSuggestMode() : Chat(messages: context.watch<ChatViewModel>().messages),
               ExpandableTextField(clickCallback: _isSuggest ? () => updateUI(!_isSuggest) : null,
-                  sendMessageCallback: _isSuggest ? null : (text) => context.read<ChatViewModel>().sendMessage(text),
-                  enable: !_isSuggest
+                sendMessageCallback: _isSuggest ? null : (text) => context.read<ChatViewModel>().sendMessage(text),
+                newConversationCallback: () {
+                  _currentConversation = null;
+                  updateUI(false);
+                }
               )
             ],
           ),
@@ -86,7 +89,11 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
       _isSuggest = isSuggest;
       if (_isSuggest) {
         context.read<HomeViewModel>().getAllConversation();
+        context.read<ChatViewModel>().setCurrentState(ChatState.disable);
         _currentConversation = null;
+      } else {
+        context.read<ChatViewModel>().getAllMessage(_currentConversation);
+        context.read<ChatViewModel>().setCurrentState(ChatState.type);
       }
     });
   }
@@ -185,12 +192,12 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                    onTap: () => _showConversationOptionSheet(context, conv),
-                    customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomLeft: Radius.circular(10))),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: Icon(Icons.more_horiz_outlined),
-                    )
+                  onTap: () => _showConversationOption(conv),
+                  customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomLeft: Radius.circular(10))),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: Icon(Icons.more_horiz_outlined),
+                  )
                 )
               ],
             ),
@@ -214,59 +221,13 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
     );
   }
 
-  void _showConversationOptionSheet(BuildContext context, Conversation conv) {
-    TextEditingController renameController = TextEditingController();
-    FocusNode focusNode = FocusNode();
-    showModalBottomSheet<void>(context: context, isScrollControlled: true, builder: (BuildContext ctx) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(height: 30),
-              TextFormField(
-                focusNode: focusNode,
-                controller: renameController,
-                decoration: InputDecoration(border: InputBorder.none,
-                  hintStyle: CustomStyle.body2I,
-                  labelStyle: CustomStyle.body2,
-                  hintText: conv.title,
-                  counter: const Offstage(),
-                  contentPadding: const EdgeInsets.only(left: 15, right: 15)
-                ),
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                maxLength: Utils.chatMaxLength,
-                maxLines: 1,
-              ),
-              SimpleListViewItem(
-                onTap: () {
-                  if (renameController.text.isNotEmpty) {
-                    context.read<HomeViewModel>().updateConversation(conv, renameController.text);
-                    Navigator.pop(ctx);
-                  } else {
-                    focusNode.requestFocus();
-                  }
-                },
-                content: S.current.home_conversation_rename,
-                leftWidget: const Icon(Icons.edit),
-              ),
-              const Divider(height: 1),
-              SimpleListViewItem(
-                onTap: () {
-                  context.read<HomeViewModel>().deleteConversation(conv);
-                  renameController.dispose();
-                  Navigator.pop(ctx);
-                },
-                content: S.current.home_conversation_delete,
-                leftWidget: const Icon(Icons.delete),
-              ),
-              Container(height: 30)
-            ],
-          ),
-        );
-      },
+  void _showConversationOption(Conversation conv) {
+    ConversationOptionSheet.show(context: context, conversation: conv, rename: (newName) {
+      context.read<HomeViewModel>().updateConversation(conv, newName);
+    },
+        delete: () {
+          context.read<HomeViewModel>().deleteConversation(conv);
+        }
     );
   }
 
