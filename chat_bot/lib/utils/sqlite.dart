@@ -3,7 +3,6 @@ import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
-
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
@@ -46,10 +45,10 @@ class SQLite {
   };
 
   Future<void> init() async {
-    if (Utils.instance.os == Platforms.win32) {
+    if (Utils.instance.isWin32) {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
-    } else if (Utils.instance.os == Platforms.web) {
+    } else if (Utils.instance.isWeb) {
       //dart run sqflite_common_ffi_web:setup
       //dart run sqflite_common_ffi_web:setup --force
       databaseFactory = databaseFactoryFfiWeb;

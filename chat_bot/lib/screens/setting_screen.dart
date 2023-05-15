@@ -63,11 +63,11 @@ class SettingScreen extends BaseStatelessWidget {
                 itemCount: _settings.length,
                 itemBuilder: (BuildContext context, int index) {
                   return SimpleListViewItem(
-                    onTap: () => updateNightMode(!_isNightMode),
+                    onTap: () => onSettingItemClicked(index),
                     content: _settings[index],
                     leftWidget: Icon(_settingIcons[index]),
                     rightWidget: index == 0 ? PlatformSwitch(value: _isNightMode, onChanged: (value) {
-                      updateNightMode(value);
+                      _updateNightMode(value);
                     }) : const Icon(Icons.chevron_right),
                   );
                 }, separatorBuilder: (BuildContext context, int index) {
@@ -79,13 +79,15 @@ class SettingScreen extends BaseStatelessWidget {
     );
   }
 
-  void updateNightMode(bool value) {
+  void _updateNightMode(bool value) {
     _isNightMode = value;
     Utils.instance.setThemeMode(_isNightMode ? ThemeMode.dark : ThemeMode.light);
   }
 
   void onSettingItemClicked(int index) {
-    if (index == 1) {
+    if (index == 0) {
+      _updateNightMode(!_isNightMode);
+    } else if (index == 1) {
       CustomNavigator.goToSettingLanguageScreen();
     } else if (index == 2) { // contact us
 

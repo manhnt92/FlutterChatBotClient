@@ -9,10 +9,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-enum Platforms {
-  web, android, iOS, win32
-}
-
 class Utils {
 
   static final Utils instance = Utils._internal();
@@ -42,25 +38,25 @@ class Utils {
 
   String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
-  late Platforms os;
-  late String osName;
+  bool isWeb = false;
+  bool isWin32 = false;
+  bool isAndroid = false;
+  bool isIOS = false;
+  bool isMobile = false;
 
   Future<void> init() async {
     if (kIsWeb) {
-      os = Platforms.web;
-      osName = 'web';
+      isWeb = true;
     } else {
       if (Platform.isWindows) {
-        os = Platforms.win32;
-        osName = 'win32';
+        isWin32 = true;
       } else if (Platform.isAndroid) {
-        os = Platforms.android;
-        osName = 'android';
+        isAndroid = true;
       } else if (Platform.isIOS) {
-        os = Platforms.iOS;
-        osName = 'ios';
+        isIOS = true;
       }
     }
+    isMobile = isAndroid || isIOS;
     _languageCode = StreamController.broadcast();
     _themeMode = StreamController.broadcast();
     _wsChannel = WebSocketChannel.connect(Uri.parse(Utils.urlWebSocket));
@@ -82,7 +78,7 @@ class Utils {
     }
     await SQLite.instance.init();
 
-    if (os == Platforms.android || os == Platforms.iOS) {
+    if (isMobile) {
       MobileAds.instance.initialize();
     }
 
@@ -131,7 +127,7 @@ class Utils {
   }
 
   void getUDID(Function(String) callback) {
-    if (os == Platforms.iOS || os == Platforms.android) {
+    if (isMobile) {
       FlutterUdid.consistentUdid.then((value) {
         callback(value);
       });

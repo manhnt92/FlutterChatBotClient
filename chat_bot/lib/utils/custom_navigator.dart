@@ -58,13 +58,13 @@ class CustomNavigator {
   }
 
   static void goToPrivacy() {
-    if (Utils.instance.os == Platforms.android || Utils.instance.os == Platforms.iOS) {
+    if (Utils.instance.isMobile) {
       navigatorKey.currentState?.pushNamed('/privacy');
     }
   }
 
   static void goToTerm() {
-    if (Utils.instance.os == Platforms.android || Utils.instance.os == Platforms.iOS) {
+    if (Utils.instance.isMobile) {
       navigatorKey.currentState?.pushNamed('/term');
     }
   }

@@ -23,21 +23,21 @@ class CustomStyle {
   /// ...where "light" is `FontWeight.w300`, "regular" is `FontWeight.w400` and
   /// "medium" is `FontWeight.w500`.
 
-  static TextStyle headline1 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 96.0, fontWeight: FontWeight.w300, letterSpacing: -1.5));
-  static TextStyle headline2 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 60.0, fontWeight: FontWeight.w300, letterSpacing: -0.5));
-  static TextStyle headline3 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 48.0, fontWeight: FontWeight.w400, letterSpacing: 0.0));
-  static TextStyle headlineLarge = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 40.0, fontWeight: FontWeight.w400));
-  static TextStyle headline4 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 34.0, fontWeight: FontWeight.w400, letterSpacing: 0.25));
-  static TextStyle headline5 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400, letterSpacing: 0.0));
-  static TextStyle headline6 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500, letterSpacing: 0.15));
-  static TextStyle subtitle1 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, letterSpacing: 0.15));
-  static TextStyle subtitle2 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, letterSpacing: 0.1));
-  static TextStyle body1 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, letterSpacing: 0.5));
-  static TextStyle body2 = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, letterSpacing: 0.25));
-  static TextStyle button = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, letterSpacing: 1.25));
-  static TextStyle caption = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400, letterSpacing: 0.4));
-  static TextStyle labelMedium = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400));
-  static TextStyle overline = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w400, letterSpacing: 1.5));
+  static TextStyle headline1 = getTextStyle(textStyle: const TextStyle(fontSize: 96.0, fontWeight: FontWeight.w300, letterSpacing: -1.5));
+  static TextStyle headline2 = getTextStyle(textStyle: const TextStyle(fontSize: 60.0, fontWeight: FontWeight.w300, letterSpacing: -0.5));
+  static TextStyle headline3 = getTextStyle(textStyle: const TextStyle(fontSize: 48.0, fontWeight: FontWeight.w400, letterSpacing: 0.0));
+  static TextStyle headlineLarge = getTextStyle(textStyle: const TextStyle(fontSize: 40.0, fontWeight: FontWeight.w400));
+  static TextStyle headline4 = getTextStyle(textStyle: const TextStyle(fontSize: 34.0, fontWeight: FontWeight.w400, letterSpacing: 0.25));
+  static TextStyle headline5 = getTextStyle(textStyle: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400, letterSpacing: 0.0));
+  static TextStyle headline6 = getTextStyle(textStyle: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500, letterSpacing: 0.15));
+  static TextStyle subtitle1 = getTextStyle(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, letterSpacing: 0.15));
+  static TextStyle subtitle2 = getTextStyle(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, letterSpacing: 0.1));
+  static TextStyle body1 = getTextStyle(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, letterSpacing: 0.5));
+  static TextStyle body2 = getTextStyle(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, letterSpacing: 0.25));
+  static TextStyle button = getTextStyle(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, letterSpacing: 1.25));
+  static TextStyle caption = getTextStyle(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400, letterSpacing: 0.4));
+  static TextStyle labelMedium = getTextStyle(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400));
+  static TextStyle overline = getTextStyle(textStyle: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w400, letterSpacing: 1.5));
 
   static TextStyle headline1I = headline1.apply(fontStyle: FontStyle.italic);
   static TextStyle headline2I = headline2.apply(fontStyle: FontStyle.italic);
@@ -55,21 +55,21 @@ class CustomStyle {
   static TextStyle labelMediumI = labelMedium.apply(fontStyle: FontStyle.italic);
   static TextStyle overlineI = overline.apply(fontStyle: FontStyle.italic);
 
-  static TextStyle headline1B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 96.0, fontWeight: FontWeight.w600, letterSpacing: -1.5));
-  static TextStyle headline2B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 60.0, fontWeight: FontWeight.w600, letterSpacing: -0.5));
-  static TextStyle headline3B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 48.0, fontWeight: FontWeight.w700, letterSpacing: 0.0));
-  static TextStyle headlineLargeB = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 40.0, fontWeight: FontWeight.w700));
-  static TextStyle headline4B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 34.0, fontWeight: FontWeight.w700, letterSpacing: 0.25));
-  static TextStyle headline5B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w700, letterSpacing: 0.0));
-  static TextStyle headline6B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w800, letterSpacing: 0.15));
-  static TextStyle subtitle1B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w700, letterSpacing: 0.15));
-  static TextStyle subtitle2B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w800, letterSpacing: 0.1));
-  static TextStyle body1B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w700, letterSpacing: 0.5));
-  static TextStyle body2B = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700, letterSpacing: 0.25));
-  static TextStyle buttonB = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w800, letterSpacing: 1.25));
-  static TextStyle captionB = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w700, letterSpacing: 0.4));
-  static TextStyle labelMediumB = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w700));
-  static TextStyle overlineB = GoogleFonts.montserrat(textStyle: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w700, letterSpacing: 1.5));
+  static TextStyle headline1B = getTextStyle(textStyle: const TextStyle(fontSize: 96.0, fontWeight: FontWeight.w600, letterSpacing: -1.5));
+  static TextStyle headline2B = getTextStyle(textStyle: const TextStyle(fontSize: 60.0, fontWeight: FontWeight.w600, letterSpacing: -0.5));
+  static TextStyle headline3B = getTextStyle(textStyle: const TextStyle(fontSize: 48.0, fontWeight: FontWeight.w700, letterSpacing: 0.0));
+  static TextStyle headlineLargeB = getTextStyle(textStyle: const TextStyle(fontSize: 40.0, fontWeight: FontWeight.w700));
+  static TextStyle headline4B = getTextStyle(textStyle: const TextStyle(fontSize: 34.0, fontWeight: FontWeight.w700, letterSpacing: 0.25));
+  static TextStyle headline5B = getTextStyle(textStyle: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w700, letterSpacing: 0.0));
+  static TextStyle headline6B = getTextStyle(textStyle: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w800, letterSpacing: 0.15));
+  static TextStyle subtitle1B = getTextStyle(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w700, letterSpacing: 0.15));
+  static TextStyle subtitle2B = getTextStyle(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w800, letterSpacing: 0.1));
+  static TextStyle body1B = getTextStyle(textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w700, letterSpacing: 0.5));
+  static TextStyle body2B = getTextStyle(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700, letterSpacing: 0.25));
+  static TextStyle buttonB = getTextStyle(textStyle: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w800, letterSpacing: 1.25));
+  static TextStyle captionB = getTextStyle(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w700, letterSpacing: 0.4));
+  static TextStyle labelMediumB = getTextStyle(textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w700));
+  static TextStyle overlineB = getTextStyle(textStyle: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w700, letterSpacing: 1.5));
 
   static TextStyle headline1BI = headline1B.apply(fontStyle: FontStyle.italic);
   static TextStyle headline2BI = headline2B.apply(fontStyle: FontStyle.italic);
@@ -86,6 +86,10 @@ class CustomStyle {
   static TextStyle captionBI = captionB.apply(fontStyle: FontStyle.italic);
   static TextStyle labelMediumBI = labelMediumB.apply(fontStyle: FontStyle.italic);
   static TextStyle overlineBI = overlineB.apply(fontStyle: FontStyle.italic);
+
+  static TextStyle getTextStyle({required TextStyle textStyle}) {
+    return GoogleFonts.montserrat(textStyle: textStyle);
+  }
 
   static TextTheme textTheme(bool darkMode) {
     /*var color = isDark ? Colors.white : Colors.black;
