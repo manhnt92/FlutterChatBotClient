@@ -1,8 +1,8 @@
-import 'package:chat_bot/base/base_screen.dart';
+import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/screens/home_vm.dart';
-import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/widgets/conversation_option_sheet.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(S.current.chat_history_title),
         leading: InkWell(
-          onTap : () { CustomNavigator.goBack(); },
+          onTap : () { AppNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         ),
         actions: [
@@ -50,7 +50,7 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
               var conv = conversations[index];
               return InkWell(
                 customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                onTap: () { CustomNavigator.goToChatScreen(conv); },
+                onTap: () { AppNavigator.goToChatScreen(conv); },
                 child: Container(//height: Utils.conversationItemHeight,
                     decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
                         color: CustomStyle.colorBgElevatedButton(context, false),
@@ -96,7 +96,8 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
   }
 
   void _showConversationOption(Conversation conv) {
-    ConversationOptionSheet.show(context: context, conversation: conv, rename: (newName) {
+    ConversationOptionSheet.show(context: context, conversation: conv,
+      rename: (newName) {
         context.read<HomeViewModel>().updateConversation(conv, newName);
       },
       delete: () {

@@ -1,7 +1,7 @@
-import 'package:chat_bot/base/base_screen.dart';
+import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/sub_data.dart';
-import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -29,7 +29,7 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
       appBar: AppBar(
         title: Text(S.current.premium_title),
         leading: InkWell(
-          onTap: () { CustomNavigator.goBack(); },
+          onTap: () { AppNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         ),
       ),
@@ -173,11 +173,11 @@ class SubscriptionTerm extends BaseStatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
-                  onTap: () { CustomNavigator.goToPrivacy(); },
+                  onTap: () { AppNavigator.goToPrivacy(); },
                   child: Text(S.current.setting_policy, style: CustomStyle.body2.apply(decoration: TextDecoration.underline))),
               Container(width: 15),
               InkWell(
-                  onTap: () { CustomNavigator.goToTerm(); },
+                  onTap: () { AppNavigator.goToTerm(); },
                   child: Text(S.current.setting_term, style: CustomStyle.body2.apply(decoration: TextDecoration.underline)))
             ],
           ),

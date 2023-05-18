@@ -1,14 +1,9 @@
-import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_bot/main.dart';
 
 abstract class BaseStatefulWidget extends StatefulWidget {
 
   const BaseStatefulWidget({super.key});
-
-  MyAppState getRootState(BuildContext context) {
-    return context.findAncestorStateOfType<MyAppState>()!;
-  }
 
   bool isInDarkMode(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -21,10 +16,6 @@ abstract class BaseStatelessWidget extends StatelessWidget {
 
   const BaseStatelessWidget({super.key});
 
-  MyAppState getRootState(BuildContext context) {
-    return context.findAncestorStateOfType<MyAppState>()!;
-  }
-
   bool isInDarkMode(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     return brightness == Brightness.dark;
@@ -32,17 +23,21 @@ abstract class BaseStatelessWidget extends StatelessWidget {
 
 }
 
-abstract class BaseState<T extends BaseStatefulWidget> extends State<T> with WidgetsBindingObserver {
+abstract class BaseState<T extends BaseStatefulWidget> extends State<T> with WidgetsBindingObserver, RouteAware {
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      AppNavigator.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+      WidgetsBinding.instance.addObserver(this);
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    AppNavigator.routeObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
   }
 
@@ -51,6 +46,5 @@ abstract class BaseState<T extends BaseStatefulWidget> extends State<T> with Wid
     super.didChangeAppLifecycleState(state);
     debugPrint("didChangeAppLifecycleState state = $state");
   }
-
 
 }

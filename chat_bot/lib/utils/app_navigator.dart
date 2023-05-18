@@ -1,22 +1,30 @@
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/screens/chat_screen.dart';
+import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/screens/conversation_screen.dart';
 import 'package:chat_bot/screens/home_screen.dart';
+import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/screens/premium_screen.dart';
 import 'package:chat_bot/screens/setting_language_screen.dart';
 import 'package:chat_bot/screens/setting_screen.dart';
 import 'package:chat_bot/screens/webview_screen.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
-class CustomNavigator {
+class AppNavigator {
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   static final _routes = {
-    '/': (context) => HomeScreen(),
+    '/': (context) => MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => HomeViewModel()),
+      ChangeNotifierProvider(create: (_) => ChatViewModel()),
+    ],
+    child: const HomeScreen()),
     '/conversations': (context) => const ConversationsScreen(),
     // '/chat': (context) => const ChatScreen(),
-    '/setting': (context) => SettingScreen(),
+    '/setting': (context) => const SettingScreen(),
     '/setting_language': (context) => const SettingLanguageScreen(),
     '/premium': (context) => const PremiumScreen(),
     '/privacy': (context) => WebViewScreen(url: Utils.urlPolicy),
@@ -58,13 +66,13 @@ class CustomNavigator {
   }
 
   static void goToPrivacy() {
-    if (Utils.instance.isMobile) {
+    if (Utils.isMobile) {
       navigatorKey.currentState?.pushNamed('/privacy');
     }
   }
 
   static void goToTerm() {
-    if (Utils.instance.isMobile) {
+    if (Utils.isMobile) {
       navigatorKey.currentState?.pushNamed('/term');
     }
   }

@@ -1,27 +1,35 @@
-import 'dart:async';
-import 'package:chat_bot/screens/home_vm.dart';
-import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/main_view_model.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_scroll_behavior.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
-import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Utils.instance.init();
+  if (Utils.isWin32) {
+    await windowManager.ensureInitialized();
+    windowManager.waitUntilReadyToShow(null, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
+
+  var viewModel = MainViewModel();
+  await viewModel.init();
   runApp(
       MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => HomeViewModel()),
-          ChangeNotifierProvider(create: (_) => ChatViewModel())
-        ],
-        child: const MyApp())
+          providers: [
+            ChangeNotifierProvider(create: (_) => viewModel)
+          ],
+          child: const MyApp()
+      )
   );
 }
 
@@ -30,92 +38,101 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<StatefulWidget> createState() => MyAppState();
+  State<StatefulWidget> createState() => _MyAppState();
 
 }
 
-class MyAppState extends State<MyApp> {
-
-  late StreamSubscription<dynamic> _socketListener;
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver, WindowListener {
 
   @override
   void initState() {
     super.initState();
-    _socketListener = Utils.instance.getWebSocketStream().listen((event) {
-      //debugPrint("receive event $event");
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addObserver(this);
+      if (Utils.isWin32) {
+        windowManager.addListener(this);
+      }
     });
-    /*Utils.instance.getUDID((udid) {
-      Map<String, dynamic> loginRq = <String, dynamic>{};
-      loginRq['id'] = 'loginguest';
-      loginRq['token'] = '984725b6c4f55963cc52fca0f943f9a8060b1c71900d542c79669b6dc718a64b';
-      loginRq['os'] = Utils.instance.osName;
-      Utils.instance.sendSocketMessage(loginRq);
-    });*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<String>(
-      stream: Utils.instance.getLangCodeStream(),
-      builder: (context, langCode) {
-        return StreamBuilder<ThemeMode>(
-          stream: Utils.instance.getThemeModeStream(),
-          builder: (context, themeMode) {
-            ThemeMode currentThemeMode = themeMode.data ?? Utils.instance.currentThemeMode;
-            final materialLightTheme = ThemeData(
-              useMaterial3: true,
-              textTheme: CustomStyle.textTheme(false),
-              colorScheme: CustomStyle.colorScheme,
-              appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light)
-            );
-            final materialDarkTheme = ThemeData(
-              useMaterial3: true,
-              textTheme: CustomStyle.textTheme(true),
-              colorScheme: CustomStyle.colorSchemeDark,
-              appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark)
-            );
-            final cupertinoLightTheme = MaterialBasedCupertinoThemeData(materialTheme: materialLightTheme);
-            final cupertinoDarkTheme = MaterialBasedCupertinoThemeData(materialTheme: materialDarkTheme);
-            return PlatformProvider(
-              settings: PlatformSettingsData(
-                iosUsesMaterialWidgets: true,
-                iosUseZeroPaddingForAppbarPlatformIcon: true,
-              ),
-              builder: (context) => PlatformTheme(
-                themeMode: currentThemeMode,
-                materialLightTheme: materialLightTheme,
-                materialDarkTheme: materialDarkTheme,
-                cupertinoLightTheme: cupertinoLightTheme,
-                cupertinoDarkTheme: cupertinoDarkTheme,
-                matchCupertinoSystemChromeBrightness: true,
-                builder: (context) => PlatformApp(
-                  debugShowCheckedModeBanner: false,
-                  localizationsDelegates: const [
-                    S.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  scrollBehavior: CustomScrollBehavior(),
-                  supportedLocales: Utils.supportedLocale,
-                  locale: Locale(langCode.data ?? Utils.instance.currentLangCode),
-                  navigatorKey: CustomNavigator.navigatorKey,
-                  initialRoute: '/',
-                  onGenerateRoute: (settings) => CustomNavigator.generateRoute(settings),
-                ),
-              )
-            );
-          }
-        );
-      }
+    final materialLightTheme = ThemeData(
+        useMaterial3: true,
+        textTheme: CustomStyle.textTheme(false),
+        colorScheme: CustomStyle.colorScheme,
+        appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light)
     );
+    final materialDarkTheme = ThemeData(
+        useMaterial3: true,
+        textTheme: CustomStyle.textTheme(true),
+        colorScheme: CustomStyle.colorSchemeDark,
+        appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark)
+    );
+    final cupertinoLightTheme = MaterialBasedCupertinoThemeData(materialTheme: materialLightTheme);
+    final cupertinoDarkTheme = MaterialBasedCupertinoThemeData(materialTheme: materialDarkTheme);
+    return PlatformProvider(
+        settings: PlatformSettingsData(
+          iosUsesMaterialWidgets: true,
+          iosUseZeroPaddingForAppbarPlatformIcon: true,
+        ),
+        builder: (context) => PlatformTheme(
+          themeMode: context.watch<MainViewModel>().currentThemeMode,
+          materialLightTheme: materialLightTheme,
+          materialDarkTheme: materialDarkTheme,
+          cupertinoLightTheme: cupertinoLightTheme,
+          cupertinoDarkTheme: cupertinoDarkTheme,
+          matchCupertinoSystemChromeBrightness: true,
+          builder: (context) => PlatformApp(
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            scrollBehavior: CustomScrollBehavior(),
+            supportedLocales: Utils.supportedLocale,
+            locale: Locale(context.watch<MainViewModel>().currentLangCode),
+            navigatorKey: AppNavigator.navigatorKey,
+            navigatorObservers: [ AppNavigator.routeObserver ],
+            initialRoute: '/',
+            onGenerateRoute: (settings) => AppNavigator.generateRoute(settings),
+          ),
+        )
+    );
+
+  }
+
+  @override
+  void onWindowMinimize() {
+    super.onWindowMinimize();
+    context.read<MainViewModel>().disconnectSocket();
+  }
+
+  @override
+  void onWindowRestore() {
+    super.onWindowRestore();
+    context.read<MainViewModel>().connectSocket();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      context.read<MainViewModel>().disconnectSocket();
+    } else if (state == AppLifecycleState.resumed) {
+      context.read<MainViewModel>().connectSocket();
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _socketListener.cancel();
-    Utils.instance.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    if (Utils.isWin32) {
+      windowManager.removeListener(this);
+    }
   }
 
 }

@@ -1,11 +1,9 @@
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
-import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ConversationOptionSheet extends StatefulWidget {
 
@@ -75,10 +73,9 @@ class _ConversationOptionState extends State<ConversationOptionSheet> {
           const Divider(height: 1),
           SimpleListViewItem(
             onTap: () {
-              widget.deleteCallback();
-              context.read<HomeViewModel>().deleteConversation(widget.conversation);
               _renameController.dispose();
               Navigator.pop(context);
+              widget.deleteCallback();
             },
             content: S.current.home_conversation_delete,
             leftWidget: const Icon(Icons.delete),

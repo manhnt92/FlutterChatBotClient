@@ -1,10 +1,10 @@
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
-import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/widgets/chat.dart';
 import 'package:chat_bot/widgets/expandable_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_bot/base/base_screen.dart';
+import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(S.current.chat_title),
         leading: InkWell(
-          onTap: () { CustomNavigator.goBack(); },
+          onTap: () { AppNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         )
       ),

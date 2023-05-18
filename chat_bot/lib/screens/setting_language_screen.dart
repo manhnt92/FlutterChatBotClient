@@ -1,9 +1,11 @@
-import 'package:chat_bot/base/base_screen.dart';
+import 'package:chat_bot/main_view_model.dart';
+import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
-import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingLanguageScreen extends BaseStatefulWidget {
 
@@ -18,11 +20,12 @@ class _SettingLanguageState extends BaseState<SettingLanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var viewModel = context.watch<MainViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.setting_language),
         leading: InkWell(
-          onTap: () { CustomNavigator.goBack(); },
+          onTap: () { AppNavigator.goBack(); },
           child: const Icon(Icons.arrow_back),
         ),
       ),
@@ -30,7 +33,7 @@ class _SettingLanguageState extends BaseState<SettingLanguageScreen> {
         itemCount: Utils.supportedLocale.length,
         itemBuilder: (BuildContext context, int index) {
           String content = convertLocaleToString(Utils.supportedLocale[index]);
-          bool isCurrentLang = Utils.supportedLocale[index].languageCode == Utils.instance.currentLangCode;
+          bool isCurrentLang = Utils.supportedLocale[index].languageCode == viewModel.currentLangCode;
           return SimpleListViewItem(
             onTap: () => updateLangMode(index),
             content: content,
@@ -44,9 +47,7 @@ class _SettingLanguageState extends BaseState<SettingLanguageScreen> {
   }
 
   void updateLangMode(int index) {
-    setState(() {
-      Utils.instance.setLangCode(Utils.supportedLocale[index].languageCode);
-    });
+    context.read<MainViewModel>().setLangCode(Utils.supportedLocale[index].languageCode);
   }
 
   String convertLocaleToString(Locale locale) {

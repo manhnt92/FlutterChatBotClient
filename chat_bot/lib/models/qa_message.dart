@@ -5,12 +5,13 @@ class Conversation {
   static const int typeConversation = 2;
 
   int id;
+  int remoteId;
   String title;
   String desc;
   List<QAMessage> messages = [];
   int type;
 
-  Conversation({required this.id, required this.title, required this.desc, required this.type});
+  Conversation({required this.id, required this.remoteId, required this.title, required this.desc, required this.type});
 
   void addMessage(QAMessage message) {
     messages.add(message);
@@ -27,13 +28,13 @@ class QAMessage {
   int id;
   String question;
   String answer = "";
-  int conversationId = 0;
+  int conversationRemoteId = 0;
   bool canPlayAnswerAnim;
 
-  QAMessage({required this.id, required this.question, this.answer = "", this.conversationId = 0, required this.canPlayAnswerAnim});
+  QAMessage({required this.id, required this.question, this.answer = "", this.conversationRemoteId = 0, required this.canPlayAnswerAnim});
 
-  void setAnswer(String answer) {
-    this.answer = answer;
+  void appendAnswer(String answer) {
+    this.answer += answer;
   }
 
   void setAnswerTest() {

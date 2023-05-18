@@ -31,13 +31,13 @@ class _TestAdsState extends State<TestAds> {
   final String _bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111";
 
   InterstitialAd? _interstitialAd;
-  final _interstitialAdUnitId = Utils.instance.isAndroid ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-3940256099942544/4411468910';
+  final _interstitialAdUnitId = Utils.isAndroid ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-3940256099942544/4411468910';
 
   RewardedAd? _rewardedAd;
-  final _rewardAdUnitId = Utils.instance.isAndroid ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313';
+  final _rewardAdUnitId = Utils.isAndroid ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313';
 
   RewardedInterstitialAd? _rewardedInterstitialAd;
-  final _rewardedInterstitialAdUnitId = Utils.instance.isAndroid ? 'ca-app-pub-3940256099942544/5354046379' : 'ca-app-pub-3940256099942544/6978759866';
+  final _rewardedInterstitialAdUnitId = Utils.isAndroid ? 'ca-app-pub-3940256099942544/5354046379' : 'ca-app-pub-3940256099942544/6978759866';
 
   @override
   void initState() {

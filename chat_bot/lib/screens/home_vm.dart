@@ -1,5 +1,5 @@
 import 'package:chat_bot/models/qa_message.dart';
-import 'package:chat_bot/utils/sqlite.dart';
+import 'package:chat_bot/data/app_database.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel with ChangeNotifier {
@@ -122,7 +122,7 @@ class HomeViewModel with ChangeNotifier {
   ];
 
   void getAllConversation() {
-    SQLite.instance.getAllConversation().then((value) {
+    AppDatabase.instance.getAllConversation().then((value) {
       conversations.clear();
       // conversations.add(Conversation(id: 1000000, title: "Hello world c++ Hello world c++ Hello world c++", desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", type: 0));
       // conversations.add(Conversation(id: 10000000, title: "Hello world c++", desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", type: 0));
@@ -133,12 +133,12 @@ class HomeViewModel with ChangeNotifier {
 
   void updateConversation(Conversation conv, String newTitle) {
     conv.title = newTitle;
-    SQLite.instance.updateConversation(conv);
+    AppDatabase.instance.updateConversation(conv);
     notifyListeners();
   }
 
   void deleteConversation(Conversation conv) {
-    SQLite.instance.deleteConversation(conv);
+    AppDatabase.instance.deleteConversation(conv);
     conversations.remove(conv);
     notifyListeners();
   }

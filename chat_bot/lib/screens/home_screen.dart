@@ -1,8 +1,8 @@
-import 'package:chat_bot/base/base_screen.dart';
+import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/screens/home_vm.dart';
-import 'package:chat_bot/utils/custom_navigator.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/widgets/chat.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
@@ -44,6 +44,13 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
   }
 
   @override
+  void didPopNext() {
+    super.didPopNext();
+    var viewModel = context.read<HomeViewModel>();
+    viewModel.getAllConversation();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
@@ -61,7 +68,7 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
           ),
           actions: [
             IconButton(onPressed: () {
-              CustomNavigator.goToSettingScreen();
+              AppNavigator.goToSettingScreen();
             }, icon: const Icon(Icons.settings))
           ],
         ),
@@ -112,7 +119,7 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
                   children: [
                     Expanded(child: Text(S.current.home_conversation_history, style: CustomStyle.body1B)),
                     TextButton(onPressed: () {
-                        CustomNavigator.goToConversationsScreen()?.then((value) {
+                        AppNavigator.goToConversationsScreen()?.then((value) {
                           context.read<HomeViewModel>().getAllConversation();
                         });
                       },
@@ -222,12 +229,13 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
   }
 
   void _showConversationOption(Conversation conv) {
-    ConversationOptionSheet.show(context: context, conversation: conv, rename: (newName) {
-      context.read<HomeViewModel>().updateConversation(conv, newName);
-    },
-        delete: () {
-          context.read<HomeViewModel>().deleteConversation(conv);
-        }
+    ConversationOptionSheet.show(context: context, conversation: conv,
+      rename: (newName) {
+        context.read<HomeViewModel>().updateConversation(conv, newName);
+      },
+      delete: () {
+        context.read<HomeViewModel>().deleteConversation(conv);
+      }
     );
   }
 

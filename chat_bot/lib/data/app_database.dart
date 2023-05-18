@@ -6,20 +6,21 @@ import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
-class SQLite {
+class AppDatabase {
 
-  static final SQLite instance = SQLite._internal();
-  factory SQLite() => instance;
-  SQLite._internal();
+  static final AppDatabase instance = AppDatabase._internal();
+  factory AppDatabase() => instance;
+  AppDatabase._internal();
 
-  static const String chatHistoryTable = 'chat_history';
-  static const String chatHistoryColumnId = 'id';
-  static const String chatHistoryColumnQuestion = 'question';
-  static const String chatHistoryColumnAnswer = 'answer';
-  static const String chatHistoryColumnConversationId = 'conversation_id';
+  static const String chatTable = 'chat';
+  static const String chatColumnId = 'id';
+  static const String chatColumnQuestion = 'question';
+  static const String chatColumnAnswer = 'answer';
+  static const String chatColumnConversationRemoteId = 'conversation_remote_id';
 
   static const String conversationTable = 'conversation';
   static const String conversationColumnId = 'id';
+  static const String conversationColumnRemoteId = 'remote_id';
   static const String conversationColumnTitle = 'title';
   static const String conversationColumnDesc = 'desc';
   static const String conversationColumnType = 'type';
@@ -27,15 +28,16 @@ class SQLite {
   late Database _database;
   final Map<int, List<String>> _migrationScripts = {
     1 : [
-      'CREATE TABLE $chatHistoryTable('
-          '$chatHistoryColumnId INTEGER PRIMARY KEY,'
-          '$chatHistoryColumnQuestion TEXT,'
-          '$chatHistoryColumnAnswer TEXT,'
-          '$chatHistoryColumnConversationId INTEGER,'
+      'CREATE TABLE $chatTable('
+          '$chatColumnId INTEGER PRIMARY KEY,'
+          '$chatColumnQuestion TEXT,'
+          '$chatColumnAnswer TEXT,'
+          '$chatColumnConversationRemoteId INTEGER,'
           'created_at DATETIME DEFAULT CURRENT_TIMESTAMP'
       ')',
       'CREATE TABLE $conversationTable('
           '$conversationColumnId INTEGER PRIMARY KEY,'
+          '$conversationColumnRemoteId INTEGER,'
           '$conversationColumnTitle TEXT,'
           '$conversationColumnDesc TEXT,'
           '$conversationColumnType INTEGER DEFAULT 1,'
@@ -45,10 +47,10 @@ class SQLite {
   };
 
   Future<void> init() async {
-    if (Utils.instance.isWin32) {
+    if (Utils.isWin32) {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
-    } else if (Utils.instance.isWeb) {
+    } else if (Utils.isWeb) {
       //dart run sqflite_common_ffi_web:setup
       //dart run sqflite_common_ffi_web:setup --force
       databaseFactory = databaseFactoryFfiWeb;
@@ -87,16 +89,18 @@ class SQLite {
 
   Future<Conversation> insertConversation(String title, String desc, int type) async {
     Map<String, dynamic> map = {
+      conversationColumnRemoteId : -1,
       conversationColumnTitle : title,
       conversationColumnDesc : desc,
       conversationColumnType : type
     };
     int id = await _database.insert(conversationTable, map, conflictAlgorithm: ConflictAlgorithm.replace);
-    return Conversation(id: id, title: title, desc: desc, type: type);
+    return Conversation(id: id, remoteId: -1, title: title, desc: desc, type: type);
   }
 
   Future<void> updateConversation(Conversation conv) async {
     Map<String, dynamic> map = {
+      conversationColumnRemoteId : conv.remoteId,
       conversationColumnTitle : conv.title,
       conversationColumnDesc : conv.desc,
       conversationColumnType : conv.type
@@ -113,6 +117,7 @@ class SQLite {
     return List.generate(maps.length, (i) {
       return Conversation(
         id: maps[i][conversationColumnId],
+        remoteId: maps[i][conversationColumnRemoteId],
         title: maps[i][conversationColumnTitle],
         desc: maps[i][conversationColumnDesc],
         type: maps[i][conversationColumnType]
@@ -122,52 +127,52 @@ class SQLite {
 
   Future<QAMessage> insertQAMessage({required Conversation conv, required String question, String answer = ""}) async {
     Map<String, dynamic> map = {
-      chatHistoryColumnQuestion : question,
-      chatHistoryColumnAnswer : answer,
-      chatHistoryColumnConversationId : conv.id
+      chatColumnQuestion : question,
+      chatColumnAnswer : answer,
+      chatColumnConversationRemoteId: conv.remoteId
     };
     debugPrint('insert QA Message: $map');
-    int id = await _database.insert(chatHistoryTable, map, conflictAlgorithm: ConflictAlgorithm.replace);
-    return QAMessage(id: id, question: question, answer: answer, conversationId: conv.id, canPlayAnswerAnim: true);
+    int id = await _database.insert(chatTable, map, conflictAlgorithm: ConflictAlgorithm.replace);
+    return QAMessage(id: id, question: question, answer: answer, conversationRemoteId: conv.remoteId, canPlayAnswerAnim: true);
   }
 
   Future<void> updateQAMessage(QAMessage message) async {
     Map<String, dynamic> map = {
-      chatHistoryColumnQuestion : message.question,
-      chatHistoryColumnAnswer : message.answer,
-      chatHistoryColumnConversationId : message.conversationId
+      chatColumnQuestion : message.question,
+      chatColumnAnswer : message.answer,
+      chatColumnConversationRemoteId: message.conversationRemoteId
     };
     debugPrint('update QA Message: $map');
-    await _database.update(chatHistoryTable, map, where: 'id = ?', whereArgs: [message.id]);
+    await _database.update(chatTable, map, where: 'id = ?', whereArgs: [message.id]);
   }
 
   Future<void> deleteQAMessage(QAMessage message) async {
-    await _database.delete(chatHistoryTable, where: 'id = ?', whereArgs: [message.id]);
+    await _database.delete(chatTable, where: 'id = ?', whereArgs: [message.id]);
   }
 
   Future<List<QAMessage>> getAllQAMessage(Conversation conv) async {
-    final List<Map<String, dynamic>> maps = await _database.query(chatHistoryTable, where: '$chatHistoryColumnConversationId = ?', whereArgs: [conv.id]);
+    final List<Map<String, dynamic>> maps = await _database.query(chatTable, where: '$chatColumnConversationRemoteId = ?', whereArgs: [conv.remoteId]);
     debugPrint('getAllQAMessage: conv_id=${conv.id} - $maps');
     return List.generate(maps.length, (i) {
       return QAMessage(
-          id: maps[i][chatHistoryColumnId],
-          question: maps[i][chatHistoryColumnQuestion],
-          answer: maps[i][chatHistoryColumnAnswer],
-          conversationId: maps[i][chatHistoryColumnConversationId],
+          id: maps[i][chatColumnId],
+          question: maps[i][chatColumnQuestion],
+          answer: maps[i][chatColumnAnswer],
+          conversationRemoteId: maps[i][chatColumnConversationRemoteId],
           canPlayAnswerAnim: false
       );
     });
   }
 
   Future<List<QAMessage>> getAllQAMessages() async {
-    final List<Map<String, dynamic>> maps = await _database.query(chatHistoryTable);
+    final List<Map<String, dynamic>> maps = await _database.query(chatTable);
     debugPrint('getAllQAMessage: - $maps');
     return List.generate(maps.length, (i) {
       return QAMessage(
-          id: maps[i][chatHistoryColumnId],
-          question: maps[i][chatHistoryColumnQuestion],
-          answer: maps[i][chatHistoryColumnAnswer],
-          conversationId: maps[i][chatHistoryColumnConversationId],
+          id: maps[i][chatColumnId],
+          question: maps[i][chatColumnQuestion],
+          answer: maps[i][chatColumnAnswer],
+          conversationRemoteId: maps[i][chatColumnConversationRemoteId],
           canPlayAnswerAnim: false
       );
     });
