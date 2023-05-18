@@ -1,0 +1,32 @@
+package proto.aiapp;
+
+message PBCommonMessage {
+	optional int32 id = 1;
+	map<string, PBValue> params = 2;
+	optional bytes dataBytes = 3;
+}
+
+message PBValue {
+	optional int32 intValue = 1;
+	optional string stringValue = 2;
+}
+
+message PBLoginResponse {
+	optional int32 result = 1; //1 = success
+	optional string message = 2;
+	optional PBUser user = 3;
+}
+
+message PBUser {
+	optional int32 dbId = 1;
+}
+
+message PBChat {
+	optional int32 topicId = 1;
+	optional PBUser sender = 2;
+	optional string message = 3;
+}
+
+message PBChatList {
+	repeated PBChat chats = 1;
+}
