@@ -78,19 +78,21 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _isSuggest ? uiForSuggestMode() : Chat(messages: context.watch<ChatViewModel>().messages),
+              _isSuggest ? uiForSuggestMode() : const Chat(),
               ExpandableTextField(clickCallback: _isSuggest ? () => updateUI(!_isSuggest) : null,
                 sendMessageCallback: _isSuggest ? null : (text) {
                   context.read<ChatViewModel>().sendMessage(text);
-                  setState(() {
-                    _currentSuggestItem = null;
-                  });
                 },
                 newConversationCallback: () {
                   _currentConversation = null;
                   updateUI(false);
                 },
                 suggestContent: _currentSuggestItem?.presetContent,
+                clearSuggestContentCallback: () {
+                  setState(() {
+                    _currentSuggestItem = null;
+                  });
+                },
               )
             ],
           ),

@@ -27,7 +27,6 @@ class ChatViewModel with ChangeNotifier {
           var currentMessage = messages[messages.length - 1];
           currentMessage.appendAnswer(chat.message);
           currentMessage.conversationRemoteId = chat.topicId;
-          currentMessage.canPlayAnswerAnim = false;
           if (message.id == 10004) {
             AppDatabase.instance.updateQAMessage(currentMessage);
           }

@@ -1,17 +1,21 @@
-import 'package:chat_bot/models/aiapp.pb.dart';
-import 'package:chat_bot/models/qa_message.dart';
+import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/utils/custom_style.dart';
-import 'package:chat_bot/widgets/type_writer_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Chat extends StatelessWidget {
+class Chat extends StatefulWidget {
 
-  final List<QAMessage> messages;
+  const Chat({super.key});
 
-  const Chat({super.key, required this.messages});
+  @override
+  State<Chat> createState() => _ChatState();
+}
+
+class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    var messages = context.watch<ChatViewModel>().messages;
     return Expanded(
       child: ListView.separated (itemCount: messages.length,
         reverse: true,
@@ -64,16 +68,7 @@ class Chat extends StatelessWidget {
                         Row(
                           children: [
                             const SizedBox(width: 15),
-                            Expanded(child: TypeWriterText (
-                                play: message.canPlayAnswerAnim,
-                                text: Text(message.answer, style: CustomStyle.body2, softWrap: true),
-                                maintainSize: false,
-                                duration: const Duration(milliseconds: 16),
-                                startCallback: () {
-                                  message.canPlayAnswerAnim = false;
-                                },
-                              )
-                            ),
+                            Expanded(child: Text(message.answer, style: CustomStyle.body2, softWrap: true)),
                             const SizedBox(width: 15)
                           ],
                         ),

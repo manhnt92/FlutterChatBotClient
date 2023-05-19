@@ -39,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Chat(messages: context.watch<ChatViewModel>().messages),
+            const Chat(),
             ExpandableTextField(
               sendMessageCallback: (text) { context.read<ChatViewModel>().sendMessage(text); })
           ],

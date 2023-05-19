@@ -10,9 +10,10 @@ class ExpandableTextField extends StatefulWidget {
   final VoidCallback? clickCallback;
   final void Function(String)? sendMessageCallback;
   final VoidCallback? newConversationCallback;
+  final VoidCallback? clearSuggestContentCallback;
   String? suggestContent;
 
-  ExpandableTextField({super.key, this.sendMessageCallback, this.clickCallback, this.newConversationCallback, this.suggestContent});
+  ExpandableTextField({super.key, this.sendMessageCallback, this.clickCallback, this.newConversationCallback, this.suggestContent, this.clearSuggestContentCallback});
 
   @override
   State<StatefulWidget> createState() => _ExpandableTextFieldState();
@@ -85,7 +86,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
 
   Widget _uiForSendingMode() {
     return Positioned.fill(
-      child: Center(child: Text(S.current.chat_wait_response, style: CustomStyle.body1B))
+      child: Center(child: Text(S.current.chat_wait_response, style: CustomStyle.body1B, textAlign: TextAlign.center))
     );
   }
 
@@ -177,9 +178,12 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   }
 
   void _clearMessage() {
-    _messageController.clear();
     setState(() {
+      _messageController.clear();
       _currentChatLength = "0/${Utils.chatMaxLength}";
+      if (widget.clearSuggestContentCallback != null) {
+        widget.clearSuggestContentCallback!();
+      }
     });
   }
 

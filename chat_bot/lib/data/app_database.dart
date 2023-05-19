@@ -133,7 +133,7 @@ class AppDatabase {
     };
     // debugPrint('insert QA Message: $map');
     int id = await _database.insert(chatTable, map, conflictAlgorithm: ConflictAlgorithm.replace);
-    return QAMessage(id: id, question: question, answer: answer, conversationRemoteId: conv.remoteId, canPlayAnswerAnim: true);
+    return QAMessage(id: id, question: question, answer: answer, conversationRemoteId: conv.remoteId);
   }
 
   Future<void> updateQAMessage(QAMessage message) async {
@@ -158,8 +158,7 @@ class AppDatabase {
           id: maps[i][chatColumnId],
           question: maps[i][chatColumnQuestion],
           answer: maps[i][chatColumnAnswer],
-          conversationRemoteId: maps[i][chatColumnConversationRemoteId],
-          canPlayAnswerAnim: false
+          conversationRemoteId: maps[i][chatColumnConversationRemoteId]
       );
     });
   }
@@ -172,8 +171,7 @@ class AppDatabase {
           id: maps[i][chatColumnId],
           question: maps[i][chatColumnQuestion],
           answer: maps[i][chatColumnAnswer],
-          conversationRemoteId: maps[i][chatColumnConversationRemoteId],
-          canPlayAnswerAnim: false
+          conversationRemoteId: maps[i][chatColumnConversationRemoteId]
       );
     });
   }
