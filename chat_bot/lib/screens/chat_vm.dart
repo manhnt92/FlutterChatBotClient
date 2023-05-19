@@ -14,7 +14,7 @@ class ChatViewModel with ChangeNotifier {
 
   List<QAMessage> messages = [];
   Conversation? _conversation;
-  ChatState currentState = ChatState.nextQuestion;
+  ChatState currentState = ChatState.disable;
 
   late StreamSubscription<dynamic> _socketListener;
 
@@ -28,11 +28,15 @@ class ChatViewModel with ChangeNotifier {
           currentMessage.appendAnswer(chat.message);
           currentMessage.conversationRemoteId = chat.topicId;
           currentMessage.canPlayAnswerAnim = false;
-          AppDatabase.instance.updateQAMessage(currentMessage);
+          if (message.id == 10004) {
+            AppDatabase.instance.updateQAMessage(currentMessage);
+          }
 
           _conversation!.desc = currentMessage.answer;
           _conversation!.remoteId = chat.topicId;
-          AppDatabase.instance.updateConversation(_conversation!);
+          if (message.id == 10004) {
+            AppDatabase.instance.updateConversation(_conversation!);
+          }
         }
         if (message.id == 10004) {
           setCurrentState(ChatState.nextQuestion, notify: false);

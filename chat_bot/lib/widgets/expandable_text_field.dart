@@ -26,7 +26,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   final TextEditingController _messageController = TextEditingController();
   bool _openKeyboard = false;
   final FocusNode _focusNode = FocusNode();
-  String currentChatLength = "0/${Utils.chatMaxLength}";
+  String _currentChatLength = "0/${Utils.chatMaxLength}";
 
   @override
   void initState() {
@@ -101,9 +101,8 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   }
 
   Widget _uiForChatMode(bool isTypingOrDisable, bool isTyping) {
-    if (widget.suggestContent != null) {
+    if (widget.suggestContent != null && widget.suggestContent!.isNotEmpty) {
       _messageController.text = widget.suggestContent!;
-      widget.suggestContent = null;
     }
     return Column(
       children: <Widget>[
@@ -141,7 +140,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
                 Container(width: 5),
                 Visibility(visible: _messageController.text.isNotEmpty && isTypingOrDisable, child: IconButton(icon: const Icon(Icons.clear), onPressed: _clearMessage)),
                 const Spacer(),
-                Visibility(visible: isTypingOrDisable, child: Text(currentChatLength, style: CustomStyle.caption)),
+                Visibility(visible: isTypingOrDisable, child: Text(_currentChatLength, style: CustomStyle.caption)),
                 Container(width: 5),
                 Visibility(visible: isTypingOrDisable, child: IconButton(onPressed: isTyping ? _sendMessage : null, icon: Icon(Icons.send_rounded, color: CustomStyle.bgColorButton(context)))),
                 Container(width: 5)
@@ -180,13 +179,13 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   void _clearMessage() {
     _messageController.clear();
     setState(() {
-      currentChatLength = "0/${Utils.chatMaxLength}";
+      _currentChatLength = "0/${Utils.chatMaxLength}";
     });
   }
 
   void _onTextChanged(String text) {
     setState(() {
-      currentChatLength = "${text.length}/${Utils.chatMaxLength}";
+      _currentChatLength = "${text.length}/${Utils.chatMaxLength}";
     });
   }
 

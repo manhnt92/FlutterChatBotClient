@@ -131,7 +131,7 @@ class AppDatabase {
       chatColumnAnswer : answer,
       chatColumnConversationRemoteId: conv.remoteId
     };
-    debugPrint('insert QA Message: $map');
+    // debugPrint('insert QA Message: $map');
     int id = await _database.insert(chatTable, map, conflictAlgorithm: ConflictAlgorithm.replace);
     return QAMessage(id: id, question: question, answer: answer, conversationRemoteId: conv.remoteId, canPlayAnswerAnim: true);
   }
@@ -142,7 +142,7 @@ class AppDatabase {
       chatColumnAnswer : message.answer,
       chatColumnConversationRemoteId: message.conversationRemoteId
     };
-    debugPrint('update QA Message: $map');
+    // debugPrint('update QA Message: $map');
     await _database.update(chatTable, map, where: 'id = ?', whereArgs: [message.id]);
   }
 
@@ -152,7 +152,7 @@ class AppDatabase {
 
   Future<List<QAMessage>> getAllQAMessage(Conversation conv) async {
     final List<Map<String, dynamic>> maps = await _database.query(chatTable, where: '$chatColumnConversationRemoteId = ?', whereArgs: [conv.remoteId]);
-    debugPrint('getAllQAMessage: conv_id=${conv.id} - $maps');
+    // debugPrint('getAllQAMessage: conv_id=${conv.id} - $maps');
     return List.generate(maps.length, (i) {
       return QAMessage(
           id: maps[i][chatColumnId],
@@ -166,7 +166,7 @@ class AppDatabase {
 
   Future<List<QAMessage>> getAllQAMessages() async {
     final List<Map<String, dynamic>> maps = await _database.query(chatTable);
-    debugPrint('getAllQAMessage: - $maps');
+    // debugPrint('getAllQAMessage: - $maps');
     return List.generate(maps.length, (i) {
       return QAMessage(
           id: maps[i][chatColumnId],

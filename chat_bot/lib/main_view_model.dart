@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:chat_bot/data/app_database.dart';
 import 'package:chat_bot/data/app_web_socket.dart';
 import 'package:chat_bot/models/aiapp.pb.dart';
+import 'package:chat_bot/models/qa_message.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -14,6 +15,8 @@ class MainViewModel with ChangeNotifier {
   ThemeMode currentThemeMode = ThemeMode.system;
   late StreamSubscription<dynamic> _socketListener;
   List<PBSuggest> suggest = [];
+
+  final List<Conversation> conversations = [];
 
   Future<void> init() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -71,7 +74,7 @@ class MainViewModel with ChangeNotifier {
         // debugPrint('login response : ${loginResponse.toDebugString()}');
       } else if (message.id == 11113) {
         var config = PBConfig.fromBuffer(message.dataBytes);
-        debugPrint('config : $config');
+        // debugPrint('config : $config');
         suggest.clear();
         suggest.addAll(config.suggestList);
         notifyListeners();
@@ -113,6 +116,26 @@ class MainViewModel with ChangeNotifier {
     } else {
       callback('984725b6c4f55963cc52fca0f943f9a8060b1c71900d542c79669b6dc718a64b');
     }
+  }
+
+  void getAllConversation() {
+    AppDatabase.instance.getAllConversation().then((value) {
+      conversations.clear();
+      conversations.addAll(value);
+      notifyListeners();
+    });
+  }
+
+  void updateConversation(Conversation conv, String newTitle) {
+    conv.title = newTitle;
+    AppDatabase.instance.updateConversation(conv);
+    notifyListeners();
+  }
+
+  void deleteConversation(Conversation conv) {
+    AppDatabase.instance.deleteConversation(conv);
+    conversations.remove(conv);
+    notifyListeners();
   }
 
 }

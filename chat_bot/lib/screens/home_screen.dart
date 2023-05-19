@@ -3,7 +3,6 @@ import 'package:chat_bot/models/aiapp.pb.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
-import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/widgets/chat.dart';
@@ -34,12 +33,14 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    var viewModel = context.read<HomeViewModel>();
+    var viewModel = context.read<MainViewModel>();
     viewModel.getAllConversation();
     _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: context.read<MainViewModel>().suggest.length, vsync: this);
     _tabSuggestController.addListener(() {
       if (_tabSuggestController.indexIsChanging) {
-        _currentTabIndex = _tabSuggestController.index;
+        setState(() {
+          _currentTabIndex = _tabSuggestController.index;
+        });
       }
     });
   }
@@ -47,7 +48,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   @override
   void didPopNext() {
     super.didPopNext();
-    var viewModel = context.read<HomeViewModel>();
+    var viewModel = context.read<MainViewModel>();
     viewModel.getAllConversation();
   }
 
@@ -79,7 +80,12 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
             children: [
               _isSuggest ? uiForSuggestMode() : Chat(messages: context.watch<ChatViewModel>().messages),
               ExpandableTextField(clickCallback: _isSuggest ? () => updateUI(!_isSuggest) : null,
-                sendMessageCallback: _isSuggest ? null : (text) => context.read<ChatViewModel>().sendMessage(text),
+                sendMessageCallback: _isSuggest ? null : (text) {
+                  context.read<ChatViewModel>().sendMessage(text);
+                  setState(() {
+                    _currentSuggestItem = null;
+                  });
+                },
                 newConversationCallback: () {
                   _currentConversation = null;
                   updateUI(false);
@@ -97,7 +103,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
     setState(() {
       _isSuggest = isSuggest;
       if (_isSuggest) {
-        context.read<HomeViewModel>().getAllConversation();
+        context.read<MainViewModel>().getAllConversation();
         context.read<ChatViewModel>().setCurrentState(ChatState.disable);
         _currentConversation = null;
         _currentSuggestItem = null;
@@ -111,7 +117,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   Widget uiForSuggestMode() {
     return Expanded(child:
       ListView.builder(itemCount: 2, itemBuilder: (BuildContext context, int index) {
-        var viewModel = context.watch<HomeViewModel>();
+        var viewModel = context.watch<MainViewModel>();
         if (index == 0) {
           return Padding(
             padding: const EdgeInsets.all(15),
@@ -123,7 +129,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
                     Expanded(child: Text(S.current.home_conversation_history, style: CustomStyle.body1B)),
                     TextButton(onPressed: () {
                         AppNavigator.goToConversationsScreen()?.then((value) {
-                          context.read<HomeViewModel>().getAllConversation();
+                          context.read<MainViewModel>().getAllConversation();
                         });
                       },
                       child: Text(S.current.home_conversation_view_all, style: CustomStyle.body2)
@@ -159,7 +165,9 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
             _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: context.read<MainViewModel>().suggest.length, vsync: this);
             _tabSuggestController.addListener(() {
               if (_tabSuggestController.indexIsChanging) {
-                _currentTabIndex = _tabSuggestController.index;
+                setState(() {
+                  _currentTabIndex = _tabSuggestController.index;
+                });
               }
             });
           }
@@ -242,10 +250,10 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   void _showConversationOption(Conversation conv) {
     ConversationOptionSheet.show(context: context, conversation: conv,
       rename: (newName) {
-        context.read<HomeViewModel>().updateConversation(conv, newName);
+        context.read<MainViewModel>().updateConversation(conv, newName);
       },
       delete: () {
-        context.read<HomeViewModel>().deleteConversation(conv);
+        context.read<MainViewModel>().deleteConversation(conv);
       }
     );
   }

@@ -3,7 +3,6 @@ import 'package:chat_bot/screens/chat_screen.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/screens/conversation_screen.dart';
 import 'package:chat_bot/screens/home_screen.dart';
-import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/screens/premium_screen.dart';
 import 'package:chat_bot/screens/setting_language_screen.dart';
 import 'package:chat_bot/screens/setting_screen.dart';
@@ -18,7 +17,6 @@ class AppNavigator {
   static final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   static final _routes = {
     '/': (context) => MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => HomeViewModel()),
       ChangeNotifierProvider(create: (_) => ChatViewModel()),
     ],
     child: const HomeScreen()),
@@ -39,7 +37,10 @@ class AppNavigator {
         if (settings.arguments != null) {
           conv = settings.arguments as Conversation;
         }
-        return ChatScreen(conversation: conv);
+        return MultiProvider(providers: [
+          ChangeNotifierProvider(create: (_) => ChatViewModel())
+        ],
+        child: ChatScreen(conversation: conv));
       });
     }
     return CupertinoPageRoute(builder: (context) => _routes[settings.name]!(context));

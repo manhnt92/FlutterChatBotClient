@@ -1,7 +1,7 @@
+import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
-import 'package:chat_bot/screens/home_vm.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/widgets/conversation_option_sheet.dart';
@@ -22,13 +22,13 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
   @override
   void initState() {
     super.initState();
-    var viewModel = context.read<HomeViewModel>();
+    var viewModel = context.read<MainViewModel>();
     viewModel.getAllConversation();
   }
 
   @override
   Widget build(BuildContext context) {
-    var conversations = context.watch<HomeViewModel>().conversations;
+    var conversations = context.watch<MainViewModel>().conversations;
     return Scaffold(
       appBar: AppBar(title: Text(S.current.chat_history_title),
         leading: InkWell(
@@ -98,10 +98,10 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
   void _showConversationOption(Conversation conv) {
     ConversationOptionSheet.show(context: context, conversation: conv,
       rename: (newName) {
-        context.read<HomeViewModel>().updateConversation(conv, newName);
+        context.read<MainViewModel>().updateConversation(conv, newName);
       },
       delete: () {
-        context.read<HomeViewModel>().deleteConversation(conv);
+        context.read<MainViewModel>().deleteConversation(conv);
       }
     );
   }
