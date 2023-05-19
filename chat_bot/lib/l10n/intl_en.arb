@@ -12,6 +12,8 @@
 
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Send a message...",
+  "chat_wait_response" : "Please wait for bot response before asking the next question...",
+  "chat_next_question": "Next Question",
 
   "setting_title": "Setting",
   "setting_subscribe": "Subscribe",

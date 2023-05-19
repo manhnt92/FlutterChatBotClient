@@ -30,3 +30,17 @@ message PBChat {
 message PBChatList {
 	repeated PBChat chats = 1;
 }
+
+message PBConfig {
+	repeated PBSuggest suggestList = 1;
+}
+
+message PBSuggest {
+	optional string title = 1;			//tiêu đề mục chính
+	repeated PBSuggestItem suggestItem = 2;
+}
+
+message PBSuggestItem {
+	optional string title = 1;			//tiêu đề của item con
+	optional string presetContent = 2;	//nội dung soạn sẵn để cho user hiểu mẫu trước khi gửi (fill sẵn vào ô chat để user có thể edit hoặc gửi luôn)
+}

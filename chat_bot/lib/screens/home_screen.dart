@@ -1,3 +1,5 @@
+import 'package:chat_bot/main_view_model.dart';
+import 'package:chat_bot/models/aiapp.pb.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
@@ -21,25 +23,24 @@ class HomeScreen extends BaseStatefulWidget {
 
 }
 
-class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
 
   bool _isSuggest = true;
   late TabController _tabSuggestController;
   int _currentTabIndex = 0;
   Conversation? _currentConversation;
+  PBSuggestItem? _currentSuggestItem;
 
   @override
   void initState() {
     super.initState();
     var viewModel = context.read<HomeViewModel>();
     viewModel.getAllConversation();
-    _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: viewModel.tabsTitle.length, vsync: this);
+    _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: context.read<MainViewModel>().suggest.length, vsync: this);
     _tabSuggestController.addListener(() {
-      setState(() {
-        if (_tabSuggestController.indexIsChanging) {
-          _currentTabIndex = _tabSuggestController.index;
-        }
-      });
+      if (_tabSuggestController.indexIsChanging) {
+        _currentTabIndex = _tabSuggestController.index;
+      }
     });
   }
 
@@ -82,7 +83,8 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
                 newConversationCallback: () {
                   _currentConversation = null;
                   updateUI(false);
-                }
+                },
+                suggestContent: _currentSuggestItem?.presetContent,
               )
             ],
           ),
@@ -98,6 +100,7 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
         context.read<HomeViewModel>().getAllConversation();
         context.read<ChatViewModel>().setCurrentState(ChatState.disable);
         _currentConversation = null;
+        _currentSuggestItem = null;
       } else {
         context.read<ChatViewModel>().getAllMessage(_currentConversation);
         context.read<ChatViewModel>().setCurrentState(ChatState.type);
@@ -152,6 +155,14 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
             ),
           );
         } else {
+          if (context.watch<MainViewModel>().suggest.length != _tabSuggestController.length) {
+            _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: context.read<MainViewModel>().suggest.length, vsync: this);
+            _tabSuggestController.addListener(() {
+              if (_tabSuggestController.indexIsChanging) {
+                _currentTabIndex = _tabSuggestController.index;
+              }
+            });
+          }
           List<Widget> children = [];
           children.add(Text(S.current.home_suggestion, style: CustomStyle.body1B));
           children.add(Container(height: 10));
@@ -241,8 +252,8 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
 
   List<Tab> _getTabListWidget(BuildContext context) {
     List<Tab> tabs = [];
-    var viewModel = context.watch<HomeViewModel>();
-    for (int i = 0; i < viewModel.tabsTitle.length; i++) {
+    var viewModel = context.watch<MainViewModel>();
+    for (int i = 0; i < viewModel.suggest.length; i++) {
       bool isSelectedTab = _currentTabIndex == i;
       var tab = Tab(child:
         Container(
@@ -255,7 +266,7 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
           child: Row(
             children: [
               Container(width: 15),
-              Text(viewModel.tabsTitle[i], style: isSelectedTab ? CustomStyle.body2B : CustomStyle.body2),
+              Text(viewModel.suggest[i].title, style: isSelectedTab ? CustomStyle.body2B : CustomStyle.body2),
               Container(width: 15)
             ],
           ),
@@ -268,20 +279,26 @@ class _HomeState extends BaseState<HomeScreen> with SingleTickerProviderStateMix
 
   List<Widget> _getTabListContentWidget() {
     List<Widget> contents = [];
-    var viewModel = context.watch<HomeViewModel>();
-    Map<String, String> map = viewModel.tabsContent[_currentTabIndex];
-    List<String> keys = map.entries.map((e) => e.key).toList();
-    for (int i = 0 ; i < keys.length; i++) {
+    var viewModel = context.watch<MainViewModel>();
+    if (viewModel.suggest.isEmpty) {
+      return contents;
+    }
+    List<PBSuggestItem> items = viewModel.suggest[_currentTabIndex].suggestItem;
+    for (int i = 0 ; i < items.length; i++) {
       contents.add(InkWell(
         customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        onTap: () => {},
+        onTap: () {
+        _currentConversation = null;
+        _currentSuggestItem = items[i];
+          updateUI(false);
+        },
         child: Container(
             padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
             decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
                 color: CustomStyle.colorBgElevatedButton(context, false),
                 borderRadius: const BorderRadius.all(Radius.circular(25))
             ),
-            child: Center(child: Text(keys[i], style: CustomStyle.body2, textAlign: TextAlign.center)),
+            child: Center(child: Text(items[i].title, style: CustomStyle.body2, textAlign: TextAlign.center)),
           ),
       )
       );

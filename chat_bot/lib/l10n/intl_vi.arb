@@ -12,6 +12,8 @@
 
   "chat_title": "Chat Bot",
   "chat_send_message_hint": "Gửi tin nhắn...",
+  "chat_wait_response" : "Vui lòng đợi phản hồi của bot trước khi đặt câu hỏi tiếp...",
+  "chat_next_question": "Câu hỏi tiếp",
 
   "setting_title": "Cài đặt",
   "setting_subscribe": "Subscribe",

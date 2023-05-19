@@ -1,3 +1,4 @@
+import 'package:chat_bot/models/aiapp.pb.dart';
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/utils/custom_style.dart';
 import 'package:chat_bot/widgets/type_writer_text.dart';

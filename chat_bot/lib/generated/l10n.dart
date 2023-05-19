@@ -160,6 +160,26 @@ class S {
     );
   }
 
+  /// `Please wait for bot response before asking the next question...`
+  String get chat_wait_response {
+    return Intl.message(
+      'Please wait for bot response before asking the next question...',
+      name: 'chat_wait_response',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next Question`
+  String get chat_next_question {
+    return Intl.message(
+      'Next Question',
+      name: 'chat_next_question',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Setting`
   String get setting_title {
     return Intl.message(

@@ -10,8 +10,9 @@ class ExpandableTextField extends StatefulWidget {
   final VoidCallback? clickCallback;
   final void Function(String)? sendMessageCallback;
   final VoidCallback? newConversationCallback;
+  String? suggestContent;
 
-  const ExpandableTextField({super.key, this.sendMessageCallback, this.clickCallback, this.newConversationCallback});
+  ExpandableTextField({super.key, this.sendMessageCallback, this.clickCallback, this.newConversationCallback, this.suggestContent});
 
   @override
   State<StatefulWidget> createState() => _ExpandableTextFieldState();
@@ -44,6 +45,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   @override
   Widget build(BuildContext context) {
     var currentState = context.watch<ChatViewModel>().currentState;
+    bool isTypingOrDisable = currentState == ChatState.type || currentState == ChatState.disable;
     bool isTyping = currentState == ChatState.type;
     if (!isTyping) {
       _height = _minHeight;
@@ -55,7 +57,6 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
         _openKeyboard = false;
         Future.delayed(const Duration(milliseconds: 200), () {
           setState(() {
-            debugPrint("request focus");
             _focusNode.requestFocus();
           });
         });
@@ -73,7 +74,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
         ),
         child: Stack(
           children: [
-            _uiForChatMode(isTyping),
+            _uiForChatMode(isTypingOrDisable, isTyping),
             Visibility(visible: currentState == ChatState.send, child: _uiForSendingMode()),
             Visibility(visible: currentState == ChatState.nextQuestion, child: _uiForNextQuestionMode())
           ],
@@ -84,17 +85,26 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
 
   Widget _uiForSendingMode() {
     return Positioned.fill(
-      child: Center(child: Text("waiting bot prepare answer...", style: CustomStyle.body2))
+      child: Center(child: Text(S.current.chat_wait_response, style: CustomStyle.body1B))
     );
   }
 
   Widget _uiForNextQuestionMode() {
     return Positioned.fill(
-        child: Center(child: ElevatedButton(onPressed: _newConversation, child: Text("next question", style: CustomStyle.body2)))
+      child: Center(
+        child: ElevatedButton(onPressed: _newConversation,
+          style: ElevatedButton.styleFrom(padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20)),
+          child: Text(S.current.chat_next_question, style: CustomStyle.body1B),
+        )
+      )
     );
   }
 
-  Widget _uiForChatMode(bool isTyping) {
+  Widget _uiForChatMode(bool isTypingOrDisable, bool isTyping) {
+    if (widget.suggestContent != null) {
+      _messageController.text = widget.suggestContent!;
+      widget.suggestContent = null;
+    }
     return Column(
       children: <Widget>[
         Container(height: 10),
@@ -103,7 +113,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
           child: AnimatedContainer(
             constraints: BoxConstraints(minHeight: _height),
             duration: Duration(milliseconds: _heightAnimDuration),
-            child: TextField(
+            child: TextFormField(
               enabled: isTyping,
               focusNode: _focusNode,
               autofocus: isTyping,
@@ -111,7 +121,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
               decoration: InputDecoration(border: InputBorder.none,
                 hintStyle: CustomStyle.body2I,
                 labelStyle: CustomStyle.body2,
-                hintText: S.current.chat_send_message_hint,
+                hintText: isTypingOrDisable ? S.current.chat_send_message_hint : '',
                 counter: const Offstage(),
                 contentPadding: EdgeInsets.zero,
                 isDense: true,
@@ -129,11 +139,11 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
             child: Row(
               children: [
                 Container(width: 5),
-                Visibility(visible: _messageController.text.isNotEmpty, child: IconButton(icon: const Icon(Icons.clear), onPressed: _clearMessage)),
+                Visibility(visible: _messageController.text.isNotEmpty && isTypingOrDisable, child: IconButton(icon: const Icon(Icons.clear), onPressed: _clearMessage)),
                 const Spacer(),
-                Visibility(visible: isTyping, child: Text(currentChatLength, style: CustomStyle.caption)),
+                Visibility(visible: isTypingOrDisable, child: Text(currentChatLength, style: CustomStyle.caption)),
                 Container(width: 5),
-                IconButton(onPressed: isTyping ? _sendMessage : null, icon: Icon(Icons.send_rounded, color: CustomStyle.bgColorButton(context))),
+                Visibility(visible: isTypingOrDisable, child: IconButton(onPressed: isTyping ? _sendMessage : null, icon: Icon(Icons.send_rounded, color: CustomStyle.bgColorButton(context)))),
                 Container(width: 5)
               ],
             )

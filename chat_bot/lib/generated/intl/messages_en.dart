@@ -25,9 +25,13 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "chat_history_title": MessageLookupByLibrary.simpleMessage("History"),
+        "chat_next_question":
+            MessageLookupByLibrary.simpleMessage("Next Question"),
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "chat_wait_response": MessageLookupByLibrary.simpleMessage(
+            "Please wait for bot response before asking the next question..."),
         "home_conversation_delete":
             MessageLookupByLibrary.simpleMessage("Delete"),
         "home_conversation_empty":

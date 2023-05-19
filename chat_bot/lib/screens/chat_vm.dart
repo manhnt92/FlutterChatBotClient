@@ -14,7 +14,7 @@ class ChatViewModel with ChangeNotifier {
 
   List<QAMessage> messages = [];
   Conversation? _conversation;
-  ChatState currentState = ChatState.disable;
+  ChatState currentState = ChatState.nextQuestion;
 
   late StreamSubscription<dynamic> _socketListener;
 
@@ -57,7 +57,6 @@ class ChatViewModel with ChangeNotifier {
 
   void getAllMessage(Conversation? conversation) {
     _conversation = conversation;
-    debugPrint("${_conversation?.title} - ${_conversation?.desc}");
     setCurrentState(ChatState.type, notify: false);
     if (conversation != null) {
       AppDatabase.instance.getAllQAMessage(conversation).then((value) {

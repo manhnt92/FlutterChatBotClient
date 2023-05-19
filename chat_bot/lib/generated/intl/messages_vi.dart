@@ -26,9 +26,13 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "chat_history_title":
             MessageLookupByLibrary.simpleMessage("Lịch sử chat"),
+        "chat_next_question":
+            MessageLookupByLibrary.simpleMessage("Câu hỏi tiếp"),
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
         "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "chat_wait_response": MessageLookupByLibrary.simpleMessage(
+            "Vui lòng đợi phản hồi của bot trước khi đặt câu hỏi tiếp..."),
         "home_conversation_delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "home_conversation_empty":
             MessageLookupByLibrary.simpleMessage("Không tìm thấy lịch sử."),

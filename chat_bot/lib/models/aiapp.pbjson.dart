@@ -86,3 +86,35 @@ const PBChatList$json = const {
 
 /// Descriptor for `PBChatList`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List pBChatListDescriptor = $convert.base64Decode('CgpQQkNoYXRMaXN0EikKBWNoYXRzGAEgAygLMhMucHJvdG8uYWlhcHAuUEJDaGF0UgVjaGF0cw==');
+@$core.Deprecated('Use pBConfigDescriptor instead')
+const PBConfig$json = const {
+  '1': 'PBConfig',
+  '2': const [
+    const {'1': 'suggestList', '3': 1, '4': 3, '5': 11, '6': '.proto.aiapp.PBSuggest', '10': 'suggestList'},
+  ],
+};
+
+/// Descriptor for `PBConfig`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pBConfigDescriptor = $convert.base64Decode('CghQQkNvbmZpZxI4CgtzdWdnZXN0TGlzdBgBIAMoCzIWLnByb3RvLmFpYXBwLlBCU3VnZ2VzdFILc3VnZ2VzdExpc3Q=');
+@$core.Deprecated('Use pBSuggestDescriptor instead')
+const PBSuggest$json = const {
+  '1': 'PBSuggest',
+  '2': const [
+    const {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
+    const {'1': 'suggestItem', '3': 2, '4': 3, '5': 11, '6': '.proto.aiapp.PBSuggestItem', '10': 'suggestItem'},
+  ],
+};
+
+/// Descriptor for `PBSuggest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pBSuggestDescriptor = $convert.base64Decode('CglQQlN1Z2dlc3QSFAoFdGl0bGUYASABKAlSBXRpdGxlEjwKC3N1Z2dlc3RJdGVtGAIgAygLMhoucHJvdG8uYWlhcHAuUEJTdWdnZXN0SXRlbVILc3VnZ2VzdEl0ZW0=');
+@$core.Deprecated('Use pBSuggestItemDescriptor instead')
+const PBSuggestItem$json = const {
+  '1': 'PBSuggestItem',
+  '2': const [
+    const {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
+    const {'1': 'presetContent', '3': 2, '4': 1, '5': 9, '10': 'presetContent'},
+  ],
+};
+
+/// Descriptor for `PBSuggestItem`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pBSuggestItemDescriptor = $convert.base64Decode('Cg1QQlN1Z2dlc3RJdGVtEhQKBXRpdGxlGAEgASgJUgV0aXRsZRIkCg1wcmVzZXRDb250ZW50GAIgASgJUg1wcmVzZXRDb250ZW50');

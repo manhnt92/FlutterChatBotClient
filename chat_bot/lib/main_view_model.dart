@@ -13,6 +13,7 @@ class MainViewModel with ChangeNotifier {
   String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
   late StreamSubscription<dynamic> _socketListener;
+  List<PBSuggest> suggest = [];
 
   Future<void> init() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -68,6 +69,12 @@ class MainViewModel with ChangeNotifier {
       if (message.id == 10002) {
         var loginResponse = PBLoginResponse.fromBuffer(message.dataBytes);
         // debugPrint('login response : ${loginResponse.toDebugString()}');
+      } else if (message.id == 11113) {
+        var config = PBConfig.fromBuffer(message.dataBytes);
+        debugPrint('config : $config');
+        suggest.clear();
+        suggest.addAll(config.suggestList);
+        notifyListeners();
       }
     });
 
