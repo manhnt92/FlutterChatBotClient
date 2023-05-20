@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
@@ -32,7 +34,10 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(S.current.chat_title),
         leading: InkWell(
-          onTap: () { AppNavigator.goBack(); },
+          onTap: () {
+            context.read<ChatViewModel>().setCurrentState(ChatState.disable);
+            AppNavigator.goBack();
+          },
           child: const Icon(Icons.arrow_back),
         )
       ),
@@ -40,12 +45,19 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           children: [
             const Chat(),
-            ExpandableTextField(
-              sendMessageCallback: (text) { context.read<ChatViewModel>().sendMessage(text); })
+            ExpandableTextField(sendMessageCallback: (text) => sendMessage(text))
           ],
         ),
       ),
     );
+  }
+
+  Future<bool> sendMessage(String text) {
+    var future = context.read<ChatViewModel>().sendMessage(text);
+    future.then((success) {
+      debugPrint("success = $success");
+    });
+    return future;
   }
 
 }

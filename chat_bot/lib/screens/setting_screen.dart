@@ -1,8 +1,9 @@
 import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
+import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
-import 'package:chat_bot/utils/custom_style.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -29,7 +30,7 @@ class _SettingScreenState extends BaseState<SettingScreen> {
     Icons.privacy_tip,
     Icons.delete_forever
   ];
-  final List<String> _settings = [ S.current.setting_night_mode, S.current.setting_language,
+  List<String> _settings = [ S.current.setting_night_mode, S.current.setting_language,
     S.current.setting_contact_us, S.current.setting_share_app, S.current.setting_restore_purchase,
     S.current.setting_policy, S.current.setting_term, S.current.setting_clear_history
   ];
@@ -57,8 +58,8 @@ class _SettingScreenState extends BaseState<SettingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    Text(S.current.setting_subscribe, style: CustomStyle.body1B),
-                    Text(S.current.setting_subscribe_hint, style: CustomStyle.body2),
+                    Text(S.current.setting_subscribe, style: AppStyle.body1B),
+                    Text(S.current.setting_subscribe_hint, style: AppStyle.body2),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -85,6 +86,18 @@ class _SettingScreenState extends BaseState<SettingScreen> {
     );
   }
 
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    setState(() {
+      _settings = [ S.current.setting_night_mode, S.current.setting_language,
+        S.current.setting_contact_us, S.current.setting_share_app, S.current.setting_restore_purchase,
+        S.current.setting_policy, S.current.setting_term, S.current.setting_clear_history
+      ];
+    });
+
+  }
+
   void _updateNightMode(bool value) {
     context.read<MainViewModel>().setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
   }
@@ -106,7 +119,28 @@ class _SettingScreenState extends BaseState<SettingScreen> {
     } else if (index == 6) { // term
       AppNavigator.goToTerm();
     } else if (index == 7) { // clear chat history
-
+      showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(S.current.question_remove_all_conversation, style: AppStyle.body2),
+            actions: [
+              TextButton(
+                child: Text(S.current.button_cancel, style: AppStyle.body2B),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(S.current.button_delete, style: AppStyle.body2B),
+                onPressed:  () {
+                  context.read<MainViewModel>().deleteAllConversation();
+                  Navigator.of(context).pop();
+                  showToast(context, S.current.toast_remove_all_conversation_success);
+                },
+              )
+            ],
+          );
+        }
+      );
     }
   }
 

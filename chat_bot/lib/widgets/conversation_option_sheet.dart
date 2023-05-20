@@ -1,6 +1,6 @@
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
-import 'package:chat_bot/utils/custom_style.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +35,12 @@ class _ConversationOptionState extends State<ConversationOptionSheet> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _renameController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -47,8 +53,8 @@ class _ConversationOptionState extends State<ConversationOptionSheet> {
             focusNode: _focusNode,
             controller: _renameController,
             decoration: InputDecoration(border: InputBorder.none,
-                hintStyle: CustomStyle.body2I,
-                labelStyle: CustomStyle.body2,
+                hintStyle: AppStyle.body2I,
+                labelStyle: AppStyle.body2,
                 hintText: widget.conversation.title,
                 counter: const Offstage(),
                 contentPadding: const EdgeInsets.only(left: 15, right: 15)
@@ -73,7 +79,6 @@ class _ConversationOptionState extends State<ConversationOptionSheet> {
           const Divider(height: 1),
           SimpleListViewItem(
             onTap: () {
-              _renameController.dispose();
               Navigator.pop(context);
               widget.deleteCallback();
             },

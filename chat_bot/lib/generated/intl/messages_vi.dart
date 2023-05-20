@@ -24,6 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "button_cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
+        "button_delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "chat_history_title":
             MessageLookupByLibrary.simpleMessage("Lịch sử chat"),
         "chat_next_question":
@@ -65,6 +67,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_week": MessageLookupByLibrary.simpleMessage("Gói tuần"),
         "premium_week_price":
             MessageLookupByLibrary.simpleMessage("100.000đ / tuần"),
+        "question_remove_all_conversation": MessageLookupByLibrary.simpleMessage(
+            "Bạn có chắc chắn muốn xóa tất cả dữ liệu, cuộc trò chuyện và tin nhắn không. Bạn không thể hoàn tác hành động này"),
         "setting_clear_history":
             MessageLookupByLibrary.simpleMessage("Xóa trò chuyện và lịch sử"),
         "setting_contact_us": MessageLookupByLibrary.simpleMessage("Liên hệ"),
@@ -84,6 +88,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Get Full Access to Chat"),
         "setting_term":
             MessageLookupByLibrary.simpleMessage("Điều khoản sử dụng"),
-        "setting_title": MessageLookupByLibrary.simpleMessage("Cài đặt")
+        "setting_title": MessageLookupByLibrary.simpleMessage("Cài đặt"),
+        "toast_remove_all_conversation_success":
+            MessageLookupByLibrary.simpleMessage(
+                "Các cuộc trò chuyện đã bị xóa"),
+        "toast_remove_conversation_success":
+            MessageLookupByLibrary.simpleMessage(
+                "Xóa cuộc trò chuyện thành công"),
+        "toast_rename_conversation_success":
+            MessageLookupByLibrary.simpleMessage(
+                "Đổi tên cuộc trò chuyện thành công")
       };
 }

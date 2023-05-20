@@ -1,4 +1,10 @@
 {
+  "toast_rename_conversation_success": "Rename success",
+  "toast_remove_conversation_success": "Delete success",
+  "toast_remove_all_conversation_success": "The chats has been cleared",
+  "question_remove_all_conversation": "Are you sure you want to delete all the data, chats and messages. You cannot undo this action",
+  "button_cancel": "Cancel",
+  "button_delete": "Delete",
   "home_title": "Home",
   "home_conversation_history": "My history",
   "home_conversation_view_all": "View all",

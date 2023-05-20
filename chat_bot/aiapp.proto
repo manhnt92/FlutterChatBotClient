@@ -44,3 +44,7 @@ message PBSuggestItem {
 	optional string title = 1;			//tiêu đề của item con
 	optional string presetContent = 2;	//nội dung soạn sẵn để cho user hiểu mẫu trước khi gửi (fill sẵn vào ô chat để user có thể edit hoặc gửi luôn)
 }
+
+message PBDailyLimit {
+	optional bool isLimited = 1;		//true = cần hiện popup, false = vẫn chat tiếp được, ko hiện popup
+}

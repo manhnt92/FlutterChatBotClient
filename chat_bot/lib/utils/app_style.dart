@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomStyle {
+class AppStyle {
 
   /// The 2018 spec has thirteen text styles:
   ///
@@ -132,30 +132,30 @@ class CustomStyle {
 
   static Color colorBgElevatedButton(BuildContext context, bool isSelected) {
     if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return isSelected ? CustomStyle.colorSchemeDark.surfaceTint.withAlpha(48) : CustomStyle.colorSchemeDark.surfaceTint.withAlpha(12);
+      return isSelected ? AppStyle.colorSchemeDark.surfaceTint.withAlpha(48) : AppStyle.colorSchemeDark.surfaceTint.withAlpha(12);
     }
-    return isSelected ? CustomStyle.colorScheme.surfaceTint.withAlpha(48) : CustomStyle.colorScheme.surfaceTint.withAlpha(12);
+    return isSelected ? AppStyle.colorScheme.surfaceTint.withAlpha(48) : AppStyle.colorScheme.surfaceTint.withAlpha(12);
   }
 
   static Color colorExpandableTextField(BuildContext context) {
     if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return CustomStyle.colorSchemeDark.surfaceTint.withAlpha(48);
+      return AppStyle.colorSchemeDark.surfaceTint.withAlpha(48);
     }
-    return CustomStyle.colorScheme.surfaceTint.withAlpha(48);
+    return AppStyle.colorScheme.surfaceTint.withAlpha(48);
   }
 
   static Color bgColorButton(BuildContext context) {
     if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return CustomStyle.colorSchemeDark.primary;
+      return AppStyle.colorSchemeDark.primary;
     }
-    return CustomStyle.colorScheme.primary;
+    return AppStyle.colorScheme.primary;
   }
 
   static Color colorBorder(BuildContext context, bool isSelected) {
     if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return isSelected ? CustomStyle.colorSchemeDark.surfaceTint.withAlpha(122) : Colors.transparent;
+      return isSelected ? AppStyle.colorSchemeDark.surfaceTint.withAlpha(122) : Colors.transparent;
     }
-    return isSelected ? CustomStyle.colorScheme.surfaceTint.withAlpha(122) : Colors.transparent;
+    return isSelected ? AppStyle.colorScheme.surfaceTint.withAlpha(122) : Colors.transparent;
   }
 
 }

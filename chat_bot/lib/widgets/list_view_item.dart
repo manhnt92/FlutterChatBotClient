@@ -1,5 +1,5 @@
 
-import 'package:chat_bot/utils/custom_style.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class SimpleListViewItem extends StatelessWidget {
             Visibility(visible: leftWidget != null, child: const SizedBox(width: 15)),
             Visibility(visible: leftWidget != null, child: leftWidget ?? const SizedBox(height: 0)),
             const SizedBox(width: 15),
-            Expanded(child: Text(content, style: CustomStyle.body2)),
+            Expanded(child: Text(content, style: AppStyle.body2)),
             Visibility(visible: rightWidget != null, child: rightWidget ?? const SizedBox(height: 0)),
             Visibility(visible: rightWidget != null, child: const SizedBox(width: 15))
           ],

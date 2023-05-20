@@ -4,7 +4,7 @@ import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
-import 'package:chat_bot/utils/custom_style.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/widgets/chat.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/widgets/conversation_option_sheet.dart';
@@ -80,9 +80,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
             children: [
               _isSuggest ? uiForSuggestMode() : const Chat(),
               ExpandableTextField(clickCallback: _isSuggest ? () => updateUI(!_isSuggest) : null,
-                sendMessageCallback: _isSuggest ? null : (text) {
-                  context.read<ChatViewModel>().sendMessage(text);
-                },
+                sendMessageCallback: _isSuggest ? null : (text) => sendMessage(text),
                 newConversationCallback: () {
                   _currentConversation = null;
                   updateUI(false);
@@ -128,13 +126,13 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text(S.current.home_conversation_history, style: CustomStyle.body1B)),
+                    Expanded(child: Text(S.current.home_conversation_history, style: AppStyle.body1B)),
                     TextButton(onPressed: () {
                         AppNavigator.goToConversationsScreen()?.then((value) {
                           context.read<MainViewModel>().getAllConversation();
                         });
                       },
-                      child: Text(S.current.home_conversation_view_all, style: CustomStyle.body2)
+                      child: Text(S.current.home_conversation_view_all, style: AppStyle.body2)
                     )
                   ],
                 ),
@@ -156,7 +154,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
                   visible: viewModel.conversations.isEmpty,
                   child: SizedBox(
                     height: Utils.conversationItemHeight,
-                    child: Center(child: Text(S.current.home_conversation_empty, style: CustomStyle.body2)),
+                    child: Center(child: Text(S.current.home_conversation_empty, style: AppStyle.body2)),
                   ),
                 )
               ],
@@ -174,7 +172,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
             });
           }
           List<Widget> children = [];
-          children.add(Text(S.current.home_suggestion, style: CustomStyle.body1B));
+          children.add(Text(S.current.home_suggestion, style: AppStyle.body1B));
           children.add(Container(height: 10));
           children.add(TabBar(
             controller: _tabSuggestController,
@@ -210,8 +208,8 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
         updateUI(false);
       },
       child: Container(width: Utils.conversationItemWidth,
-        decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
-          color: CustomStyle.colorBgElevatedButton(context, false),
+        decoration: BoxDecoration(border: Border.all(color: AppStyle.colorBorder(context, false)),
+          color: AppStyle.colorBgElevatedButton(context, false),
           borderRadius: const BorderRadius.all(Radius.circular(10))
         ),
         child: Column(
@@ -236,8 +234,8 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
                 child: Column(mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(child: Text(conv.title, style: CustomStyle.body2B, maxLines: 2, overflow: TextOverflow.ellipsis)),
-                    Text(conv.desc, style: CustomStyle.body2, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Expanded(child: Text(conv.title, style: AppStyle.body2B, maxLines: 2, overflow: TextOverflow.ellipsis)),
+                    Text(conv.desc, style: AppStyle.body2, maxLines: 1, overflow: TextOverflow.ellipsis),
                   ]
                 ),
               ),
@@ -253,9 +251,11 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
     ConversationOptionSheet.show(context: context, conversation: conv,
       rename: (newName) {
         context.read<MainViewModel>().updateConversation(conv, newName);
+        showToast(context, S.current.toast_rename_conversation_success);
       },
       delete: () {
         context.read<MainViewModel>().deleteConversation(conv);
+        showToast(context, S.current.toast_remove_conversation_success);
       }
     );
   }
@@ -269,14 +269,14 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
         Container(
           height: 30,
           decoration: BoxDecoration(
-            border: Border.all(color: CustomStyle.colorBorder(context, isSelectedTab)),
-            color: CustomStyle.colorBgElevatedButton(context, isSelectedTab),
+            border: Border.all(color: AppStyle.colorBorder(context, isSelectedTab)),
+            color: AppStyle.colorBgElevatedButton(context, isSelectedTab),
             borderRadius: const BorderRadius.all(Radius.circular(10))
           ),
           child: Row(
             children: [
               Container(width: 15),
-              Text(viewModel.suggest[i].title, style: isSelectedTab ? CustomStyle.body2B : CustomStyle.body2),
+              Text(viewModel.suggest[i].title, style: isSelectedTab ? AppStyle.body2B : AppStyle.body2),
               Container(width: 15)
             ],
           ),
@@ -304,17 +304,25 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
         },
         child: Container(
             padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-            decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
-                color: CustomStyle.colorBgElevatedButton(context, false),
+            decoration: BoxDecoration(border: Border.all(color: AppStyle.colorBorder(context, false)),
+                color: AppStyle.colorBgElevatedButton(context, false),
                 borderRadius: const BorderRadius.all(Radius.circular(25))
             ),
-            child: Center(child: Text(items[i].title, style: CustomStyle.body2, textAlign: TextAlign.center)),
+            child: Center(child: Text(items[i].title, style: AppStyle.body2, textAlign: TextAlign.center)),
           ),
       )
       );
       contents.add(Container(height: 10));
     }
     return contents;
+  }
+
+  Future<bool> sendMessage(String text) {
+    var future = context.read<ChatViewModel>().sendMessage(text);
+    future.then((success) {
+      debugPrint("success = $success");
+    });
+    return future;
   }
 
 }

@@ -9,11 +9,10 @@ import 'package:flutter_udid/flutter_udid.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MainViewModel with ChangeNotifier {
+class MainViewModel with ChangeNotifier, SocketEventListener {
 
   String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
-  late StreamSubscription<dynamic> _socketListener;
   List<PBSuggest> suggest = [];
 
   final List<Conversation> conversations = [];
@@ -66,55 +65,40 @@ class MainViewModel with ChangeNotifier {
   }
 
   void connectSocket() {
-    AppWebSocket.instance.init();
-    _socketListener = AppWebSocket.instance.getWebSocketStream().listen((event) {
-      var message = PBCommonMessage.fromBuffer(event);
-      if (message.id == 10002) {
-        var loginResponse = PBLoginResponse.fromBuffer(message.dataBytes);
-        // debugPrint('login response : ${loginResponse.toDebugString()}');
-      } else if (message.id == 11113) {
-        var config = PBConfig.fromBuffer(message.dataBytes);
-        // debugPrint('config : $config');
-        suggest.clear();
-        suggest.addAll(config.suggestList);
-        notifyListeners();
-      }
-    });
-
-    _getUdId((token) {
-      var message = PBCommonMessage();
-      message.id = 20002;
-      message.params['type'] = _createIntValue(4);
-      message.params['platform'] = _createStringValue(Utils.osName);
-      message.params['token'] = _createStringValue(token);
-      AppWebSocket.instance.setPBCommonMessage(message);
-    });
-  }
-
-  PBValue _createIntValue(int v) {
-    var value = PBValue();
-    value.intValue = v;
-    return value;
-  }
-
-  PBValue _createStringValue(String v) {
-    var value = PBValue();
-    value.stringValue = v;
-    return value;
+    AppWebSocket.instance.connect();
+    AppWebSocket.instance.registerEventListener(this);
   }
 
   void disconnectSocket() {
-    _socketListener.cancel();
-    AppWebSocket.instance.dispose();
+    AppWebSocket.instance.disconnect();
+    AppWebSocket.instance.unregisterEventListener(this);
   }
 
-  void _getUdId(Function(String) callback) {
+  @override
+  void onWebSocketOpen() {
     if (Utils.isMobile) {
       FlutterUdid.consistentUdid.then((value) {
-        callback(value);
+        AppWebSocket.instance.sendLogin(value);
       });
     } else {
-      callback('984725b6c4f55963cc52fca0f943f9a8060b1c71900d542c79669b6dc718a64b');
+      AppWebSocket.instance.sendLogin('984725b6c4f55963cc52fca0f943f9a8060b1c71900d542c79669b6dc718a64b');
+    }
+  }
+
+  @override
+  void onWebSocketMessage(message) {
+    var pbMsg = PBCommonMessage.fromBuffer(message);
+    if (pbMsg.id == 10002) {
+      var loginResponse = PBLoginResponse.fromBuffer(pbMsg.dataBytes);
+      debugPrint('login success: id=${loginResponse.user.dbId}');
+      // debugPrint('login response : ${loginResponse.toDebugString()}');
+    } else if (pbMsg.id == 11113) {
+      debugPrint('config response');
+      var config = PBConfig.fromBuffer(pbMsg.dataBytes);
+      // debugPrint('config : $config');
+      suggest.clear();
+      suggest.addAll(config.suggestList);
+      notifyListeners();
     }
   }
 
@@ -135,6 +119,12 @@ class MainViewModel with ChangeNotifier {
   void deleteConversation(Conversation conv) {
     AppDatabase.instance.deleteConversation(conv);
     conversations.remove(conv);
+    notifyListeners();
+  }
+
+  void deleteAllConversation() {
+    AppDatabase.instance.deleteAllConversation();
+    conversations.clear();
     notifyListeners();
   }
 

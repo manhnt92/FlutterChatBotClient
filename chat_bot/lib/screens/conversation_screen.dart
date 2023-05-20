@@ -3,7 +3,7 @@ import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
-import 'package:chat_bot/utils/custom_style.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/widgets/conversation_option_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,9 +36,7 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
           child: const Icon(Icons.arrow_back),
         ),
         actions: [
-          IconButton(onPressed: () {
-
-          }, icon: const Icon(Icons.delete_forever))
+          IconButton(onPressed: _showDeleteAllConversationDialog, icon: const Icon(Icons.delete_forever))
         ],
       ),
       body: SafeArea(
@@ -52,8 +50,8 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
                 customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 onTap: () { AppNavigator.goToChatScreen(conv); },
                 child: Container(//height: Utils.conversationItemHeight,
-                    decoration: BoxDecoration(border: Border.all(color: CustomStyle.colorBorder(context, false)),
-                        color: CustomStyle.colorBgElevatedButton(context, false),
+                    decoration: BoxDecoration(border: Border.all(color: AppStyle.colorBorder(context, false)),
+                        color: AppStyle.colorBgElevatedButton(context, false),
                         borderRadius: const BorderRadius.all(Radius.circular(10))
                     ),
                     child: Column(
@@ -76,8 +74,8 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
                           child: Column(mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(conv.title, style: CustomStyle.body2B),
-                                Text(conv.desc, style: CustomStyle.body2, maxLines: 5, overflow: TextOverflow.ellipsis),
+                                Text(conv.title, style: AppStyle.body2B),
+                                Text(conv.desc, style: AppStyle.body2, maxLines: 5, overflow: TextOverflow.ellipsis),
                               ]
                           ),
                         ),
@@ -103,6 +101,31 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
       delete: () {
         context.read<MainViewModel>().deleteConversation(conv);
       }
+    );
+  }
+
+  void _showDeleteAllConversationDialog() {
+    showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(
+        content: Text(S.current.question_remove_all_conversation, style: AppStyle.body2),
+        actions: [
+          TextButton(
+            child: Text(S.current.button_cancel, style: AppStyle.body2B),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text(S.current.button_delete, style: AppStyle.body2B),
+            onPressed:  () {
+              context.read<MainViewModel>().deleteAllConversation();
+              Navigator.of(context).pop();
+              showToast(context, S.current.toast_remove_all_conversation_success);
+            },
+          )
+        ],
+      );
+    }
     );
   }
 

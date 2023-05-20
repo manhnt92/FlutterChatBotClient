@@ -50,6 +50,66 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Rename success`
+  String get toast_rename_conversation_success {
+    return Intl.message(
+      'Rename success',
+      name: 'toast_rename_conversation_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete success`
+  String get toast_remove_conversation_success {
+    return Intl.message(
+      'Delete success',
+      name: 'toast_remove_conversation_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The chats has been cleared`
+  String get toast_remove_all_conversation_success {
+    return Intl.message(
+      'The chats has been cleared',
+      name: 'toast_remove_all_conversation_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete all the data, chats and messages. You cannot undo this action`
+  String get question_remove_all_conversation {
+    return Intl.message(
+      'Are you sure you want to delete all the data, chats and messages. You cannot undo this action',
+      name: 'question_remove_all_conversation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get button_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'button_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get button_delete {
+    return Intl.message(
+      'Delete',
+      name: 'button_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Home`
   String get home_title {
     return Intl.message(

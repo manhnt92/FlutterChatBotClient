@@ -24,6 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "button_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "button_delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "chat_history_title": MessageLookupByLibrary.simpleMessage("History"),
         "chat_next_question":
             MessageLookupByLibrary.simpleMessage("Next Question"),
@@ -64,6 +66,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_week": MessageLookupByLibrary.simpleMessage("Weekly"),
         "premium_week_price":
             MessageLookupByLibrary.simpleMessage("2 USD / week"),
+        "question_remove_all_conversation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete all the data, chats and messages. You cannot undo this action"),
         "setting_clear_history":
             MessageLookupByLibrary.simpleMessage("Clear all Chats and History"),
         "setting_contact_us":
@@ -83,6 +87,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting_subscribe_hint":
             MessageLookupByLibrary.simpleMessage("Get Full Access to Chat"),
         "setting_term": MessageLookupByLibrary.simpleMessage("Terms of use"),
-        "setting_title": MessageLookupByLibrary.simpleMessage("Setting")
+        "setting_title": MessageLookupByLibrary.simpleMessage("Setting"),
+        "toast_remove_all_conversation_success":
+            MessageLookupByLibrary.simpleMessage("The chats has been cleared"),
+        "toast_remove_conversation_success":
+            MessageLookupByLibrary.simpleMessage("Delete success"),
+        "toast_rename_conversation_success":
+            MessageLookupByLibrary.simpleMessage("Rename success")
       };
 }

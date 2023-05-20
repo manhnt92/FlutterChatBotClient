@@ -118,3 +118,13 @@ const PBSuggestItem$json = const {
 
 /// Descriptor for `PBSuggestItem`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List pBSuggestItemDescriptor = $convert.base64Decode('Cg1QQlN1Z2dlc3RJdGVtEhQKBXRpdGxlGAEgASgJUgV0aXRsZRIkCg1wcmVzZXRDb250ZW50GAIgASgJUg1wcmVzZXRDb250ZW50');
+@$core.Deprecated('Use pBDailyLimitDescriptor instead')
+const PBDailyLimit$json = const {
+  '1': 'PBDailyLimit',
+  '2': const [
+    const {'1': 'isLimited', '3': 1, '4': 1, '5': 8, '10': 'isLimited'},
+  ],
+};
+
+/// Descriptor for `PBDailyLimit`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pBDailyLimitDescriptor = $convert.base64Decode('CgxQQkRhaWx5TGltaXQSHAoJaXNMaW1pdGVkGAEgASgIUglpc0xpbWl0ZWQ=');

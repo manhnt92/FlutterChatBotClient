@@ -1,6 +1,6 @@
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
-import 'package:chat_bot/utils/custom_style.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class ExpandableTextField extends StatefulWidget {
 
   final VoidCallback? clickCallback;
-  final void Function(String)? sendMessageCallback;
+  final Future<bool> Function(String)? sendMessageCallback;
   final VoidCallback? newConversationCallback;
   final VoidCallback? clearSuggestContentCallback;
   String? suggestContent;
@@ -40,21 +40,25 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   @override
   void dispose() {
     super.dispose();
+    debugPrint("ExpandableTextField dispose");
+    _focusNode.unfocus();
     _messageController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var currentState = context.watch<ChatViewModel>().currentState;
-    bool isTypingOrDisable = currentState == ChatState.type || currentState == ChatState.disable;
-    bool isTyping = currentState == ChatState.type;
+    bool isType = currentState == ChatState.type;
+    bool isTypeNext = currentState == ChatState.typeNext;
+    bool isTypingOrDisable = isType || isTypeNext || currentState == ChatState.disable;
+    bool isTyping = isType || isTypeNext;
     if (!isTyping) {
       _height = _minHeight;
       _focusNode.unfocus();
       _messageController.clear();
       _openKeyboard = true;
     } else {
-      if (_openKeyboard) {
+      if (_openKeyboard && isType) {
         _openKeyboard = false;
         Future.delayed(const Duration(milliseconds: 200), () {
           setState(() {
@@ -69,14 +73,14 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
       onPanEnd: (details) => isTyping ? _handlePanUpdate(isEnd: true) : null,
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(color: CustomStyle.colorExpandableTextField(context)),
+            border: Border.all(color: AppStyle.colorExpandableTextField(context)),
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-            color: CustomStyle.colorExpandableTextField(context)
+            color: AppStyle.colorExpandableTextField(context)
         ),
         child: Stack(
           children: [
             _uiForChatMode(isTypingOrDisable, isTyping),
-            Visibility(visible: currentState == ChatState.send, child: _uiForSendingMode()),
+            Visibility(visible: currentState == ChatState.sending, child: _uiForSendingMode()),
             Visibility(visible: currentState == ChatState.nextQuestion, child: _uiForNextQuestionMode())
           ],
         ),
@@ -86,7 +90,10 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
 
   Widget _uiForSendingMode() {
     return Positioned.fill(
-      child: Center(child: Text(S.current.chat_wait_response, style: CustomStyle.body1B, textAlign: TextAlign.center))
+      child: Center(child: Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Text(S.current.chat_wait_response, style: AppStyle.body1B, textAlign: TextAlign.center),
+      ))
     );
   }
 
@@ -95,7 +102,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
       child: Center(
         child: ElevatedButton(onPressed: _newConversation,
           style: ElevatedButton.styleFrom(padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20)),
-          child: Text(S.current.chat_next_question, style: CustomStyle.body1B),
+          child: Text(S.current.chat_next_question, style: AppStyle.body1B),
         )
       )
     );
@@ -119,8 +126,8 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
               autofocus: isTyping,
               controller: _messageController,
               decoration: InputDecoration(border: InputBorder.none,
-                hintStyle: CustomStyle.body2I,
-                labelStyle: CustomStyle.body2,
+                hintStyle: AppStyle.body2I,
+                labelStyle: AppStyle.body2,
                 hintText: isTypingOrDisable ? S.current.chat_send_message_hint : '',
                 counter: const Offstage(),
                 contentPadding: EdgeInsets.zero,
@@ -141,9 +148,9 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
                 Container(width: 5),
                 Visibility(visible: _messageController.text.isNotEmpty && isTypingOrDisable, child: IconButton(icon: const Icon(Icons.clear), onPressed: _clearMessage)),
                 const Spacer(),
-                Visibility(visible: isTypingOrDisable, child: Text(_currentChatLength, style: CustomStyle.caption)),
+                Visibility(visible: isTypingOrDisable, child: Text(_currentChatLength, style: AppStyle.caption)),
                 Container(width: 5),
-                Visibility(visible: isTypingOrDisable, child: IconButton(onPressed: isTyping ? _sendMessage : null, icon: Icon(Icons.send_rounded, color: CustomStyle.bgColorButton(context)))),
+                Visibility(visible: isTypingOrDisable, child: IconButton(onPressed: isTyping ? _sendMessage : null, icon: Icon(Icons.send_rounded, color: AppStyle.bgColorButton(context)))),
                 Container(width: 5)
               ],
             )
@@ -195,8 +202,13 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
 
   void _sendMessage() {
     if (_messageController.text.isNotEmpty && widget.sendMessageCallback != null) {
-      widget.sendMessageCallback!(_messageController.text);
-      _clearMessage();
+      widget.sendMessageCallback!(_messageController.text).then((success) {
+        if (success) {
+          _clearMessage();
+        } else {
+          _focusNode.unfocus();
+        }
+      });
     }
   }
 

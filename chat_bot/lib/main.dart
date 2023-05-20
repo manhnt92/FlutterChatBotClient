@@ -1,7 +1,8 @@
 import 'package:chat_bot/main_view_model.dart';
+import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_scroll_behavior.dart';
-import 'package:chat_bot/utils/custom_style.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -59,14 +60,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver, WindowListen
   Widget build(BuildContext context) {
     final materialLightTheme = ThemeData(
         useMaterial3: true,
-        textTheme: CustomStyle.textTheme(false),
-        colorScheme: CustomStyle.colorScheme,
+        textTheme: AppStyle.textTheme(false),
+        colorScheme: AppStyle.colorScheme,
         appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light)
     );
     final materialDarkTheme = ThemeData(
         useMaterial3: true,
-        textTheme: CustomStyle.textTheme(true),
-        colorScheme: CustomStyle.colorSchemeDark,
+        textTheme: AppStyle.textTheme(true),
+        colorScheme: AppStyle.colorSchemeDark,
         appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark)
     );
     final cupertinoLightTheme = MaterialBasedCupertinoThemeData(materialTheme: materialLightTheme);

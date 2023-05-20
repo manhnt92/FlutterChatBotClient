@@ -1,4 +1,5 @@
 import 'package:chat_bot/utils/app_navigator.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:flutter/material.dart';
 
 abstract class BaseStatefulWidget extends StatefulWidget {
@@ -8,6 +9,12 @@ abstract class BaseStatefulWidget extends StatefulWidget {
   bool isInDarkMode(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     return brightness == Brightness.dark;
+  }
+
+  void showToast(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message, style: AppStyle.body2))
+    );
   }
 
 }
@@ -24,6 +31,12 @@ abstract class BaseStatelessWidget extends StatelessWidget {
 }
 
 abstract class BaseState<T extends BaseStatefulWidget> extends State<T> with WidgetsBindingObserver, RouteAware {
+
+  void showToast(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message, style: AppStyle.body2))
+    );
+  }
 
   @override
   void initState() {

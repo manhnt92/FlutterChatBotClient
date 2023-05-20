@@ -7,48 +7,72 @@ import 'package:chat_bot/data/app_database.dart';
 import 'package:flutter/widgets.dart';
 
 enum ChatState {
-  disable, type, send, nextQuestion
+  disable, type, sending, nextQuestion, typeNext
 }
 
-class ChatViewModel with ChangeNotifier {
+class ChatViewModel with ChangeNotifier, SocketEventListener {
 
   List<QAMessage> messages = [];
   Conversation? _conversation;
   ChatState currentState = ChatState.disable;
-
-  late StreamSubscription<dynamic> _socketListener;
+  String _pendingSendMessage = "";
+  Completer<bool>? _pendingSendMessageCallback;
 
   ChatViewModel() {
-    _socketListener = AppWebSocket.instance.getWebSocketStream().listen((event) {
-      var message = PBCommonMessage.fromBuffer(event);
-      if (message.id == 10003 || message.id == 10004) {
-        var chat = PBChat.fromBuffer(message.dataBytes);
-        if (_conversation != null) {
-          var currentMessage = messages[messages.length - 1];
-          currentMessage.appendAnswer(chat.message);
-          currentMessage.conversationRemoteId = chat.topicId;
-          if (message.id == 10004) {
-            AppDatabase.instance.updateQAMessage(currentMessage);
-          }
+    AppWebSocket.instance.registerEventListener(this);
+  }
 
-          _conversation!.desc = currentMessage.answer;
-          _conversation!.remoteId = chat.topicId;
-          if (message.id == 10004) {
-            AppDatabase.instance.updateConversation(_conversation!);
-          }
-        }
-        if (message.id == 10004) {
-          setCurrentState(ChatState.nextQuestion, notify: false);
-        }
+  @override
+  void onWebSocketMessage(message) {
+    var pbMsg = PBCommonMessage.fromBuffer(message);
+    if (pbMsg.id == 10004) {
+      debugPrint('bot answer stream response');
+      var chat = PBChat.fromBuffer(pbMsg.dataBytes);
+      if (_conversation != null) {
+        var currentMessage = messages[messages.length - 1];
+        currentMessage.appendAnswer(chat.message);
+        currentMessage.conversationRemoteId = chat.topicId;
+        _conversation!.desc = currentMessage.answer;
+        _conversation!.remoteId = chat.topicId;
         notifyListeners();
       }
-    });
+    } else if (pbMsg.id == 10003) {
+      debugPrint('bot answer response');
+      var chat = PBChat.fromBuffer(pbMsg.dataBytes);
+      if (_conversation != null) {
+        var currentMessage = messages[messages.length - 1];
+        currentMessage.answer = chat.message;
+        currentMessage.conversationRemoteId = chat.topicId;
+        _conversation!.desc = currentMessage.answer;
+        _conversation!.remoteId = chat.topicId;
+        AppDatabase.instance.updateQAMessage(currentMessage);
+        AppDatabase.instance.updateConversation(_conversation!);
+        setCurrentState(ChatState.typeNext, notify: false);
+        notifyListeners();
+      }
+    } else if (pbMsg.id == 10006) {
+      debugPrint("check daily limit response");
+      var limit = PBDailyLimit.fromBuffer(pbMsg.dataBytes);
+      limit.isLimited = true;
+      if (limit.isLimited) {
+        if (_pendingSendMessageCallback != null) {
+          _pendingSendMessageCallback!.complete(false);
+        }
+        setCurrentState(ChatState.typeNext);
+      } else {
+        sendPendingMessage().then((value) {
+          if (_pendingSendMessageCallback != null) {
+            _pendingSendMessageCallback!.complete(true);
+          }
+        });
+      }
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _socketListener.cancel();
+    AppWebSocket.instance.unregisterEventListener(this);
   }
 
   void setCurrentState(ChatState state, {bool notify = true}) {
@@ -73,32 +97,19 @@ class ChatViewModel with ChangeNotifier {
     }
   }
 
-  void sendMessage(String text) async {
-    _conversation ??= await AppDatabase.instance.insertConversation(text, "", Conversation.typeQA);
-    QAMessage message = await AppDatabase.instance.insertQAMessage(conv: _conversation!, question: text);
+  Future<bool> sendMessage(String text) {
+    _pendingSendMessage = text;
+    AppWebSocket.instance.checkLimit();
+    _pendingSendMessageCallback = Completer<bool>();
+    return _pendingSendMessageCallback!.future;
+  }
+
+  Future<void> sendPendingMessage() async {
+    _conversation ??= await AppDatabase.instance.insertConversation(_pendingSendMessage, "", Conversation.typeQA);
+    QAMessage message = await AppDatabase.instance.insertQAMessage(conv: _conversation!, question: _pendingSendMessage);
     messages.add(message);
-    setCurrentState(ChatState.send, notify: false);
-    notifyListeners();
-
-    var msg = PBCommonMessage();
-    msg.id = 20003;
-    msg.params['msg'] = _createStringValue(text);
-    if (_conversation!.remoteId > 0) {
-      msg.params['topicId'] = _createIntValue(_conversation!.remoteId);
-    }
-    AppWebSocket.instance.setPBCommonMessage(msg);
-  }
-
-  PBValue _createIntValue(int v) {
-    var value = PBValue();
-    value.intValue = v;
-    return value;
-  }
-
-  PBValue _createStringValue(String v) {
-    var value = PBValue();
-    value.stringValue = v;
-    return value;
+    setCurrentState(ChatState.sending);
+    AppWebSocket.instance.sendChat(_pendingSendMessage, _conversation!.remoteId);
   }
 
 }

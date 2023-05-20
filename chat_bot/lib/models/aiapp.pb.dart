@@ -538,3 +538,50 @@ class PBSuggestItem extends $pb.GeneratedMessage {
   void clearPresetContent() => clearField(2);
 }
 
+class PBDailyLimit extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PBDailyLimit', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.aiapp'), createEmptyInstance: create)
+    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isLimited', protoName: 'isLimited')
+    ..hasRequiredFields = false
+  ;
+
+  PBDailyLimit._() : super();
+  factory PBDailyLimit({
+    $core.bool? isLimited,
+  }) {
+    final _result = create();
+    if (isLimited != null) {
+      _result.isLimited = isLimited;
+    }
+    return _result;
+  }
+  factory PBDailyLimit.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PBDailyLimit.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PBDailyLimit clone() => PBDailyLimit()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PBDailyLimit copyWith(void Function(PBDailyLimit) updates) => super.copyWith((message) => updates(message as PBDailyLimit)) as PBDailyLimit; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static PBDailyLimit create() => PBDailyLimit._();
+  PBDailyLimit createEmptyInstance() => create();
+  static $pb.PbList<PBDailyLimit> createRepeated() => $pb.PbList<PBDailyLimit>();
+  @$core.pragma('dart2js:noInline')
+  static PBDailyLimit getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PBDailyLimit>(create);
+  static PBDailyLimit? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get isLimited => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isLimited($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsLimited() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsLimited() => clearField(1);
+}
+

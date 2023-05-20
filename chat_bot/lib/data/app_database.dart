@@ -105,11 +105,17 @@ class AppDatabase {
       conversationColumnDesc : conv.desc,
       conversationColumnType : conv.type
     };
-    await _database.update(conversationTable, map, where: 'id = ?', whereArgs: [conv.id]);
+    await _database.update(conversationTable, map, where: '$conversationColumnId = ?', whereArgs: [conv.id]);
   }
 
-  Future<void> deleteConversation(Conversation conv) async {
-    await _database.delete(conversationTable, where: 'id = ?', whereArgs: [conv.id]);
+  void deleteConversation(Conversation conv) async {
+    _database.delete(conversationTable, where: '$conversationColumnId = ?', whereArgs: [conv.id]);
+    _database.delete(chatTable, where: '$chatColumnConversationRemoteId = ?', whereArgs: [conv.id]);
+  }
+
+  void deleteAllConversation() async {
+    _database.delete(conversationTable);
+    _database.delete(chatTable);
   }
 
   Future<List<Conversation>> getAllConversation() async {
@@ -143,11 +149,11 @@ class AppDatabase {
       chatColumnConversationRemoteId: message.conversationRemoteId
     };
     // debugPrint('update QA Message: $map');
-    await _database.update(chatTable, map, where: 'id = ?', whereArgs: [message.id]);
+    await _database.update(chatTable, map, where: '$chatColumnId = ?', whereArgs: [message.id]);
   }
 
   Future<void> deleteQAMessage(QAMessage message) async {
-    await _database.delete(chatTable, where: 'id = ?', whereArgs: [message.id]);
+    await _database.delete(chatTable, where: '$chatColumnId = ?', whereArgs: [message.id]);
   }
 
   Future<List<QAMessage>> getAllQAMessage(Conversation conv) async {
