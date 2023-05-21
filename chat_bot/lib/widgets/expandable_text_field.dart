@@ -71,6 +71,9 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
         });
       }
     }
+    if (currentState == ChatState.disable) {
+      _currentChatLength = "0/${Utils.chatMaxLength}";
+    }
     return GestureDetector(
       onTap: (currentState == ChatState.disable) ? widget.clickCallback : null,
       onPanUpdate: (details) => isTyping ? _handlePanUpdate(isEnd: false, dy: details.delta.dy) : null,
@@ -115,6 +118,8 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   Widget _uiForChatMode(bool isTypingOrDisable, bool isTyping) {
     if (widget.suggestContent != null && widget.suggestContent!.isNotEmpty) {
       _messageController.text = widget.suggestContent!;
+      _messageController.selection = TextSelection.fromPosition(TextPosition(offset: _messageController.text.length));
+      _currentChatLength = "${_messageController.text.length}/${Utils.chatMaxLength}";
     }
     return Column(
       children: <Widget>[

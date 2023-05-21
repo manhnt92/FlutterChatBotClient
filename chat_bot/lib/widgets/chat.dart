@@ -70,7 +70,7 @@ class _ChatState extends State<Chat> {
                               const SizedBox(width: 15),
                               const Icon(Icons.computer),
                               const SizedBox(width: 5),
-                              Text('Bot', style: AppStyle.body2B, softWrap: true)
+                              Text('Vega AI', style: AppStyle.body2B, softWrap: true)
                             ]
                         ),
                         const SizedBox(height: 10),
