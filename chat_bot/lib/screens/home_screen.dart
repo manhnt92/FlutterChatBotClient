@@ -54,6 +54,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var chatVm = context.watch<ChatViewModel>();
     return WillPopScope(
       onWillPop: () async {
         if (!_isSuggest) {
@@ -78,7 +79,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _isSuggest ? uiForSuggestMode() : const Chat(),
+              _isSuggest ? uiForSuggestMode() : Chat(messages: chatVm.messages, currentState: chatVm.currentState),
               ExpandableTextField(clickCallback: _isSuggest ? () => updateUI(!_isSuggest) : null,
                 sendMessageCallback: _isSuggest ? null : (text) => sendMessage(text),
                 newConversationCallback: () {
@@ -320,7 +321,11 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   Future<bool> sendMessage(String text) {
     var future = context.read<ChatViewModel>().sendMessage(text);
     future.then((success) {
-      debugPrint("success = $success");
+      if (!success) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          AppNavigator.goToPremiumScreen();
+        });
+      }
     });
     return future;
   }

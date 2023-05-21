@@ -41,6 +41,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   void dispose() {
     super.dispose();
     debugPrint("ExpandableTextField dispose");
+    FocusScope.of(context).unfocus();
     _focusNode.unfocus();
     _messageController.dispose();
   }
@@ -54,6 +55,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
     bool isTyping = isType || isTypeNext;
     if (!isTyping) {
       _height = _minHeight;
+      FocusScope.of(context).unfocus();
       _focusNode.unfocus();
       _messageController.clear();
       _openKeyboard = true;
@@ -62,6 +64,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
         _openKeyboard = false;
         Future.delayed(const Duration(milliseconds: 200), () {
           setState(() {
+            debugPrint("van vao");
             _focusNode.requestFocus();
           });
         });
@@ -123,7 +126,6 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
             child: TextFormField(
               enabled: isTyping,
               focusNode: _focusNode,
-              autofocus: isTyping,
               controller: _messageController,
               decoration: InputDecoration(border: InputBorder.none,
                 hintStyle: AppStyle.body2I,
@@ -206,6 +208,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
         if (success) {
           _clearMessage();
         } else {
+          FocusScope.of(context).unfocus();
           _focusNode.unfocus();
         }
       });

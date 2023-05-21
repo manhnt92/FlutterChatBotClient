@@ -31,6 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var chatVm = context.watch<ChatViewModel>();
     return Scaffold(
       appBar: AppBar(title: Text(S.current.chat_title),
         leading: InkWell(
@@ -44,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const Chat(),
+            Chat(messages: chatVm.messages, currentState: chatVm.currentState),
             ExpandableTextField(sendMessageCallback: (text) => sendMessage(text))
           ],
         ),
@@ -55,7 +56,11 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<bool> sendMessage(String text) {
     var future = context.read<ChatViewModel>().sendMessage(text);
     future.then((success) {
-      debugPrint("success = $success");
+      if (!success) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          AppNavigator.goToPremiumScreen();
+        });
+      }
     });
     return future;
   }
