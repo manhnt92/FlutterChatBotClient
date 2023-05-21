@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
 
-  List<QAMessage> messages;
-  ChatState currentState;
+  final List<QAMessage> messages;
+  final ChatState currentState;
 
-  Chat({super.key, required this.messages, required this.currentState});
+  const Chat({super.key, required this.messages, required this.currentState});
 
   @override
   State<Chat> createState() => _ChatState();

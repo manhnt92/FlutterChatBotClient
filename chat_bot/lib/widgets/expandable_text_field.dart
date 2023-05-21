@@ -3,6 +3,7 @@ import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ExpandableTextField extends StatefulWidget {
@@ -139,6 +140,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
               textInputAction: TextInputAction.newline,
               onChanged: (text) => _onTextChanged(text),
               maxLength: Utils.chatMaxLength,
+              maxLengthEnforcement : MaxLengthEnforcement.enforced,
               minLines: 1,
               maxLines: 10,
             ),

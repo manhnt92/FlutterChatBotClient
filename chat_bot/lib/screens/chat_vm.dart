@@ -53,7 +53,6 @@ class ChatViewModel with ChangeNotifier, SocketEventListener {
     } else if (pbMsg.id == 10006) {
       debugPrint("check daily limit response");
       var limit = PBDailyLimit.fromBuffer(pbMsg.dataBytes);
-      limit.isLimited = true;
       if (limit.isLimited) {
         if (_pendingSendMessageCallback != null) {
           _pendingSendMessageCallback!.complete(false);
