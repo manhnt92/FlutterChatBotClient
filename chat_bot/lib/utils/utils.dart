@@ -23,6 +23,9 @@ class Utils {
   static bool isDebug = kDebugMode;
   static String osName = isWeb ? 'web': (isWin32 ? 'win32': (isAndroid ? 'android': 'iOS'));
 
+  // static String rewardAdUnitId = isAndroid ? 'ca-app-pub-6832904884201522/2366638181' : 'ca-app-pub-3940256099942544/1712485313';
+  static String rewardAdUnitId = isAndroid ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313';
+
   static const List<Locale> supportedLocale = [
     Locale('en', 'US'),
     Locale('vi', 'VN')

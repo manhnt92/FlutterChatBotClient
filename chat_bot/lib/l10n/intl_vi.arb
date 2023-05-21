@@ -22,27 +22,29 @@
   "chat_next_question": "Câu hỏi tiếp",
 
   "setting_title": "Cài đặt",
-  "setting_subscribe": "Subscribe",
-  "setting_subscribe_hint": "Get Full Access to Chat",
+  "setting_subscribe": "Đăng ký gói",
+  "setting_subscribe_hint": "Nhận toàn quyền sử dụng ứng dụng",
   "setting_night_mode": "Chế độ ban đêm",
   "setting_language": "Ngôn ngữ",
   "setting_language_en": "English",
   "setting_language_vi": "Tiếng Việt",
   "setting_contact_us": "Liên hệ",
   "setting_share_app": "Chia sẻ",
-  "setting_restore_purchase": "Restore purchases",
+  "setting_restore_purchase": "Khôi phục mua hàng",
   "setting_policy": "Chính sách bảo mật",
   "setting_term": "Điều khoản sử dụng",
   "setting_clear_history": "Xóa trò chuyện và lịch sử",
 
   "premium_title": "Premium",
-  "premium_title_hint": "GO PREMIUM",
-  "premium_title_hint_1": "You will get full access to our chatbot with high limits. Cancel anytime",
+  "premium_title_hint": "PREMIUM",
+  "premium_title_hint_1": "Bạn sẽ có toàn quyền sử dụng ứng dụng của chúng tôi với giới hạn cao. Hủy bỏ bất cứ lúc nào",
   "premium_week": "Gói tuần",
-  "premium_week_price": "100.000đ / tuần",
+  "premium_week_price": "3 ngày miễn phí, sau đó 100.000đ / tuần",
   "premium_month": "Gói tháng",
-  "premium_month_price": "1.000.000đ / tháng",
-  "premium_promotion": "(Giảm giá {value}%)",
+  "premium_month_price": "1.000.000đ / tháng, tự động tái tạo",
+  "premium_ads": "Xem quảng cáo",
+  "premium_ads_price": "Xem quảng cáo để nhận 1 lượt chat miễn phí",
+  "premium_promotion": "(Tiết kiệm {value}%)",
   "@premium_promotion": {
     "description": "",
     "placeholders": {
@@ -51,10 +53,25 @@
       }
     }
   },
-  "premium_feature_1": "Chat không giới hạn",
-  "premium_feature_2": "Loại bỏ quảng cáo",
+  "premium_feature_1": "Được cung cấp bởi GPT4",
+  "premium_feature_1_desc": "ChatGPT mới nhất",
+  "premium_feature_2": "Giới hạn từ",
+  "premium_feature_2_desc": "Nhập tin nhắn dài hơn",
+  "premium_feature_3": "Không giới hạn",
+  "premium_feature_3_desc": "Không giới hạn hội thoại",
+  "premium_feature_4": "Không quảng cáo",
+  "premium_feature_4_desc": "Không hiện quảng cáo trong khi dùng ứng dụng",
+  "premium_purchase_try_for_free": "Thử miễn phí",
   "premium_purchase": "Mua",
-  "premium_purchase_term": "By clicking 'Purchase', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased."
-
+  "premium_purchase_ads": "Xem quảng cáo",
+  "premium_purchase_term": "Bằng cách nhấp vào '{value}', bạn đồng ý với Điều khoản của chúng tôi. Số tiền sẽ được tính và đăng ký sẽ được gia hạn trong khoảng thời gian đã chọn và ở cùng mức giá cho đến khi bạn hủy đăng ký trong cài đặt Google Play.\n\nNó không phải là truy cập không giới hạn. Kế hoạch là nhằm mục đích sử dụng cá nhân. Nếu bạn vượt quá hạn ngạch, quyền truy cập tài khoản của bạn có thể bị hạn chế hoặc tần suất yêu cầu giảm.",
+  "@premium_purchase_term" : {
+    "description": "",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 
 }

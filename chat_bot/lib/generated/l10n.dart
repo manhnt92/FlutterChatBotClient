@@ -410,10 +410,10 @@ class S {
     );
   }
 
-  /// `2 USD / week`
+  /// `First 3 days free, then 2 USD / week`
   String get premium_week_price {
     return Intl.message(
-      '2 USD / week',
+      'First 3 days free, then 2 USD / week',
       name: 'premium_week_price',
       desc: '',
       args: [],
@@ -430,41 +430,131 @@ class S {
     );
   }
 
-  /// `10 USD / month`
+  /// `10 USD / month, auto renewable`
   String get premium_month_price {
     return Intl.message(
-      '10 USD / month',
+      '10 USD / month, auto renewable',
       name: 'premium_month_price',
       desc: '',
       args: [],
     );
   }
 
-  /// `({value}% sale off)`
+  /// `Reward Ads`
+  String get premium_ads {
+    return Intl.message(
+      'Reward Ads',
+      name: 'premium_ads',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch ads to get 1 free chat`
+  String get premium_ads_price {
+    return Intl.message(
+      'Watch ads to get 1 free chat',
+      name: 'premium_ads_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `(Save {value}%)`
   String premium_promotion(String value) {
     return Intl.message(
-      '($value% sale off)',
+      '(Save $value%)',
       name: 'premium_promotion',
       desc: '',
       args: [value],
     );
   }
 
-  /// `Unlimited chat`
+  /// `Powered by GPT4`
   String get premium_feature_1 {
     return Intl.message(
-      'Unlimited chat',
+      'Powered by GPT4',
       name: 'premium_feature_1',
       desc: '',
       args: [],
     );
   }
 
-  /// `No ads`
+  /// `Latest ChatGPT AI model`
+  String get premium_feature_1_desc {
+    return Intl.message(
+      'Latest ChatGPT AI model',
+      name: 'premium_feature_1_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Higher Word Limit`
   String get premium_feature_2 {
     return Intl.message(
-      'No ads',
+      'Higher Word Limit',
       name: 'premium_feature_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type longer messages`
+  String get premium_feature_2_desc {
+    return Intl.message(
+      'Type longer messages',
+      name: 'premium_feature_2_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Limits`
+  String get premium_feature_3 {
+    return Intl.message(
+      'No Limits',
+      name: 'premium_feature_3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Have unlimited dialogues`
+  String get premium_feature_3_desc {
+    return Intl.message(
+      'Have unlimited dialogues',
+      name: 'premium_feature_3_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Ads`
+  String get premium_feature_4 {
+    return Intl.message(
+      'No Ads',
+      name: 'premium_feature_4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enjoy app without ads`
+  String get premium_feature_4_desc {
+    return Intl.message(
+      'Enjoy app without ads',
+      name: 'premium_feature_4_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try for free`
+  String get premium_purchase_try_for_free {
+    return Intl.message(
+      'Try for free',
+      name: 'premium_purchase_try_for_free',
       desc: '',
       args: [],
     );
@@ -480,13 +570,23 @@ class S {
     );
   }
 
-  /// `By clicking 'Purchase', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.`
-  String get premium_purchase_term {
+  /// `Watch ads`
+  String get premium_purchase_ads {
     return Intl.message(
-      'By clicking \'Purchase\', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt\'s not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.',
-      name: 'premium_purchase_term',
+      'Watch ads',
+      name: 'premium_purchase_ads',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `By clicking '{value}', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.`
+  String premium_purchase_term(String value) {
+    return Intl.message(
+      'By clicking \'$value\', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt\'s not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.',
+      name: 'premium_purchase_term',
+      desc: '',
+      args: [value],
     );
   }
 }

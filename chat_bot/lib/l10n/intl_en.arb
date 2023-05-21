@@ -39,10 +39,12 @@
   "premium_title_hint": "GO PREMIUM",
   "premium_title_hint_1": "You will get full access to our chatbot with high limits. Cancel anytime",
   "premium_week": "Weekly",
-  "premium_week_price": "2 USD / week",
+  "premium_week_price": "First 3 days free, then 2 USD / week",
   "premium_month": "Monthly",
-  "premium_month_price": "10 USD / month",
-  "premium_promotion": "({value}% sale off)",
+  "premium_month_price": "10 USD / month, auto renewable",
+  "premium_ads": "Reward Ads",
+  "premium_ads_price": "Watch ads to get 1 free chat",
+  "premium_promotion": "(Save {value}%)",
   "@premium_promotion": {
     "description": "",
     "placeholders": {
@@ -51,8 +53,24 @@
       }
     }
   },
-  "premium_feature_1": "Unlimited chat",
-  "premium_feature_2": "No ads",
+  "premium_feature_1": "Powered by GPT4",
+  "premium_feature_1_desc": "Latest ChatGPT AI model",
+  "premium_feature_2": "Higher Word Limit",
+  "premium_feature_2_desc": "Type longer messages",
+  "premium_feature_3": "No Limits",
+  "premium_feature_3_desc": "Have unlimited dialogues",
+  "premium_feature_4": "No Ads",
+  "premium_feature_4_desc": "Enjoy app without ads",
+  "premium_purchase_try_for_free": "Try for free",
   "premium_purchase": "Purchase",
-  "premium_purchase_term": "By clicking 'Purchase', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased."
+  "premium_purchase_ads": "Watch ads",
+  "premium_purchase_term": "By clicking '{value}', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt's not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.",
+  "@premium_purchase_term" : {
+    "description": "",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -142,9 +142,9 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
                   visible: viewModel.conversations.isNotEmpty,
                   child: SizedBox(
                     height: Utils.conversationItemHeight,
-                    child: ListView.separated(itemCount: viewModel.conversations.length, scrollDirection: Axis.horizontal,
+                    child: ListView.separated(itemCount: viewModel.conversations.length > 5 ? 5 : viewModel.conversations.length, scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext ctx, int idx) {
-                        return _uiForConversationItem(viewModel.conversations[idx]);
+                        return _uiForConversationItem(viewModel.conversations[viewModel.conversations.length - 1 - idx]);
                       }, separatorBuilder: (BuildContext ctx, int idx) {
                         return Container(width: 10);
                       },
