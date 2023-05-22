@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:chat_bot/data/app_database.dart';
 import 'package:chat_bot/data/app_web_socket.dart';
+import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/aiapp.pb.dart';
 import 'package:chat_bot/models/qa_message.dart';
+import 'package:chat_bot/utils/app_navigator.dart';
+import 'package:chat_bot/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -64,13 +67,32 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
     });
   }
 
+  @override
+  void onInternetConnection(bool connected) {
+    if (AppNavigator.scaffoldMessengerKey.currentState == null) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        onInternetConnection(connected);
+      });
+      return;
+    }
+    if (connected) {
+      AppNavigator.scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+    } else {
+      AppNavigator.scaffoldMessengerKey.currentState?.showSnackBar(
+          SnackBar(
+              content: Text(S.current.toast_no_internet_connection, style: AppStyle.body2), duration: const Duration(days: 365)
+          )
+      );
+    }
+  }
+
   void connectSocket() {
-    AppWebSocket.instance.connect();
     AppWebSocket.instance.registerEventListener(this);
+    AppWebSocket.instance.init();
   }
 
   void disconnectSocket() {
-    AppWebSocket.instance.disconnect();
+    AppWebSocket.instance.dispose();
     AppWebSocket.instance.unregisterEventListener(this);
   }
 

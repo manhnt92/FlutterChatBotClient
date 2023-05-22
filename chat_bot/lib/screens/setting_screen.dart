@@ -1,12 +1,10 @@
 import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
-import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/widgets/list_view_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:provider/provider.dart';
 
 class SettingScreen extends BaseStatefulWidget {
@@ -51,7 +49,7 @@ class _SettingScreenState extends BaseState<SettingScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-              child: PlatformElevatedButton(
+              child: ElevatedButton(
                 onPressed: () { AppNavigator.goToPremiumScreen();} ,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +71,7 @@ class _SettingScreenState extends BaseState<SettingScreen> {
                         onTap: () => onSettingItemClicked(index),
                         content: _settings[index],
                         leftWidget: Icon(_settingIcons[index]),
-                        rightWidget: index == 0 ? PlatformSwitch(value: viewModel.currentThemeMode == ThemeMode.dark, onChanged: (value) {
+                        rightWidget: index == 0 ? Switch(value: viewModel.currentThemeMode == ThemeMode.dark, onChanged: (value) {
                           _updateNightMode(value);
                         }) : const Icon(Icons.chevron_right),
                       );

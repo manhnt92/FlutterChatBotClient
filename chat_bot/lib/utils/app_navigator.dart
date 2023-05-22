@@ -9,10 +9,12 @@ import 'package:chat_bot/screens/setting_screen.dart';
 import 'package:chat_bot/screens/webview_screen.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppNavigator {
 
+  static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   static final _routes = {

@@ -8,7 +8,6 @@ import 'package:chat_bot/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -62,7 +61,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver, WindowListen
         useMaterial3: true,
         textTheme: AppStyle.textTheme(false),
         colorScheme: AppStyle.colorScheme,
-        appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light)
+        appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
     );
     final materialDarkTheme = ThemeData(
         useMaterial3: true,
@@ -70,39 +69,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver, WindowListen
         colorScheme: AppStyle.colorSchemeDark,
         appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark)
     );
-    final cupertinoLightTheme = MaterialBasedCupertinoThemeData(materialTheme: materialLightTheme);
-    final cupertinoDarkTheme = MaterialBasedCupertinoThemeData(materialTheme: materialDarkTheme);
-    return PlatformProvider(
-        settings: PlatformSettingsData(
-          iosUsesMaterialWidgets: true,
-          iosUseZeroPaddingForAppbarPlatformIcon: true,
-        ),
-        builder: (context) => PlatformTheme(
-          themeMode: context.watch<MainViewModel>().currentThemeMode,
-          materialLightTheme: materialLightTheme,
-          materialDarkTheme: materialDarkTheme,
-          cupertinoLightTheme: cupertinoLightTheme,
-          cupertinoDarkTheme: cupertinoDarkTheme,
-          matchCupertinoSystemChromeBrightness: true,
-          builder: (context) => PlatformApp(
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: const [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            scrollBehavior: CustomScrollBehavior(),
-            supportedLocales: Utils.supportedLocale,
-            locale: Locale(context.watch<MainViewModel>().currentLangCode),
-            navigatorKey: AppNavigator.navigatorKey,
-            navigatorObservers: [ AppNavigator.routeObserver ],
-            initialRoute: '/',
-            onGenerateRoute: (settings) => AppNavigator.generateRoute(settings),
-          ),
-        )
+    return MaterialApp(
+      themeMode: context.watch<MainViewModel>().currentThemeMode,
+      theme: materialLightTheme,
+      darkTheme: materialDarkTheme,
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      scaffoldMessengerKey: AppNavigator.scaffoldMessengerKey,
+      scrollBehavior: CustomScrollBehavior(),
+      supportedLocales: Utils.supportedLocale,
+      locale: Locale(context.watch<MainViewModel>().currentLangCode),
+      navigatorKey: AppNavigator.navigatorKey,
+      navigatorObservers: [ AppNavigator.routeObserver ],
+      initialRoute: '/',
+      onGenerateRoute: (settings) => AppNavigator.generateRoute(settings),
     );
-
   }
 
   @override

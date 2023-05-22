@@ -1,7 +1,6 @@
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -83,8 +82,8 @@ Page resource error:
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(widget._title),
         leading: InkWell(
           onTap: () { AppNavigator.goBack(); },

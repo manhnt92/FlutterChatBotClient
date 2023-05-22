@@ -110,6 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting_term":
             MessageLookupByLibrary.simpleMessage("Điều khoản sử dụng"),
         "setting_title": MessageLookupByLibrary.simpleMessage("Cài đặt"),
+        "toast_no_internet_connection":
+            MessageLookupByLibrary.simpleMessage("Không có kết nối mạng"),
         "toast_remove_all_conversation_success":
             MessageLookupByLibrary.simpleMessage(
                 "Các cuộc trò chuyện đã bị xóa"),

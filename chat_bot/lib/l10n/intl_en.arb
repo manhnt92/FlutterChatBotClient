@@ -1,4 +1,5 @@
 {
+  "toast_no_internet_connection": "No Internet Connection",
   "toast_rename_conversation_success": "Rename success",
   "toast_remove_conversation_success": "Delete success",
   "toast_remove_all_conversation_success": "The chats has been cleared",

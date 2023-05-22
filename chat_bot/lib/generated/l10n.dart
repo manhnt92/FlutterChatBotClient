@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `No Internet Connection`
+  String get toast_no_internet_connection {
+    return Intl.message(
+      'No Internet Connection',
+      name: 'toast_no_internet_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Rename success`
   String get toast_rename_conversation_success {
     return Intl.message(

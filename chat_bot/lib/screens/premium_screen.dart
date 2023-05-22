@@ -1,4 +1,3 @@
-import "dart:math" show pi;
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/sub_data.dart';
@@ -6,7 +5,6 @@ import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class PremiumScreen extends BaseStatefulWidget {
@@ -64,10 +62,12 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
               Subscription(onTap: () => onSubscriptionSelected(3),
                   isSelected: _selectedIndex == 3, sub: subs[2]),
               const SubscriptionFeatures(),
-              PlatformElevatedButton(
+              ElevatedButton(
                 onPressed: onSubscription,
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
-                child: Text(_getPurchaseBtString(), style: AppStyle.headline6B),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
+                  child: Text(_getPurchaseBtString(), style: AppStyle.headline6B),
+                ),
               ),
               Container(height: 10),
               Center(child: InkWell(

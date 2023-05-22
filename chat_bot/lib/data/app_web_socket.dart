@@ -1,16 +1,18 @@
 import 'dart:async';
-
 import 'package:chat_bot/models/aiapp.pb.dart';
 import 'package:chat_bot/utils/utils.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 enum AppWebSocketState {
   connecting, connected, disconnected
 }
 
 abstract class SocketEventListener {
+  void onInternetConnection(bool connected) {}
   void onWebSocketOpen() {}
   void onWebSocketClose() {}
   void onWebSocketMessage(dynamic message) {}
@@ -22,13 +24,44 @@ class AppWebSocket {
   factory AppWebSocket() => instance;
   AppWebSocket._internal();
 
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+
   static const String urlWebSocket = "ws://h2ksolution.com:3000/aichatserver";
   WebSocketChannel? _wsChannel;
   AppWebSocketState _currentState = AppWebSocketState.disconnected;
   Timer? _reconnectTimer;
   final List<SocketEventListener> _listeners = [];
 
-  void connect() {
+  void init() async {
+    ConnectivityResult status;
+    try {
+      status = await _connectivity.checkConnectivity();
+    } on PlatformException catch (_) {
+      status = ConnectivityResult.none;
+    }
+    for (var l in _listeners) {
+      l.onInternetConnection(status != ConnectivityResult.none);
+    }
+
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen((result) {
+      bool isInternetConnected = result != ConnectivityResult.none;
+      for (var l in _listeners) {
+        l.onInternetConnection(isInternetConnected);
+      }
+      _disconnect();
+      if (isInternetConnected) {
+        _connect();
+      }
+    });
+  }
+
+  void dispose() {
+    _connectivitySubscription?.cancel();
+    _disconnect();
+  }
+
+  void _connect() async {
     debugPrint('socket connecting');
     _currentState = AppWebSocketState.connecting;
     _wsChannel = WebSocketChannel.connect(Uri.parse(urlWebSocket));
@@ -40,15 +73,14 @@ class AppWebSocket {
         l.onWebSocketOpen();
       }
 
-      _wsChannel?.stream.listen(
-        (event) {
+      _wsChannel?.stream.listen((event) {
           for (var l in _listeners) {
             l.onWebSocketMessage(event);
           }
         },
         onError: (error, stackTrace) {
           debugPrint("socket error => reconnect");
-          disconnect();
+          _disconnect();
           _reconnect();
         },
         onDone: () {
@@ -61,7 +93,7 @@ class AppWebSocket {
     });
   }
 
-  void disconnect() {
+  void _disconnect() {
     _wsChannel?.sink.close(status.goingAway);
     _reconnectTimer?.cancel();
     _currentState = AppWebSocketState.disconnected;
@@ -73,7 +105,7 @@ class AppWebSocket {
   void _reconnect() {
     if (_reconnectTimer == null || !_reconnectTimer!.isActive) {
       _reconnectTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-        connect();
+        _connect();
       });
     }
   }

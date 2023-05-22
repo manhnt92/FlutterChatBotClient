@@ -108,6 +108,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Get Full Access to Chat"),
         "setting_term": MessageLookupByLibrary.simpleMessage("Terms of use"),
         "setting_title": MessageLookupByLibrary.simpleMessage("Setting"),
+        "toast_no_internet_connection":
+            MessageLookupByLibrary.simpleMessage("No Internet Connection"),
         "toast_remove_all_conversation_success":
             MessageLookupByLibrary.simpleMessage("The chats has been cleared"),
         "toast_remove_conversation_success":

@@ -1,4 +1,5 @@
 {
+  "toast_no_internet_connection": "Không có kết nối mạng",
   "toast_rename_conversation_success": "Đổi tên cuộc trò chuyện thành công",
   "toast_remove_conversation_success": "Xóa cuộc trò chuyện thành công",
   "toast_remove_all_conversation_success": "Các cuộc trò chuyện đã bị xóa",

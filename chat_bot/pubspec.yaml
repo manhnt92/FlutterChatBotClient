@@ -38,11 +38,10 @@ dependencies:
   shared_preferences: ^2.1.0
 
   web_socket_channel: ^2.4.0
-  http: ^0.13.6
   protobuf: ^2.1.0
+  connectivity_plus: ^4.0.1
 
   flutter_udid: ^2.0.1
-  flutter_platform_widgets: ^3.3.2
   google_fonts: ^4.0.4
   webview_flutter: ^4.2.0
 
