@@ -210,10 +210,20 @@ class S {
     );
   }
 
-  /// `Chat Bot`
+  /// `Free {value}`
+  String free_chat_title(int value) {
+    return Intl.message(
+      'Free $value',
+      name: 'free_chat_title',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Vega AI`
   String get chat_title {
     return Intl.message(
-      'Chat Bot',
+      'Vega AI',
       name: 'chat_title',
       desc: '',
       args: [],

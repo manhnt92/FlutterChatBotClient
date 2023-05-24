@@ -20,9 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(value) => "(Save ${value}%)";
+  static String m0(value) => "Free ${value}";
 
-  static String m1(value) =>
+  static String m1(value) => "(Save ${value}%)";
+
+  static String m2(value) =>
       "By clicking \'${value}\', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt\'s not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -34,9 +36,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Next Question"),
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
-        "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "chat_title": MessageLookupByLibrary.simpleMessage("Vega AI"),
         "chat_wait_response": MessageLookupByLibrary.simpleMessage(
             "Please wait for bot response before asking the next question..."),
+        "free_chat_title": m0,
         "home_conversation_delete":
             MessageLookupByLibrary.simpleMessage("Delete"),
         "home_conversation_empty":
@@ -71,11 +74,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_month": MessageLookupByLibrary.simpleMessage("Monthly"),
         "premium_month_price": MessageLookupByLibrary.simpleMessage(
             "10 USD / month, auto renewable"),
-        "premium_promotion": m0,
+        "premium_promotion": m1,
         "premium_purchase": MessageLookupByLibrary.simpleMessage("Purchase"),
         "premium_purchase_ads":
             MessageLookupByLibrary.simpleMessage("Watch ads"),
-        "premium_purchase_term": m1,
+        "premium_purchase_term": m2,
         "premium_purchase_try_for_free":
             MessageLookupByLibrary.simpleMessage("Try for free"),
         "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),

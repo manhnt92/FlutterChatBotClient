@@ -18,34 +18,30 @@ class AppNavigator {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   static final _routes = {
-    '/': (context) => MultiProvider(providers: [
+    '/': (context, params) => MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => ChatViewModel()),
     ],
     child: const HomeScreen()),
-    '/conversations': (context) => const ConversationsScreen(),
-    // '/chat': (context) => const ChatScreen(),
-    '/setting': (context) => const SettingScreen(),
-    '/setting_language': (context) => const SettingLanguageScreen(),
-    '/premium': (context) => const PremiumScreen(),
-    '/privacy': (context) => WebViewScreen(url: Utils.urlPolicy),
-    '/term': (context) => WebViewScreen(url: Utils.urlTerm),
-  };
-
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-
-    if (settings.name == '/chat') {
-      return CupertinoPageRoute(builder: (context) {
-        Conversation? conv;
-        if (settings.arguments != null) {
-          conv = settings.arguments as Conversation;
-        }
-        return MultiProvider(providers: [
+    '/conversations': (context, params) => const ConversationsScreen(),
+    '/chat': (context, params) {
+      Conversation? conv;
+      if (params != null) {
+        conv = params as Conversation;
+      }
+      return MultiProvider(providers: [
           ChangeNotifierProvider(create: (_) => ChatViewModel())
         ],
         child: ChatScreen(conversation: conv));
-      });
-    }
-    return CupertinoPageRoute(builder: (context) => _routes[settings.name]!(context));
+    },
+    '/setting': (context, params) => const SettingScreen(),
+    '/setting_language': (context, params) => const SettingLanguageScreen(),
+    '/premium': (context, params) => PremiumScreen(showRewardAdsOption: params),
+    '/privacy': (context, params) => WebViewScreen(url: Utils.urlPolicy),
+    '/term': (context, params) => WebViewScreen(url: Utils.urlTerm),
+  };
+
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    return CupertinoPageRoute(builder: (context) => _routes[settings.name]!(context, settings.arguments));
   }
 
   static Future<dynamic>? goToConversationsScreen() {
@@ -64,8 +60,8 @@ class AppNavigator {
     navigatorKey.currentState?.pushNamed('/setting_language');
   }
 
-  static void goToPremiumScreen() {
-    navigatorKey.currentState?.pushNamed('/premium');
+  static void goToPremiumScreen(bool showAdsOption) {
+    navigatorKey.currentState?.pushNamed('/premium', arguments: showAdsOption);
   }
 
   static void goToPrivacy() {

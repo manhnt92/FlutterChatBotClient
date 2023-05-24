@@ -37,12 +37,16 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
     viewModel.getAllConversation();
     _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: context.read<MainViewModel>().suggest.length, vsync: this);
     _tabSuggestController.addListener(() {
-      if (_tabSuggestController.indexIsChanging) {
-        setState(() {
-          _currentTabIndex = _tabSuggestController.index;
-        });
-      }
+      setState(() {
+        _currentTabIndex = _tabSuggestController.index;
+      });
     });
+
+    if (!viewModel.isPurchased) {
+      Future.delayed(const Duration(seconds: 1), () {
+        AppNavigator.goToPremiumScreen(false);
+      });
+    }
   }
 
   @override
@@ -55,6 +59,13 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var chatVm = context.watch<ChatViewModel>();
+    var mainVm = context.watch<MainViewModel>();
+    String chatTitle;
+    if (mainVm.isPurchased) {
+      chatTitle = S.current.chat_title;
+    } else {
+      chatTitle = S.current.free_chat_title(mainVm.freeMessageLeft);
+    }
     return WillPopScope(
       onWillPop: () async {
         if (!_isSuggest) {
@@ -64,12 +75,15 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(_isSuggest ? S.current.home_title : S.current.chat_title),
+        appBar: AppBar(title: Text(_isSuggest ? S.current.home_title : chatTitle),
           leading: _isSuggest ? null : InkWell(
             onTap : () => updateUI(true),
             child: const Icon(Icons.arrow_back),
           ),
           actions: [
+            // IconButton(onPressed: () {
+            //   AppNavigator.goToPremiumScreen(true);
+            // }, icon: Image.asset("assets/images/ic_unlock.png")),
             IconButton(onPressed: () {
               AppNavigator.goToSettingScreen();
             }, icon: const Icon(Icons.settings))
@@ -116,88 +130,80 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget uiForSuggestMode() {
-    return Expanded(child:
-      ListView.builder(itemCount: 2, itemBuilder: (BuildContext context, int index) {
-        var viewModel = context.watch<MainViewModel>();
-        if (index == 0) {
-          return Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Text(S.current.home_conversation_history, style: AppStyle.body1B)),
-                    TextButton(onPressed: () {
-                        AppNavigator.goToConversationsScreen()?.then((value) {
-                          context.read<MainViewModel>().getAllConversation();
-                        });
-                      },
-                      child: Text(S.current.home_conversation_view_all, style: AppStyle.body2)
-                    )
-                  ],
-                ),
-                Container(height: 10),
-                Visibility(
-                  visible: viewModel.conversations.isNotEmpty,
-                  child: SizedBox(
-                    height: Utils.conversationItemHeight,
-                    child: ListView.separated(itemCount: viewModel.conversations.length > 5 ? 5 : viewModel.conversations.length, scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext ctx, int idx) {
-                        return _uiForConversationItem(viewModel.conversations[viewModel.conversations.length - 1 - idx]);
-                      }, separatorBuilder: (BuildContext ctx, int idx) {
-                        return Container(width: 10);
-                      },
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: viewModel.conversations.isEmpty,
-                  child: SizedBox(
-                    height: Utils.conversationItemHeight,
-                    child: Center(child: Text(S.current.home_conversation_empty, style: AppStyle.body2)),
-                  ),
-                )
-              ],
-            ),
-          );
-        } else {
-          if (context.watch<MainViewModel>().suggest.length != _tabSuggestController.length) {
-            _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: context.read<MainViewModel>().suggest.length, vsync: this);
-            _tabSuggestController.addListener(() {
-              if (_tabSuggestController.indexIsChanging) {
-                setState(() {
-                  _currentTabIndex = _tabSuggestController.index;
-                });
-              }
-            });
-          }
-          List<Widget> children = [];
-          children.add(Text(S.current.home_suggestion, style: AppStyle.body1B));
-          children.add(Container(height: 10));
-          children.add(TabBar(
-            controller: _tabSuggestController,
-            isScrollable: true,
-            dividerColor: Colors.transparent,
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            padding: EdgeInsets.zero,
-            indicator: const BoxDecoration(color: Colors.transparent),
-            indicatorColor: Colors.transparent,
-            indicatorPadding: EdgeInsets.zero,
-            labelPadding: const EdgeInsets.only(right: 5),
-            tabs: _getTabListWidget(context),
-          ));
-          children.addAll(_getTabListContentWidget());
-          return Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: children
-            ),
-          );
+    var viewModel = context.watch<MainViewModel>();
+    if (context.watch<MainViewModel>().suggest.length != _tabSuggestController.length) {
+      _tabSuggestController = TabController(initialIndex: _currentTabIndex, length: context.read<MainViewModel>().suggest.length, vsync: this);
+      _tabSuggestController.addListener(() {
+        if (_tabSuggestController.indexIsChanging) {
+          setState(() {
+            _currentTabIndex = _tabSuggestController.index;
+          });
         }
-      })
+      });
+    }
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+            child: Row(children: [
+              Expanded(child: Text(S.current.home_conversation_history, style: AppStyle.body1B)),
+              TextButton(onPressed: () {
+                  AppNavigator.goToConversationsScreen()?.then((value) {
+                    context.read<MainViewModel>().getAllConversation();
+                  });
+                },
+                child: Text(S.current.home_conversation_view_all, style: AppStyle.body2)
+              )
+            ]),
+          ),
+          Visibility(
+            visible: viewModel.conversations.isNotEmpty,
+            child: SizedBox(
+              height: Utils.conversationItemHeight,
+              child: ListView.separated(itemCount: viewModel.conversations.length > 5 ? 5 : viewModel.conversations.length, scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext ctx, int idx) {
+                  return _uiForConversationItem(viewModel.conversations[viewModel.conversations.length - 1 - idx]);
+                }, separatorBuilder: (BuildContext ctx, int idx) {
+                  return Container(width: 10);
+                },
+              ),
+            ),
+          ),
+          Visibility(
+            visible: viewModel.conversations.isEmpty,
+            child: SizedBox(
+              height: Utils.conversationItemHeight,
+              child: Center(child: Text(S.current.home_conversation_empty, style: AppStyle.body2)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+            child: Text(S.current.home_suggestion, style: AppStyle.body1B),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: TabBar(
+              controller: _tabSuggestController,
+              isScrollable: true,
+              dividerColor: Colors.transparent,
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              padding: EdgeInsets.zero,
+              indicator: const BoxDecoration(color: Colors.transparent),
+              indicatorColor: Colors.transparent,
+              indicatorPadding: EdgeInsets.zero,
+              labelPadding: const EdgeInsets.only(right: 5),
+              tabs: _getTabListWidget(context),
+            ),
+          ),
+          Container(height: 10),
+          Expanded(child: TabBarView(
+            controller: _tabSuggestController,
+            children: _getTabListContentWidget(),
+          ))
+        ]
+      )
     );
   }
 
@@ -289,7 +295,42 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   }
 
   List<Widget> _getTabListContentWidget() {
-    List<Widget> contents = [];
+    var viewModel = context.watch<MainViewModel>();
+    if (viewModel.suggest.isEmpty) {
+      return [];
+    }
+    List<Widget> results = [];
+    for (int i = 0; i < viewModel.suggest.length; i++) {
+      List<PBSuggestItem> items = viewModel.suggest[i].suggestItem;
+      List<Widget> contents = [];
+      for (int j = 0; j < items.length; j++) {
+        contents.add(Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: InkWell(
+            customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            onTap: () {
+              _currentConversation = null;
+              _currentSuggestItem = items[j];
+              updateUI(false);
+            },
+            child: Container(
+              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+              decoration: BoxDecoration(border: Border.all(color: AppStyle.colorBorder(context, false)),
+                  color: AppStyle.colorBgElevatedButton(context, false),
+                  borderRadius: const BorderRadius.all(Radius.circular(25))
+              ),
+              child: Center(child: Text(items[j].title, style: AppStyle.body2, textAlign: TextAlign.center)),
+            ),
+          ),
+        ));
+        contents.add(Container(height: 10));
+      }
+      results.add(Column(children: contents));
+    }
+    return results;
+
+
+    /*List<Widget> contents = [];
     var viewModel = context.watch<MainViewModel>();
     if (viewModel.suggest.isEmpty) {
       return contents;
@@ -315,7 +356,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
       );
       contents.add(Container(height: 10));
     }
-    return contents;
+    return contents;*/
   }
 
   Future<bool> sendMessage(String text) {
@@ -323,7 +364,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
     future.then((success) {
       if (!success) {
         Future.delayed(const Duration(milliseconds: 500), () {
-          AppNavigator.goToPremiumScreen();
+          AppNavigator.goToPremiumScreen(true);
         });
       }
     });

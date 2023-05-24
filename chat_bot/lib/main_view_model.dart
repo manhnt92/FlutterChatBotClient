@@ -16,8 +16,11 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
 
   String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
-  List<PBSuggest> suggest = [];
+  int userId = 0;
+  int freeMessageLeft = 0;
+  bool isPurchased = false;
 
+  List<PBSuggest> suggest = [];
   final List<Conversation> conversations = [];
 
   Future<void> init() async {
@@ -112,8 +115,11 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
     var pbMsg = PBCommonMessage.fromBuffer(message);
     if (pbMsg.id == 10002) {
       var loginResponse = PBLoginResponse.fromBuffer(pbMsg.dataBytes);
-      debugPrint('login success: id=${loginResponse.user.dbId}');
-      // debugPrint('login response : ${loginResponse.toDebugString()}');
+      userId = loginResponse.user.dbId;
+      freeMessageLeft = loginResponse.user.freeMsgLeft;
+      isPurchased = loginResponse.user.isPurchased;
+      debugPrint('login success: id=$userId, freeMsgLeft: $freeMessageLeft, isPurchased: $isPurchased');
+      notifyListeners();
     } else if (pbMsg.id == 11113) {
       debugPrint('config response');
       var config = PBConfig.fromBuffer(pbMsg.dataBytes);
@@ -121,6 +127,18 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
       suggest.clear();
       suggest.addAll(config.suggestList);
       notifyListeners();
+    } else if (pbMsg.id == 11114) {
+      var userInfo = PBUser.fromBuffer(pbMsg.dataBytes);
+      userId = userInfo.dbId;
+      freeMessageLeft = userInfo.freeMsgLeft;
+      isPurchased = userInfo.isPurchased;
+      notifyListeners();
+    } else if (pbMsg.id == 10003) { //chat response
+      if (!isPurchased && freeMessageLeft == 0) {
+        Future.delayed(const Duration(seconds: 1), () {
+          AppNavigator.goToPremiumScreen(true);
+        });
+      }
     }
   }
 

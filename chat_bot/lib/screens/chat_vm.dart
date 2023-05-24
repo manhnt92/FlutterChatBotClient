@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:chat_bot/data/app_web_socket.dart';
 import 'package:chat_bot/models/aiapp.pb.dart';
 import 'package:chat_bot/models/qa_message.dart';

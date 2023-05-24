@@ -42,7 +42,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
   void dispose() {
     super.dispose();
     debugPrint("ExpandableTextField dispose");
-    FocusScope.of(context).unfocus();
+    // FocusScope.of(context).unfocus();
     _focusNode.unfocus();
     _messageController.dispose();
   }

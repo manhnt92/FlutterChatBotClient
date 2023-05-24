@@ -45,7 +45,7 @@ class _ConversationsState extends BaseState<ConversationsScreen> {
           child: ListView.separated(
             itemCount: conversations.length,
             itemBuilder: (BuildContext context, int index) {
-              var conv = conversations[index];
+              var conv = conversations[conversations.length - 1 - index];
               return InkWell(
                 customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 onTap: () { AppNavigator.goToChatScreen(conv); },

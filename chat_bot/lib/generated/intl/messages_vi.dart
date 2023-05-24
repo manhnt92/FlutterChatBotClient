@@ -20,9 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'vi';
 
-  static String m0(value) => "(Tiết kiệm ${value}%)";
+  static String m0(value) => "Miễn phí ${value}";
 
-  static String m1(value) =>
+  static String m1(value) => "(Tiết kiệm ${value}%)";
+
+  static String m2(value) =>
       "Bằng cách nhấp vào \'${value}\', bạn đồng ý với Điều khoản của chúng tôi. Số tiền sẽ được tính và đăng ký sẽ được gia hạn trong khoảng thời gian đã chọn và ở cùng mức giá cho đến khi bạn hủy đăng ký trong cài đặt Google Play.\n\nNó không phải là truy cập không giới hạn. Kế hoạch là nhằm mục đích sử dụng cá nhân. Nếu bạn vượt quá hạn ngạch, quyền truy cập tài khoản của bạn có thể bị hạn chế hoặc tần suất yêu cầu giảm.";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -35,9 +37,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Câu hỏi tiếp"),
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
-        "chat_title": MessageLookupByLibrary.simpleMessage("Chat Bot"),
+        "chat_title": MessageLookupByLibrary.simpleMessage("Vega AI"),
         "chat_wait_response": MessageLookupByLibrary.simpleMessage(
             "Vui lòng đợi phản hồi của bot trước khi đặt câu hỏi tiếp..."),
+        "free_chat_title": m0,
         "home_conversation_delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "home_conversation_empty":
             MessageLookupByLibrary.simpleMessage("Không tìm thấy lịch sử."),
@@ -73,11 +76,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_month": MessageLookupByLibrary.simpleMessage("Gói tháng"),
         "premium_month_price": MessageLookupByLibrary.simpleMessage(
             "1.000.000đ / tháng, tự động tái tạo"),
-        "premium_promotion": m0,
+        "premium_promotion": m1,
         "premium_purchase": MessageLookupByLibrary.simpleMessage("Mua"),
         "premium_purchase_ads":
             MessageLookupByLibrary.simpleMessage("Xem quảng cáo"),
-        "premium_purchase_term": m1,
+        "premium_purchase_term": m2,
         "premium_purchase_try_for_free":
             MessageLookupByLibrary.simpleMessage("Thử miễn phí"),
         "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),

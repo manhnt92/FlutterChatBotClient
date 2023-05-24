@@ -19,6 +19,8 @@ message PBLoginResponse {
 
 message PBUser {
 	optional int32 dbId = 1;
+	optional int32 freeMsgLeft = 2;
+	optional bool isPurchased = 3;
 }
 
 message PBChat {
@@ -33,6 +35,7 @@ message PBChatList {
 
 message PBConfig {
 	repeated PBSuggest suggestList = 1;
+	optional string suggestPurchaseMsg = 2;
 }
 
 message PBSuggest {

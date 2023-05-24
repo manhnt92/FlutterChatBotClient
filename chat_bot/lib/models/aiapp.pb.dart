@@ -219,16 +219,26 @@ class PBLoginResponse extends $pb.GeneratedMessage {
 class PBUser extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PBUser', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.aiapp'), createEmptyInstance: create)
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dbId', $pb.PbFieldType.O3, protoName: 'dbId')
+    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'freeMsgLeft', $pb.PbFieldType.O3, protoName: 'freeMsgLeft')
+    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPurchased', protoName: 'isPurchased')
     ..hasRequiredFields = false
   ;
 
   PBUser._() : super();
   factory PBUser({
     $core.int? dbId,
+    $core.int? freeMsgLeft,
+    $core.bool? isPurchased,
   }) {
     final _result = create();
     if (dbId != null) {
       _result.dbId = dbId;
+    }
+    if (freeMsgLeft != null) {
+      _result.freeMsgLeft = freeMsgLeft;
+    }
+    if (isPurchased != null) {
+      _result.isPurchased = isPurchased;
     }
     return _result;
   }
@@ -261,6 +271,24 @@ class PBUser extends $pb.GeneratedMessage {
   $core.bool hasDbId() => $_has(0);
   @$pb.TagNumber(1)
   void clearDbId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get freeMsgLeft => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set freeMsgLeft($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasFreeMsgLeft() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFreeMsgLeft() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get isPurchased => $_getBF(2);
+  @$pb.TagNumber(3)
+  set isPurchased($core.bool v) { $_setBool(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasIsPurchased() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIsPurchased() => clearField(3);
 }
 
 class PBChat extends $pb.GeneratedMessage {
@@ -384,16 +412,21 @@ class PBChatList extends $pb.GeneratedMessage {
 class PBConfig extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PBConfig', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.aiapp'), createEmptyInstance: create)
     ..pc<PBSuggest>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'suggestList', $pb.PbFieldType.PM, protoName: 'suggestList', subBuilder: PBSuggest.create)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'suggestPurchaseMsg', protoName: 'suggestPurchaseMsg')
     ..hasRequiredFields = false
   ;
 
   PBConfig._() : super();
   factory PBConfig({
     $core.Iterable<PBSuggest>? suggestList,
+    $core.String? suggestPurchaseMsg,
   }) {
     final _result = create();
     if (suggestList != null) {
       _result.suggestList.addAll(suggestList);
+    }
+    if (suggestPurchaseMsg != null) {
+      _result.suggestPurchaseMsg = suggestPurchaseMsg;
     }
     return _result;
   }
@@ -420,6 +453,15 @@ class PBConfig extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<PBSuggest> get suggestList => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.String get suggestPurchaseMsg => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set suggestPurchaseMsg($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasSuggestPurchaseMsg() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSuggestPurchaseMsg() => clearField(2);
 }
 
 class PBSuggest extends $pb.GeneratedMessage {

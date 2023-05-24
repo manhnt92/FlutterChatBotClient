@@ -17,7 +17,9 @@
 
   "chat_history_title": "History",
 
-  "chat_title": "Chat Bot",
+  "free_chat_title": "Free {value}",
+  "@free_chat_title": {"placeholders": {"value": {"type": "int"}}},
+  "chat_title": "Vega AI",
   "chat_send_message_hint": "Send a message...",
   "chat_wait_response" : "Please wait for bot response before asking the next question...",
   "chat_next_question": "Next Question",
@@ -47,7 +49,6 @@
   "premium_ads_price": "Watch ads to get 1 free chat",
   "premium_promotion": "(Save {value}%)",
   "@premium_promotion": {
-    "description": "",
     "placeholders": {
       "value": {
         "type": "String"

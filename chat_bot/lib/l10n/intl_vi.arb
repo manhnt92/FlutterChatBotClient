@@ -17,7 +17,9 @@
 
   "chat_history_title": "Lịch sử chat",
 
-  "chat_title": "Chat Bot",
+  "free_chat_title": "Miễn phí {value}",
+  "@free_chat_title": {"placeholders": {"value": {"type": "int"}}},
+  "chat_title": "Vega AI",
   "chat_send_message_hint": "Gửi tin nhắn...",
   "chat_wait_response" : "Vui lòng đợi phản hồi của bot trước khi đặt câu hỏi tiếp...",
   "chat_next_question": "Câu hỏi tiếp",
@@ -47,7 +49,6 @@
   "premium_ads_price": "Xem quảng cáo để nhận 1 lượt chat miễn phí",
   "premium_promotion": "(Tiết kiệm {value}%)",
   "@premium_promotion": {
-    "description": "",
     "placeholders": {
       "value": {
         "type": "String"

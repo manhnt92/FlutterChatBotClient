@@ -50,7 +50,7 @@ class _SettingScreenState extends BaseState<SettingScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
               child: ElevatedButton(
-                onPressed: () { AppNavigator.goToPremiumScreen();} ,
+                onPressed: () { AppNavigator.goToPremiumScreen(true);} ,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

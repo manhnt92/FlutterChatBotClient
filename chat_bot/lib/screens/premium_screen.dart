@@ -1,3 +1,4 @@
+import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/sub_data.dart';
@@ -6,10 +7,13 @@ import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 
 class PremiumScreen extends BaseStatefulWidget {
 
-  const PremiumScreen({super.key});
+  final bool showRewardAdsOption;
+
+  const PremiumScreen({super.key, required this.showRewardAdsOption});
 
   @override
   State<StatefulWidget> createState() => _PremiumScreenState();
@@ -58,9 +62,12 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
               Container(height: 10),
               Subscription(onTap: () => onSubscriptionSelected(2),
                   isSelected: _selectedIndex == 2, sub: subs[1]),
-              Container(height: 10),
-              Subscription(onTap: () => onSubscriptionSelected(3),
-                  isSelected: _selectedIndex == 3, sub: subs[2]),
+              Visibility(visible: widget.showRewardAdsOption, child: Container(height: 10)),
+              Visibility(
+                visible: widget.showRewardAdsOption,
+                child: Subscription(onTap: () => onSubscriptionSelected(3),
+                    isSelected: _selectedIndex == 3, sub: subs[2]),
+              ),
               const SubscriptionFeatures(),
               ElevatedButton(
                 onPressed: onSubscription,
@@ -111,34 +118,34 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
   void _loadRewardAd({bool show = true}) {
     var request = const AdRequest();
     RewardedAd.load(
-        adUnitId: Utils.rewardAdUnitId,
-        request: request,
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
-            onAdLoaded: (ad) {
-              ad.fullScreenContentCallback = FullScreenContentCallback(
-                  onAdShowedFullScreenContent: (ad) {},
-                  onAdImpression: (ad) {},
-                  onAdFailedToShowFullScreenContent: (ad, err) {
-                    ad.dispose();
-                    _rewardedAd = null;
-                  },
-                  onAdDismissedFullScreenContent: (ad) {
-                    ad.dispose();
-                    _rewardedAd = null;
-                  },
-                  onAdClicked: (ad) {}
-              );
-              debugPrint('$ad loaded.');
-              _rewardedAd = ad;
-              if (show) {
-                _showRewardAd();
-              }
-            },
-            onAdFailedToLoad: (LoadAdError error) {
-              debugPrint('RewardedAd failed to load: $error');
+      adUnitId: Utils.rewardAdUnitId,
+      request: request,
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (ad) {},
+            onAdImpression: (ad) {},
+            onAdFailedToShowFullScreenContent: (ad, err) {
+              ad.dispose();
               _rewardedAd = null;
-            }
-        )
+            },
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _rewardedAd = null;
+            },
+            onAdClicked: (ad) {}
+          );
+          debugPrint('$ad loaded.');
+          _rewardedAd = ad;
+          if (show) {
+            _showRewardAd();
+          }
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          debugPrint('RewardedAd failed to load: $error');
+          _rewardedAd = null;
+        }
+      )
     );
   }
 
@@ -146,6 +153,11 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
     if (_rewardedAd == null) {
       _loadRewardAd();
     } else {
+      int userId = context.read<MainViewModel>().userId;
+      _rewardedAd?.setServerSideOptions(ServerSideVerificationOptions(
+        userId: userId.toString(),
+        customData: userId.toString()
+      ));
       _rewardedAd?.show(
           onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
 

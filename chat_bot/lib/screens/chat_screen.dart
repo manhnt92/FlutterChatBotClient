@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/models/qa_message.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
@@ -32,8 +33,15 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     var chatVm = context.watch<ChatViewModel>();
+    var mainVm = context.watch<MainViewModel>();
+    String chatTitle;
+    if (mainVm.isPurchased) {
+      chatTitle = S.current.chat_title;
+    } else {
+      chatTitle = S.current.free_chat_title(mainVm.freeMessageLeft);
+    }
     return Scaffold(
-      appBar: AppBar(title: Text(S.current.chat_title),
+      appBar: AppBar(title: Text(chatTitle),
         leading: InkWell(
           onTap: () {
             context.read<ChatViewModel>().setCurrentState(ChatState.disable);
@@ -58,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
     future.then((success) {
       if (!success) {
         Future.delayed(const Duration(milliseconds: 500), () {
-          AppNavigator.goToPremiumScreen();
+          AppNavigator.goToPremiumScreen(true);
         });
       }
     });

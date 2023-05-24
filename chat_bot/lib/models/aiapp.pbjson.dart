@@ -59,11 +59,13 @@ const PBUser$json = const {
   '1': 'PBUser',
   '2': const [
     const {'1': 'dbId', '3': 1, '4': 1, '5': 5, '10': 'dbId'},
+    const {'1': 'freeMsgLeft', '3': 2, '4': 1, '5': 5, '10': 'freeMsgLeft'},
+    const {'1': 'isPurchased', '3': 3, '4': 1, '5': 8, '10': 'isPurchased'},
   ],
 };
 
 /// Descriptor for `PBUser`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pBUserDescriptor = $convert.base64Decode('CgZQQlVzZXISEgoEZGJJZBgBIAEoBVIEZGJJZA==');
+final $typed_data.Uint8List pBUserDescriptor = $convert.base64Decode('CgZQQlVzZXISEgoEZGJJZBgBIAEoBVIEZGJJZBIgCgtmcmVlTXNnTGVmdBgCIAEoBVILZnJlZU1zZ0xlZnQSIAoLaXNQdXJjaGFzZWQYAyABKAhSC2lzUHVyY2hhc2Vk');
 @$core.Deprecated('Use pBChatDescriptor instead')
 const PBChat$json = const {
   '1': 'PBChat',
@@ -91,11 +93,12 @@ const PBConfig$json = const {
   '1': 'PBConfig',
   '2': const [
     const {'1': 'suggestList', '3': 1, '4': 3, '5': 11, '6': '.proto.aiapp.PBSuggest', '10': 'suggestList'},
+    const {'1': 'suggestPurchaseMsg', '3': 2, '4': 1, '5': 9, '10': 'suggestPurchaseMsg'},
   ],
 };
 
 /// Descriptor for `PBConfig`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pBConfigDescriptor = $convert.base64Decode('CghQQkNvbmZpZxI4CgtzdWdnZXN0TGlzdBgBIAMoCzIWLnByb3RvLmFpYXBwLlBCU3VnZ2VzdFILc3VnZ2VzdExpc3Q=');
+final $typed_data.Uint8List pBConfigDescriptor = $convert.base64Decode('CghQQkNvbmZpZxI4CgtzdWdnZXN0TGlzdBgBIAMoCzIWLnByb3RvLmFpYXBwLlBCU3VnZ2VzdFILc3VnZ2VzdExpc3QSLgoSc3VnZ2VzdFB1cmNoYXNlTXNnGAIgASgJUhJzdWdnZXN0UHVyY2hhc2VNc2c=');
 @$core.Deprecated('Use pBSuggestDescriptor instead')
 const PBSuggest$json = const {
   '1': 'PBSuggest',
