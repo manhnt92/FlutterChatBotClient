@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:chat_bot/utils/hexcolor.dart';
 
 class AppStyle {
 
@@ -127,8 +128,10 @@ class AppStyle {
     );
   }
 
-  static ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.light);
-  static ColorScheme colorSchemeDark = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.dark);
+  // static ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.light);
+  static ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: HexColor("#141227"), brightness: Brightness.light);
+  // static ColorScheme colorSchemeDark = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.dark);
+  static ColorScheme colorSchemeDark = ColorScheme.fromSeed(seedColor: HexColor("#141227"), brightness: Brightness.dark);
 
   static Color colorBgElevatedButton(BuildContext context, bool isSelected) {
     if (MediaQuery.of(context).platformBrightness == Brightness.dark) {

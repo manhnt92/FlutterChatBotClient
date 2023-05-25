@@ -65,7 +65,6 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
         _openKeyboard = false;
         Future.delayed(const Duration(milliseconds: 200), () {
           setState(() {
-            debugPrint("van vao");
             _focusNode.requestFocus();
           });
         });

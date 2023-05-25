@@ -182,19 +182,29 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
             padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
             child: Text(S.current.home_suggestion, style: AppStyle.body1B),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: TabBar(
-              controller: _tabSuggestController,
-              isScrollable: true,
-              dividerColor: Colors.transparent,
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              padding: EdgeInsets.zero,
-              indicator: const BoxDecoration(color: Colors.transparent),
-              indicatorColor: Colors.transparent,
-              indicatorPadding: EdgeInsets.zero,
-              labelPadding: const EdgeInsets.only(right: 5),
-              tabs: _getTabListWidget(context),
+          SizedBox(
+            height: 35,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: TabBar(
+                controller: _tabSuggestController,
+                isScrollable: true,
+                dividerColor: Colors.transparent,
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                padding: EdgeInsets.zero,
+                // indicator: const BoxDecoration(color: Colors.transparent),
+                indicator: BoxDecoration(
+                    border: Border.all(color: AppStyle.colorBorder(context, true)),
+                    color: AppStyle.colorBgElevatedButton(context, true),
+                    borderRadius: const BorderRadius.all(Radius.circular(15))
+                ),
+                indicatorColor: Colors.transparent,
+                indicatorPadding: EdgeInsets.zero,
+                labelPadding: const EdgeInsets.only(right: 5),
+                unselectedLabelStyle: AppStyle.body2,
+                labelStyle: AppStyle.body2B,
+                tabs: _getTabListWidget(context),
+              ),
             ),
           ),
           Container(height: 10),
@@ -271,19 +281,19 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
     List<Tab> tabs = [];
     var viewModel = context.watch<MainViewModel>();
     for (int i = 0; i < viewModel.suggest.length; i++) {
-      bool isSelectedTab = _currentTabIndex == i;
+      // bool isSelectedTab = _currentTabIndex == i;
       var tab = Tab(child:
         Container(
           height: 30,
-          decoration: BoxDecoration(
+          /*decoration: BoxDecoration(
             border: Border.all(color: AppStyle.colorBorder(context, isSelectedTab)),
             color: AppStyle.colorBgElevatedButton(context, isSelectedTab),
             borderRadius: const BorderRadius.all(Radius.circular(10))
-          ),
+          ),*/
           child: Row(
             children: [
               Container(width: 15),
-              Text(viewModel.suggest[i].title, style: isSelectedTab ? AppStyle.body2B : AppStyle.body2),
+              Text(viewModel.suggest[i].title/*, style: isSelectedTab ? AppStyle.body2B : AppStyle.body2*/),
               Container(width: 15)
             ],
           ),
