@@ -20,16 +20,16 @@ class _SettingScreenState extends BaseState<SettingScreen> {
 
   final List<IconData> _settingIcons = [
     Icons.nightlight,
-    Icons.language,
+    // Icons.language,
     Icons.support_agent,
-    Icons.share,
-    Icons.reset_tv,
+    // Icons.share,
+    // Icons.reset_tv,
     Icons.privacy_tip,
     Icons.privacy_tip,
     Icons.delete_forever
   ];
-  List<String> _settings = [ S.current.setting_night_mode, S.current.setting_language,
-    S.current.setting_contact_us, S.current.setting_share_app, S.current.setting_restore_purchase,
+  List<String> _settings = [ S.current.setting_night_mode, /*S.current.setting_language,*/
+    S.current.setting_contact_us, /*S.current.setting_share_app, S.current.setting_restore_purchase,*/
     S.current.setting_policy, S.current.setting_term, S.current.setting_clear_history
   ];
 
@@ -88,8 +88,8 @@ class _SettingScreenState extends BaseState<SettingScreen> {
   void didPopNext() {
     super.didPopNext();
     setState(() {
-      _settings = [ S.current.setting_night_mode, S.current.setting_language,
-        S.current.setting_contact_us, S.current.setting_share_app, S.current.setting_restore_purchase,
+      _settings = [ S.current.setting_night_mode, /*S.current.setting_language,*/
+        S.current.setting_contact_us, /*S.current.setting_share_app, S.current.setting_restore_purchase,*/
         S.current.setting_policy, S.current.setting_term, S.current.setting_clear_history
       ];
     });
@@ -104,19 +104,19 @@ class _SettingScreenState extends BaseState<SettingScreen> {
     if (index == 0) {
       bool isNightMode = context.read<MainViewModel>().currentThemeMode == ThemeMode.dark;
       _updateNightMode(!isNightMode);
-    } else if (index == 1) {
+    } /*else if (index == 1) {
       AppNavigator.goToSettingLanguageScreen();
-    } else if (index == 2) { // contact us
+    }*/ else if (index == 1) { // contact us
+      AppNavigator.goToContactUs();
+    } /*else if (index == 2) { // share app
 
-    } else if (index == 3) { // share app
+    } else if (index == 3) { // restore purchase
 
-    } else if (index == 4) { // restore purchase
-
-    } else if (index == 5) { // privacy
+    }*/ else if (index == 2) { // privacy
       AppNavigator.goToPrivacy();
-    } else if (index == 6) { // term
+    } else if (index == 3) { // term
       AppNavigator.goToTerm();
-    } else if (index == 7) { // clear chat history
+    } else if (index == 4) { // clear chat history
       showDialog(context: context, builder: (BuildContext context) {
           return AlertDialog(
             content: Text(S.current.question_remove_all_conversation, style: AppStyle.body2),

@@ -20,7 +20,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(value) => "Free ${value}";
+  static String m0(value) => "Free ${value} Messages";
 
   static String m1(value) => "(Save ${value}%)";
 
@@ -36,10 +36,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Next Question"),
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
-        "chat_title": MessageLookupByLibrary.simpleMessage("Vega AI"),
+        "chat_title": MessageLookupByLibrary.simpleMessage("VegaAI Premium"),
         "chat_wait_response": MessageLookupByLibrary.simpleMessage(
             "Please wait for bot response before asking the next question..."),
         "free_chat_title": m0,
+        "free_chat_title_0":
+            MessageLookupByLibrary.simpleMessage("Free 0 Message"),
+        "free_chat_title_1":
+            MessageLookupByLibrary.simpleMessage("Free 1 Message"),
         "home_conversation_delete":
             MessageLookupByLibrary.simpleMessage("Delete"),
         "home_conversation_empty":
@@ -71,9 +75,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_feature_4": MessageLookupByLibrary.simpleMessage("No Ads"),
         "premium_feature_4_desc":
             MessageLookupByLibrary.simpleMessage("Enjoy app without ads"),
-        "premium_month": MessageLookupByLibrary.simpleMessage("Monthly"),
-        "premium_month_price": MessageLookupByLibrary.simpleMessage(
-            "10 USD / month, auto renewable"),
         "premium_promotion": m1,
         "premium_purchase": MessageLookupByLibrary.simpleMessage("Purchase"),
         "premium_purchase_ads":
@@ -87,8 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_title_hint_1": MessageLookupByLibrary.simpleMessage(
             "You will get full access to our chatbot with high limits. Cancel anytime"),
         "premium_week": MessageLookupByLibrary.simpleMessage("Weekly"),
-        "premium_week_price": MessageLookupByLibrary.simpleMessage(
-            "First 3 days free, then 2 USD / week"),
+        "premium_year": MessageLookupByLibrary.simpleMessage("Yearly"),
         "question_remove_all_conversation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete all the data, chats and messages. You cannot undo this action"),
         "setting_clear_history":

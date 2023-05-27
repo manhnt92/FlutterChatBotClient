@@ -210,20 +210,40 @@ class S {
     );
   }
 
-  /// `Free {value}`
+  /// `Free {value} Messages`
   String free_chat_title(int value) {
     return Intl.message(
-      'Free $value',
+      'Free $value Messages',
       name: 'free_chat_title',
       desc: '',
       args: [value],
     );
   }
 
-  /// `Vega AI`
+  /// `Free 1 Message`
+  String get free_chat_title_1 {
+    return Intl.message(
+      'Free 1 Message',
+      name: 'free_chat_title_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free 0 Message`
+  String get free_chat_title_0 {
+    return Intl.message(
+      'Free 0 Message',
+      name: 'free_chat_title_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `VegaAI Premium`
   String get chat_title {
     return Intl.message(
-      'Vega AI',
+      'VegaAI Premium',
       name: 'chat_title',
       desc: '',
       args: [],
@@ -430,31 +450,11 @@ class S {
     );
   }
 
-  /// `First 3 days free, then 2 USD / week`
-  String get premium_week_price {
+  /// `Yearly`
+  String get premium_year {
     return Intl.message(
-      'First 3 days free, then 2 USD / week',
-      name: 'premium_week_price',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Monthly`
-  String get premium_month {
-    return Intl.message(
-      'Monthly',
-      name: 'premium_month',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `10 USD / month, auto renewable`
-  String get premium_month_price {
-    return Intl.message(
-      '10 USD / month, auto renewable',
-      name: 'premium_month_price',
+      'Yearly',
+      name: 'premium_year',
       desc: '',
       args: [],
     );

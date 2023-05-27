@@ -23,8 +23,8 @@ class Utils {
   static bool isDebug = kDebugMode;
   static String osName = isWeb ? 'web': (isWin32 ? 'win32': (isAndroid ? 'android': 'iOS'));
 
-  // static String rewardAdUnitId = isAndroid ? 'ca-app-pub-6832904884201522/2366638181' : 'ca-app-pub-3940256099942544/1712485313';
-  static String rewardAdUnitId = isAndroid ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313';
+  static String rewardAdUnitId = isAndroid ? 'ca-app-pub-6832904884201522/2366638181' : 'ca-app-pub-3940256099942544/1712485313';
+  // static String rewardAdUnitId = isAndroid ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313';
 
   static const List<Locale> supportedLocale = [
     Locale('en', 'US'),
@@ -33,8 +33,12 @@ class Utils {
   static const double defaultListViewItemHeight = 45;
   static const double conversationItemHeight = 110;
   static const double conversationItemWidth = 250;
-  static const String urlPolicy = "https://flutter.dev";
-  static const String urlTerm = "https://google.com.vn";
+  static const String urlMailToScheme = "mailto";
+  static const String urlMailTo = "vegaaicompany@gmail.com";
+  static const String urlPolicyScheme = "http";
+  static const String urlPolicy = "h2ksolution.com/privacypolicy/vega";
+  static const String urlTermScheme = "http";
+  static const String urlTerm = "h2ksolution.com/privacypolicy/tosvega";
   static const int chatMaxLength = 500;
 
 }

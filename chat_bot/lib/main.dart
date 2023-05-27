@@ -1,5 +1,7 @@
 import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/screens/chat_vm.dart';
+import 'package:chat_bot/screens/test_iap.dart';
+import 'package:chat_bot/utils/app_iap.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/custom_scroll_behavior.dart';
 import 'package:chat_bot/utils/app_style.dart';
@@ -13,6 +15,7 @@ import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  debugPrint("main(): start app");
   if (Utils.isWin32) {
     await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow(null, () async {
@@ -23,10 +26,13 @@ void main() async {
 
   var viewModel = MainViewModel();
   await viewModel.init();
+  var iapVm = AppIAP();
+  iapVm.init();
   runApp(
       MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => viewModel)
+            ChangeNotifierProvider(create: (_) => viewModel),
+            ChangeNotifierProvider(create: (_) => iapVm)
           ],
           child: const MyApp()
       )
@@ -87,7 +93,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver, WindowListen
       navigatorKey: AppNavigator.navigatorKey,
       navigatorObservers: [ AppNavigator.routeObserver ],
       initialRoute: '/',
-      onGenerateRoute: (settings) => AppNavigator.generateRoute(settings),
+      onGenerateRoute: (settings) => AppNavigator.generateRoute(settings)
     );
   }
 

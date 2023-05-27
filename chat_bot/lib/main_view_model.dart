@@ -41,7 +41,9 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
     connectSocket();
     await AppDatabase.instance.init();
     if (Utils.isMobile) {
+      var configuration = RequestConfiguration(testDeviceIds: [ 'F9278F0B381C12CA1012A6DB03191AF3']);
       MobileAds.instance.initialize();
+      MobileAds.instance.updateRequestConfiguration(configuration);
     }
   }
 
@@ -53,6 +55,7 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
   }
 
   void setLangCode(String code) {
+    code = "en";
     debugPrint("current lang code = $code");
     currentLangCode = code;
     notifyListeners();
@@ -120,6 +123,11 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
       isPurchased = loginResponse.user.isPurchased;
       debugPrint('login success: id=$userId, freeMsgLeft: $freeMessageLeft, isPurchased: $isPurchased');
       notifyListeners();
+      if (!isPurchased) {
+        Future.delayed(const Duration(seconds: 1), () {
+          AppNavigator.goToPremiumScreen(false);
+        });
+      }
     } else if (pbMsg.id == 11113) {
       debugPrint('config response');
       var config = PBConfig.fromBuffer(pbMsg.dataBytes);

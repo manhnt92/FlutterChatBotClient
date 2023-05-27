@@ -48,21 +48,25 @@ final bool _kAutoConsume = Platform.isIOS || true;
 
 const String _kConsumableId = 'consumable';
 const String _kUpgradeId = 'upgrade';
-const String _kSilverSubscriptionId = 'subscription_silver';
-const String _kGoldSubscriptionId = 'subscription_gold';
+const String _kSilverSubscriptionId = 'com.vegaai.chatbot.weekly';
+const String _kGoldSubscriptionId = 'com.vegaai.chatbot.yearly';
 const List<String> _kProductIds = <String>[
-  _kConsumableId,
-  _kUpgradeId,
+  // _kConsumableId,
+  // _kUpgradeId,
   _kSilverSubscriptionId,
   _kGoldSubscriptionId,
+  "android.test.purchased",
+  "android.test.canceled",
+  "android.test.refunded",
+  "android.test.item_unavailable"
 ];
 
-class _TestIAP extends StatefulWidget {
+class TestIAP extends StatefulWidget {
   @override
-  State<_TestIAP> createState() => _TestIAPState();
+  State<TestIAP> createState() => _TestIAPState();
 }
 
-class _TestIAPState extends State<_TestIAP> {
+class _TestIAPState extends State<TestIAP> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<String> _notFoundIds = <String>[];

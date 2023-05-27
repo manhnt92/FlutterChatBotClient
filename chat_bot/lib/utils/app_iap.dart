@@ -6,7 +6,6 @@ import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class IOSPaymentQueueDelegate implements SKPaymentQueueDelegateWrapper {
   @override
@@ -20,81 +19,60 @@ class IOSPaymentQueueDelegate implements SKPaymentQueueDelegateWrapper {
   }
 }
 
-class ConsumableStore {
-  static const String _kPrefKey = 'consumables';
-  static Future<void> _writes = Future<void>.value();
-
-  static Future<void> save(String id) {
-    _writes = _writes.then((void _) => _doSave(id));
-    return _writes;
-  }
-
-  static Future<void> consume(String id) {
-    _writes = _writes.then((void _) => _doConsume(id));
-    return _writes;
-  }
-
-  static Future<List<String>> load() async {
-    return (await SharedPreferences.getInstance()).getStringList(_kPrefKey) ?? <String>[];
-  }
-
-  static Future<void> _doSave(String id) async {
-    final List<String> cached = await load();
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    cached.add(id);
-    await prefs.setStringList(_kPrefKey, cached);
-  }
-
-  static Future<void> _doConsume(String id) async {
-    final List<String> cached = await load();
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    cached.remove(id);
-    await prefs.setStringList(_kPrefKey, cached);
-  }
-
-}
-
-class AppIAP {
-
-  static final AppIAP instance = AppIAP._internal();
-  factory AppIAP() => instance;
-  AppIAP._internal();
+class AppIAP with ChangeNotifier {
 
   final bool _kAutoConsume = Utils.isIOS || true;
 
-  static const String _kConsumableId = 'consumable';
-  static const String _kUpgradeId = 'upgrade';
-  static const String _kWeekSubscriptionId = 'subscription_week';
-  static const String _kMonthSubscriptionId = 'subscription_month';
+  static const String kWeekSubscriptionId = 'com.vegaai.chatbot.weekly';
+  static const String kYearSubscriptionId = 'com.vegaai.chatbot.yearly';
   static const List<String> _kProductIds = <String>[
-    _kConsumableId,
-    _kUpgradeId,
-    _kWeekSubscriptionId,
-    _kMonthSubscriptionId,
+    kWeekSubscriptionId,
+    kYearSubscriptionId,
   ];
 
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
-  List<String> _notFoundIds = <String>[];
-  List<ProductDetails> _products = <ProductDetails>[];
-  List<PurchaseDetails> _purchases = <PurchaseDetails>[];
-  List<String> _consumables = <String>[];
-  bool _isAvailable = false;
-  bool _purchasePending = false;
-  bool _loading = true;
-  String? _queryProductError;
+  List<ProductDetails> products = <ProductDetails>[];
 
-  void init() {
+  final List<PurchaseDetails> _purchases = <PurchaseDetails>[];
+  bool _purchasePending = false;
+
+  void init() async {
     _subscription = _inAppPurchase.purchaseStream.listen((purchaseDetailsList) {
       _listenToPurchaseUpdated(purchaseDetailsList);
       }, onDone: () {
         _subscription.cancel();
       }, onError: (Object error) {}
     );
-    initStoreInfo();
+
+    final bool isAvailable = await InAppPurchase.instance.isAvailable();
+    debugPrint("store available: $isAvailable");
+    if (!isAvailable) {
+      return;
+    }
+    if (Utils.isIOS) {
+      final iosPlatformAddition = _inAppPurchase.getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
+      await iosPlatformAddition.setDelegate(IOSPaymentQueueDelegate());
+    }
+    final productDetailResponse = await _inAppPurchase.queryProductDetails(_kProductIds.toSet());
+    products = productDetailResponse.productDetails;
+    if (productDetailResponse.error != null) {
+      debugPrint("product detail response error: ${productDetailResponse.error!.message}");
+    }
+    if (productDetailResponse.notFoundIDs.isNotEmpty) {
+      debugPrint("products not found: ${productDetailResponse.notFoundIDs}");
+    }
+    var purchases = Map<String, PurchaseDetails>.fromEntries(_purchases.map((PurchaseDetails purchase) {
+      if (purchase.pendingCompletePurchase) {
+        _inAppPurchase.completePurchase(purchase);
+      }
+      return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
+    }));
   }
 
+  @override
   void dispose() {
+    super.dispose();
     if (Utils.isIOS) {
       final iosPlatformAddition = _inAppPurchase.getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
       iosPlatformAddition.setDelegate(null);
@@ -102,128 +80,19 @@ class AppIAP {
     _subscription.cancel();
   }
 
-  void purchase(ProductDetails productDetails) {
-    var purchases = Map<String, PurchaseDetails>.fromEntries(_purchases.map((PurchaseDetails purchase) {
-        if (purchase.pendingCompletePurchase) {
-          _inAppPurchase.completePurchase(purchase);
-        }
-        return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
-      })
-    );
-
-    late PurchaseParam purchaseParam;
-    if (Utils.isAndroid) {
-      var oldSubscription = _getOldSubscription(productDetails, purchases);
-      ChangeSubscriptionParam? changeParam;
-      if (oldSubscription != null) {
-        changeParam = ChangeSubscriptionParam(oldPurchaseDetails: oldSubscription, prorationMode: ProrationMode.immediateWithTimeProration);
-      }
-      purchaseParam = GooglePlayPurchaseParam(productDetails: productDetails, changeSubscriptionParam: changeParam);
-    } else {
-      purchaseParam = PurchaseParam(productDetails: productDetails);
-    }
-    if (productDetails.id == _kConsumableId) {
-      _inAppPurchase.buyConsumable(purchaseParam: purchaseParam, autoConsume: _kAutoConsume);
-    } else {
-      _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
-    }
-  }
-
-  void restorePurchases() {
-    _inAppPurchase.restorePurchases();
-  }
-
-  Future<void> consume(String id) async {
-    await ConsumableStore.consume(id);
-    final List<String> consumables = await ConsumableStore.load();
-    setState(() {
-      _consumables = consumables;
-    });
-  }
-
-  Future<void> initStoreInfo() async {
-    final bool isAvailable = await InAppPurchase.instance.isAvailable();
-    if (!isAvailable) {
-      setState(() {
-        _isAvailable = isAvailable;
-        _products = <ProductDetails>[];
-        _purchases = <PurchaseDetails>[];
-        _notFoundIds = <String>[];
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
-      });
-      return;
-    }
-    if (Utils.isIOS) {
-      final iosPlatformAddition = _inAppPurchase.getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
-      await iosPlatformAddition.setDelegate(IOSPaymentQueueDelegate());
-    }
-
-    final productDetailResponse = await _inAppPurchase.queryProductDetails(_kProductIds.toSet());
-    if (productDetailResponse.error != null) {
-      setState(() {
-        _queryProductError = productDetailResponse.error!.message;
-        _isAvailable = isAvailable;
-        _products = productDetailResponse.productDetails;
-        _purchases = <PurchaseDetails>[];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
-      });
-      return;
-    }
-
-    if (productDetailResponse.productDetails.isEmpty) {
-      setState(() {
-        _queryProductError = null;
-        _isAvailable = isAvailable;
-        _products = productDetailResponse.productDetails;
-        _purchases = <PurchaseDetails>[];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
-      });
-      return;
-    }
-
-    final List<String> consumables = await ConsumableStore.load();
-    setState(() {
-      _isAvailable = isAvailable;
-      _products = productDetailResponse.productDetails;
-      _notFoundIds = productDetailResponse.notFoundIDs;
-      _consumables = consumables;
-      _purchasePending = false;
-      _loading = false;
-    });
-  }
-
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) async {
     for (final PurchaseDetails purchaseDetails in purchaseDetailsList) {
-      var status = purchaseDetails.status;
-      if (status == PurchaseStatus.pending) {
-        setState(() {
-          _purchasePending = true;
-        });
+      if (purchaseDetails.status == PurchaseStatus.pending) {
+        _purchasePending = true;
       } else {
-        if (status == PurchaseStatus.error) {
+        if (purchaseDetails.status == PurchaseStatus.error) {
           debugPrint("error : ${purchaseDetails.error!}");
-          setState(() {
-            _purchasePending = false;
-          });
-        } else if (status == PurchaseStatus.purchased || status == PurchaseStatus.restored) {
-          final bool valid = await _verifyPurchase(purchaseDetails);
-          if (valid) {
-            deliverProduct(purchaseDetails);
-          } else {
-            _handleInvalidPurchase(purchaseDetails);
-            return;
-          }
+          _purchasePending = false;
+        } else if (purchaseDetails.status == PurchaseStatus.purchased || purchaseDetails.status == PurchaseStatus.restored) {
+          //TODO: send purchase detail to server verified
         }
         if (Utils.isAndroid) {
-          if (!_kAutoConsume && purchaseDetails.productID == _kConsumableId) {
+          if (!_kAutoConsume && _isConsumable(purchaseDetails.productID)) {
             var androidAddition = _inAppPurchase.getPlatformAddition<InAppPurchaseAndroidPlatformAddition>();
             await androidAddition.consumePurchase(purchaseDetails);
           }
@@ -235,41 +104,45 @@ class AppIAP {
     }
   }
 
-  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) {
-    // IMPORTANT!! Always verify a purchase before delivering the product.
-    // For the purpose of an example, we directly return true.
-    return Future<bool>.value(true);
-  }
 
-  Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
-    // IMPORTANT!! Always verify purchase details before delivering the product.
-    if (purchaseDetails.productID == _kConsumableId) {
-      await ConsumableStore.save(purchaseDetails.purchaseID!);
-      final List<String> consumables = await ConsumableStore.load();
-      _purchasePending = false;
-      _consumables = consumables;
+  void purchase(ProductDetails productDetails) {
+    late PurchaseParam purchaseParam;
+    if (Utils.isAndroid) {
+      var oldSubscription = null;// _getOldSubscription(productDetails, purchases);//TODO oldSubscription
+      ChangeSubscriptionParam? changeParam;
+      if (oldSubscription != null) {
+        changeParam = ChangeSubscriptionParam(oldPurchaseDetails: oldSubscription, prorationMode: ProrationMode.immediateWithTimeProration);
+      }
+      purchaseParam = GooglePlayPurchaseParam(productDetails: productDetails, changeSubscriptionParam: changeParam);
     } else {
-      _purchases.add(purchaseDetails);
-      _purchasePending = false;
+      purchaseParam = PurchaseParam(productDetails: productDetails);
+    }
+    if (_isConsumable(productDetails.id)) {
+      _inAppPurchase.buyConsumable(purchaseParam: purchaseParam, autoConsume: _kAutoConsume);
+    } else {
+      _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
     }
   }
 
-  void _handleInvalidPurchase(PurchaseDetails purchaseDetails) {
-    // handle invalid purchase here if  _verifyPurchase` failed.
+  void restorePurchases() {
+    _inAppPurchase.restorePurchases();
   }
 
   GooglePlayPurchaseDetails? _getOldSubscription(ProductDetails productDetails, Map<String, PurchaseDetails> purchases) {
     GooglePlayPurchaseDetails? oldSubscription;
-    if (productDetails.id == _kWeekSubscriptionId && purchases[_kMonthSubscriptionId] != null) {
-      oldSubscription = purchases[_kMonthSubscriptionId]! as GooglePlayPurchaseDetails;
-    } else if (productDetails.id == _kMonthSubscriptionId && purchases[_kWeekSubscriptionId] != null) {
-      oldSubscription = purchases[_kWeekSubscriptionId]! as GooglePlayPurchaseDetails;
+    if (productDetails.id == kWeekSubscriptionId && purchases[kYearSubscriptionId] != null) {
+      oldSubscription = purchases[kYearSubscriptionId]! as GooglePlayPurchaseDetails;
+    } else if (productDetails.id == kYearSubscriptionId && purchases[kWeekSubscriptionId] != null) {
+      oldSubscription = purchases[kWeekSubscriptionId]! as GooglePlayPurchaseDetails;
     }
     return oldSubscription;
   }
 
-  void setState(VoidCallback func) {
-    func();
+  bool _isConsumable(String productId) {
+    if (productId == kWeekSubscriptionId || productId == kYearSubscriptionId) {
+      return false;
+    }
+    return true;
   }
 
 }

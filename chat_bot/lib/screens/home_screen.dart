@@ -41,12 +41,6 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
         _currentTabIndex = _tabSuggestController.index;
       });
     });
-
-    if (!viewModel.isPurchased) {
-      Future.delayed(const Duration(seconds: 1), () {
-        AppNavigator.goToPremiumScreen(false);
-      });
-    }
   }
 
   @override
@@ -63,6 +57,10 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
     String chatTitle;
     if (mainVm.isPurchased) {
       chatTitle = S.current.chat_title;
+    } else if (mainVm.freeMessageLeft == 1) {
+      chatTitle = S.current.free_chat_title_1;
+    } else if (mainVm.freeMessageLeft == 0) {
+      chatTitle = S.current.free_chat_title_0;
     } else {
       chatTitle = S.current.free_chat_title(mainVm.freeMessageLeft);
     }

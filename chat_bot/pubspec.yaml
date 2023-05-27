@@ -43,7 +43,7 @@ dependencies:
 
   flutter_udid: ^2.0.1
   google_fonts: ^4.0.4
-  webview_flutter: ^4.2.0
+  url_launcher: ^6.1.11
 
   google_mobile_ads: ^3.0.0
   in_app_purchase: ^3.1.5

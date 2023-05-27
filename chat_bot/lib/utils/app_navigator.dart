@@ -11,6 +11,7 @@ import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppNavigator {
 
@@ -64,15 +65,42 @@ class AppNavigator {
     navigatorKey.currentState?.pushNamed('/premium', arguments: showAdsOption);
   }
 
-  static void goToPrivacy() {
-    if (Utils.isMobile) {
-      navigatorKey.currentState?.pushNamed('/privacy');
+  static void goToContactUs() async {
+    final Uri params = Uri(
+      scheme: Utils.urlMailToScheme,
+      path: Utils.urlMailTo);
+    if (await canLaunchUrl(params)) {
+      await launchUrl(params);
+    } else {
+      debugPrint('Could not launch $params');
     }
   }
 
-  static void goToTerm() {
+  static void goToPrivacy() async {
     if (Utils.isMobile) {
-      navigatorKey.currentState?.pushNamed('/term');
+      // navigatorKey.currentState?.pushNamed('/privacy');
+      final Uri params = Uri(
+          scheme: Utils.urlPolicyScheme,
+          path: Utils.urlPolicy);
+      if (await canLaunchUrl(params)) {
+        await launchUrl(params, mode: LaunchMode.externalApplication);
+      } else {
+        debugPrint('Could not launch $params');
+      }
+    }
+  }
+
+  static void goToTerm() async {
+    if (Utils.isMobile) {
+      // navigatorKey.currentState?.pushNamed('/term');
+      final Uri params = Uri(
+          scheme: Utils.urlTermScheme,
+          path: Utils.urlTerm);
+      if (await canLaunchUrl(params)) {
+        await launchUrl(params, mode: LaunchMode.externalApplication);
+      } else {
+        debugPrint('Could not launch $params');
+      }
     }
   }
 

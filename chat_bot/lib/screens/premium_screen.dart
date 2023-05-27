@@ -1,12 +1,13 @@
 import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
-import 'package:chat_bot/models/sub_data.dart';
+import 'package:chat_bot/utils/app_iap.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/app_style.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 
 class PremiumScreen extends BaseStatefulWidget {
@@ -22,22 +23,68 @@ class PremiumScreen extends BaseStatefulWidget {
 
 class _PremiumScreenState extends BaseState<PremiumScreen> {
 
-  int _selectedIndex = 1;
-  List<SubData> subs = [
-    SubData(title: S.current.premium_week, price: S.current.premium_week_price, promotion: ''),
-    SubData(title: S.current.premium_month, price: S.current.premium_month_price, promotion: S.current.premium_promotion("85")),
-    SubData(title: S.current.premium_ads, price: S.current.premium_ads_price, promotion: '')
-  ];
+  int _selectedIndex = 0;
+  final int _adsIndex = 1000;
   RewardedAd? _rewardedAd;
 
   @override
   void initState() {
     super.initState();
-    _loadRewardAd(show: false);
+    if (Utils.isMobile) {
+      _loadRewardAd(show: false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> children = [];
+    children.addAll([
+      Container(height: 10),
+      Text(S.current.premium_title_hint, textAlign: TextAlign.center, style: AppStyle.body1B),
+      Text(S.current.premium_title_hint_1, textAlign: TextAlign.center, style: AppStyle.body2),
+      Container(height: 10),
+    ]);
+    //subs
+    var viewModel = context.watch<AppIAP>();
+    if (viewModel.products.isNotEmpty) {
+      _selectedIndex = 0;
+    } else {
+      _selectedIndex = _adsIndex;
+    }
+    for (int i = 0; i < viewModel.products.length; i++) {
+      children.add(Subscription(
+        onTap: () => onSubscriptionSelected(i),
+        isSelected: _selectedIndex == i,
+        detail: viewModel.products[i],
+      ));
+      if (i != viewModel.products.length - 1) {
+        children.add(Container(height: 10));
+      }
+    }
+    if (widget.showRewardAdsOption) {
+      children.add(Container(height: 10));
+      children.add(SubscriptionAds(onTap: () => onSubscriptionSelected(_adsIndex),
+        isSelected: _selectedIndex == _adsIndex)
+      );
+    }
+    children.addAll([
+      const SubscriptionFeatures(),
+      ElevatedButton(
+        onPressed: onSubscription,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
+          child: Text(_getPurchaseBtString(), style: AppStyle.headline6B),
+        ),
+      ),
+      Container(height: 10),
+      Center(child: InkWell(
+          onTap: () { },
+          child: Text(S.current.setting_restore_purchase, style: AppStyle.body2.apply(decoration: TextDecoration.underline)))
+      ),
+      Container(height: 10),
+      SubscriptionTerm(term: _getPurchaseBtString())
+    ]);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.premium_title),
@@ -52,38 +99,7 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(height: 10),
-              Text(S.current.premium_title_hint, textAlign: TextAlign.center, style: AppStyle.body1B),
-              Text(S.current.premium_title_hint_1, textAlign: TextAlign.center, style: AppStyle.body2),
-              Container(height: 10),
-              Subscription(onTap: () => onSubscriptionSelected(1),
-                  isSelected: _selectedIndex == 1, sub: subs[0]),
-              Container(height: 10),
-              Subscription(onTap: () => onSubscriptionSelected(2),
-                  isSelected: _selectedIndex == 2, sub: subs[1]),
-              Visibility(visible: widget.showRewardAdsOption, child: Container(height: 10)),
-              Visibility(
-                visible: widget.showRewardAdsOption,
-                child: Subscription(onTap: () => onSubscriptionSelected(3),
-                    isSelected: _selectedIndex == 3, sub: subs[2]),
-              ),
-              const SubscriptionFeatures(),
-              ElevatedButton(
-                onPressed: onSubscription,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
-                  child: Text(_getPurchaseBtString(), style: AppStyle.headline6B),
-                ),
-              ),
-              Container(height: 10),
-              Center(child: InkWell(
-                  onTap: () { },
-                  child: Text(S.current.setting_restore_purchase, style: AppStyle.body2.apply(decoration: TextDecoration.underline)))
-              ),
-              Container(height: 10),
-              SubscriptionTerm(term: _getPurchaseBtString())
-            ],
+            children: children
           ),
         ),
       ),
@@ -91,21 +107,28 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
   }
 
   String _getPurchaseBtString() {
-    if (_selectedIndex == 1) {
-      return S.current.premium_purchase_try_for_free;
-    } else if (_selectedIndex == 2) {
-      return S.current.premium_purchase;
+    if (_selectedIndex == _adsIndex) {
+      return S.current.premium_purchase_ads;
     }
-    return S.current.premium_purchase_ads;
+    var products = context.read<AppIAP>().products;
+    if (_selectedIndex >= 0 && _selectedIndex < products.length) {
+      var product = products[_selectedIndex];
+      if (product.id == AppIAP.kWeekSubscriptionId) {
+        return S.current.premium_purchase_try_for_free;
+      }
+    }
+    return S.current.premium_purchase;
   }
 
   void onSubscription() {
-    if (_selectedIndex == 1) {
-
-    } else if (_selectedIndex == 2) {
-
-    } else {
+    if (_selectedIndex == _adsIndex) {
       _showRewardAd();
+      return;
+    }
+    var viewModel = context.read<AppIAP>();
+    if (_selectedIndex >= 0 && _selectedIndex < viewModel.products.length) {
+      var product = viewModel.products[_selectedIndex];
+      viewModel.purchase(product);
     }
   }
 
@@ -172,9 +195,10 @@ class Subscription extends BaseStatelessWidget {
 
   final VoidCallback onTap;
   final bool isSelected;
-  final SubData sub;
+  final String promotion = "";
+  final ProductDetails detail;
 
-  const Subscription({Key? key, required this.onTap, required this.isSelected, required this.sub}) : super(key: key);
+  const Subscription({Key? key, required this.onTap, required this.isSelected, required this.detail}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -198,13 +222,13 @@ class Subscription extends BaseStatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(sub.title, style: AppStyle.body1B),
-                      Text(sub.price, style: AppStyle.body2)
+                      Text(detail.title, style: AppStyle.body1B),
+                      Text("${detail.price}, ${detail.description}", style: AppStyle.body2),
                     ]
                 ),
               ),
               Visibility(
-                visible: sub.promotion.isNotEmpty,
+                visible: promotion.isNotEmpty,
                 child: Positioned(
                   top: 0.0, right: 0.0, child: Container(
                     decoration: ShapeDecoration(
@@ -213,11 +237,54 @@ class Subscription extends BaseStatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
-                      child: Text(sub.promotion, style: AppStyle.body2.apply(color: Colors.white)),
+                      child: Text(promotion, style: AppStyle.body2.apply(color: Colors.white)),
                     ),
                     )
                   )
                 ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+}
+
+class SubscriptionAds extends BaseStatelessWidget {
+
+  final VoidCallback onTap;
+  final bool isSelected;
+
+  const SubscriptionAds({Key? key, required this.onTap, required this.isSelected}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      onTap: onTap,
+      child: Material(
+        elevation: 1.0,
+        borderOnForeground: true,
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          decoration: BoxDecoration(border: Border.all(color: AppStyle.colorBorder(context, isSelected)),
+              color: AppStyle.colorBgElevatedButton(context, isSelected),
+              borderRadius: const BorderRadius.all(Radius.circular(15))
+          ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(S.current.premium_ads, style: AppStyle.body1B),
+                      Text(S.current.premium_ads_price, style: AppStyle.body2),
+                    ]
+                ),
+              )
             ],
           ),
         ),

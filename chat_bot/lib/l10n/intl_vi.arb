@@ -17,8 +17,10 @@
 
   "chat_history_title": "Lịch sử chat",
 
-  "free_chat_title": "Miễn phí {value}",
+  "free_chat_title": "Miễn phí {value} tin nhắn",
   "@free_chat_title": {"placeholders": {"value": {"type": "int"}}},
+  "free_chat_title_1": "Miễn phí 1 tin nhắn",
+  "free_chat_title_0": "Miễn phí 0 tin nhắn",
   "chat_title": "Vega AI",
   "chat_send_message_hint": "Gửi tin nhắn...",
   "chat_wait_response" : "Vui lòng đợi phản hồi của bot trước khi đặt câu hỏi tiếp...",
@@ -42,9 +44,7 @@
   "premium_title_hint": "PREMIUM",
   "premium_title_hint_1": "Bạn sẽ có toàn quyền sử dụng ứng dụng của chúng tôi với giới hạn cao. Hủy bỏ bất cứ lúc nào",
   "premium_week": "Gói tuần",
-  "premium_week_price": "3 ngày miễn phí, sau đó 100.000đ / tuần",
-  "premium_month": "Gói tháng",
-  "premium_month_price": "1.000.000đ / tháng, tự động tái tạo",
+  "premium_year": "Gói năm",
   "premium_ads": "Xem quảng cáo",
   "premium_ads_price": "Xem quảng cáo để nhận 1 lượt chat miễn phí",
   "premium_promotion": "(Tiết kiệm {value}%)",

@@ -20,7 +20,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'vi';
 
-  static String m0(value) => "Miễn phí ${value}";
+  static String m0(value) => "Miễn phí ${value} tin nhắn";
 
   static String m1(value) => "(Tiết kiệm ${value}%)";
 
@@ -41,6 +41,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "chat_wait_response": MessageLookupByLibrary.simpleMessage(
             "Vui lòng đợi phản hồi của bot trước khi đặt câu hỏi tiếp..."),
         "free_chat_title": m0,
+        "free_chat_title_0":
+            MessageLookupByLibrary.simpleMessage("Miễn phí 0 tin nhắn"),
+        "free_chat_title_1":
+            MessageLookupByLibrary.simpleMessage("Miễn phí 1 tin nhắn"),
         "home_conversation_delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "home_conversation_empty":
             MessageLookupByLibrary.simpleMessage("Không tìm thấy lịch sử."),
@@ -73,9 +77,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Không quảng cáo"),
         "premium_feature_4_desc": MessageLookupByLibrary.simpleMessage(
             "Không hiện quảng cáo trong khi dùng ứng dụng"),
-        "premium_month": MessageLookupByLibrary.simpleMessage("Gói tháng"),
-        "premium_month_price": MessageLookupByLibrary.simpleMessage(
-            "1.000.000đ / tháng, tự động tái tạo"),
         "premium_promotion": m1,
         "premium_purchase": MessageLookupByLibrary.simpleMessage("Mua"),
         "premium_purchase_ads":
@@ -88,8 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_title_hint_1": MessageLookupByLibrary.simpleMessage(
             "Bạn sẽ có toàn quyền sử dụng ứng dụng của chúng tôi với giới hạn cao. Hủy bỏ bất cứ lúc nào"),
         "premium_week": MessageLookupByLibrary.simpleMessage("Gói tuần"),
-        "premium_week_price": MessageLookupByLibrary.simpleMessage(
-            "3 ngày miễn phí, sau đó 100.000đ / tuần"),
+        "premium_year": MessageLookupByLibrary.simpleMessage("Gói năm"),
         "question_remove_all_conversation": MessageLookupByLibrary.simpleMessage(
             "Bạn có chắc chắn muốn xóa tất cả dữ liệu, cuộc trò chuyện và tin nhắn không. Bạn không thể hoàn tác hành động này"),
         "setting_clear_history":
