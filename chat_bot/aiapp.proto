@@ -21,6 +21,7 @@ message PBUser {
 	optional int32 dbId = 1;
 	optional int32 freeMsgLeft = 2;
 	optional bool isPurchased = 3;
+	optional string currentPackage = 4;
 }
 
 message PBChat {
@@ -50,4 +51,10 @@ message PBSuggestItem {
 
 message PBDailyLimit {
 	optional bool isLimited = 1;		//true = cần hiện popup, false = vẫn chat tiếp được, ko hiện popup
+}
+
+message PBErrorMessage {
+	optional int32 messageType = 1;							//1 = toast
+	optional string messageTitle = 2;
+	optional string messageContent = 3;
 }

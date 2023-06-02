@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chat_bot/data/app_web_socket.dart';
 import 'package:chat_bot/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -23,8 +24,8 @@ class AppIAP with ChangeNotifier {
 
   final bool _kAutoConsume = Utils.isIOS || true;
 
-  static const String kWeekSubscriptionId = 'com.vegaai.chatbot.weekly';
-  static const String kYearSubscriptionId = 'com.vegaai.chatbot.yearly';
+  static const String kWeekSubscriptionId = 'weekly';
+  static const String kYearSubscriptionId = 'yearly';
   static const List<String> _kProductIds = <String>[
     kWeekSubscriptionId,
     kYearSubscriptionId,
@@ -62,12 +63,6 @@ class AppIAP with ChangeNotifier {
     if (productDetailResponse.notFoundIDs.isNotEmpty) {
       debugPrint("products not found: ${productDetailResponse.notFoundIDs}");
     }
-    var purchases = Map<String, PurchaseDetails>.fromEntries(_purchases.map((PurchaseDetails purchase) {
-      if (purchase.pendingCompletePurchase) {
-        _inAppPurchase.completePurchase(purchase);
-      }
-      return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
-    }));
   }
 
   @override
@@ -89,7 +84,9 @@ class AppIAP with ChangeNotifier {
           debugPrint("error : ${purchaseDetails.error!}");
           _purchasePending = false;
         } else if (purchaseDetails.status == PurchaseStatus.purchased || purchaseDetails.status == PurchaseStatus.restored) {
-          //TODO: send purchase detail to server verified
+          if (purchaseDetails.purchaseID != null) {
+            AppWebSocket.instance.sendIAP(purchaseDetails.purchaseID!, purchaseDetails.productID);
+          }
         }
         if (Utils.isAndroid) {
           if (!_kAutoConsume && _isConsumable(purchaseDetails.productID)) {
@@ -108,7 +105,7 @@ class AppIAP with ChangeNotifier {
   void purchase(ProductDetails productDetails) {
     late PurchaseParam purchaseParam;
     if (Utils.isAndroid) {
-      var oldSubscription = null;// _getOldSubscription(productDetails, purchases);//TODO oldSubscription
+      var oldSubscription = null;//_getOldSubscription(productDetails, purchases);//TODO oldSubscription
       ChangeSubscriptionParam? changeParam;
       if (oldSubscription != null) {
         changeParam = ChangeSubscriptionParam(oldPurchaseDetails: oldSubscription, prorationMode: ProrationMode.immediateWithTimeProration);

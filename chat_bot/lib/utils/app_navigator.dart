@@ -62,6 +62,12 @@ class AppNavigator {
   }
 
   static void goToPremiumScreen(bool showAdsOption) {
+    if (navigatorKey.currentContext != null) {
+      String name = ModalRoute.of(navigatorKey.currentContext!)?.settings.name ?? "";
+      if (name == "/premium") {
+        return;
+      }
+    }
     navigatorKey.currentState?.pushNamed('/premium', arguments: showAdsOption);
   }
 

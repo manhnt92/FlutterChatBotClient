@@ -27,7 +27,7 @@ class AppWebSocket {
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult>? _connectivitySubscription;
 
-  static const String urlWebSocket = "ws://h2ksolution.com:3000/aichatserver";
+  static const String urlWebSocket = "wss://h2ksolution.com:3000/aichatserver";
   WebSocketChannel? _wsChannel;
   AppWebSocketState _currentState = AppWebSocketState.disconnected;
   Timer? _reconnectTimer;
@@ -139,6 +139,14 @@ class AppWebSocket {
     if (topicId > 0) {
       msg.params['topicId'] = _createIntValue(topicId);
     }
+    sendPBCommonMessage(msg);
+  }
+
+  void sendIAP(String token, String productId) {
+    var msg = PBCommonMessage();
+    msg.id = 20006;
+    msg.params["token"] = _createStringValue(token);
+    msg.params["productid"] = _createStringValue(productId);
     sendPBCommonMessage(msg);
   }
 

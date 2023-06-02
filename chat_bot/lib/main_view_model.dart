@@ -4,6 +4,7 @@ import 'package:chat_bot/data/app_web_socket.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/aiapp.pb.dart';
 import 'package:chat_bot/models/qa_message.dart';
+import 'package:chat_bot/models/user.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
 import 'package:chat_bot/utils/app_style.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,9 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
 
   String currentLangCode = "en";
   ThemeMode currentThemeMode = ThemeMode.system;
-  int userId = 0;
-  int freeMessageLeft = 0;
-  bool isPurchased = false;
+  // int userId = 0;
+  // int freeMessageLeft = 0;
+  // bool isPurchased = false;
 
   List<PBSuggest> suggest = [];
   final List<Conversation> conversations = [];
@@ -84,11 +85,7 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
     if (connected) {
       AppNavigator.scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     } else {
-      AppNavigator.scaffoldMessengerKey.currentState?.showSnackBar(
-          SnackBar(
-              content: Text(S.current.toast_no_internet_connection, style: AppStyle.body2), duration: const Duration(days: 365)
-          )
-      );
+      _showSnackBar(message: S.current.toast_no_internet_connection, duration: const Duration(days: 365));
     }
   }
 
@@ -118,12 +115,12 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
     var pbMsg = PBCommonMessage.fromBuffer(message);
     if (pbMsg.id == 10002) {
       var loginResponse = PBLoginResponse.fromBuffer(pbMsg.dataBytes);
-      userId = loginResponse.user.dbId;
-      freeMessageLeft = loginResponse.user.freeMsgLeft;
-      isPurchased = loginResponse.user.isPurchased;
-      debugPrint('login success: id=$userId, freeMsgLeft: $freeMessageLeft, isPurchased: $isPurchased');
+      User.instance.onLoginResponse(loginResponse);
+      // userId = loginResponse.user.dbId;
+      // freeMessageLeft = loginResponse.user.freeMsgLeft;
+      // isPurchased = loginResponse.user.isPurchased;
       notifyListeners();
-      if (!isPurchased) {
+      if (!User.instance.isPurchased) {
         Future.delayed(const Duration(seconds: 1), () {
           AppNavigator.goToPremiumScreen(false);
         });
@@ -137,15 +134,18 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
       notifyListeners();
     } else if (pbMsg.id == 11114) {
       var userInfo = PBUser.fromBuffer(pbMsg.dataBytes);
-      userId = userInfo.dbId;
-      freeMessageLeft = userInfo.freeMsgLeft;
-      isPurchased = userInfo.isPurchased;
+      User.instance.updateUserInfo(userInfo);
       notifyListeners();
     } else if (pbMsg.id == 10003) { //chat response
-      if (!isPurchased && freeMessageLeft == 0) {
+      if (!User.instance.isPurchased && User.instance.freeMessageLeft == 0) {
         Future.delayed(const Duration(seconds: 1), () {
           AppNavigator.goToPremiumScreen(true);
         });
+      }
+    } else if (pbMsg.id == 11111) {
+      var errorMsg = PBErrorMessage.fromBuffer(pbMsg.dataBytes);
+      if (errorMsg.messageType == 1) {
+        _showSnackBar(message: errorMsg.messageContent);
       }
     }
   }
@@ -174,6 +174,12 @@ class MainViewModel with ChangeNotifier, SocketEventListener {
     AppDatabase.instance.deleteAllConversation();
     conversations.clear();
     notifyListeners();
+  }
+
+  void _showSnackBar({required String message, Duration duration = const Duration(seconds: 3)}) {
+    AppNavigator.scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text(message, style: AppStyle.body2), duration: duration)
+    );
   }
 
 }

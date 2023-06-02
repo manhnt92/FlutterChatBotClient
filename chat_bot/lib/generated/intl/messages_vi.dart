@@ -20,12 +20,14 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'vi';
 
-  static String m0(value) => "Miễn phí ${value} tin nhắn";
+  static String m0(value) => "(Tiết kiệm ${value}%)";
 
-  static String m1(value) => "(Tiết kiệm ${value}%)";
-
-  static String m2(value) =>
+  static String m1(value) =>
       "Bằng cách nhấp vào \'${value}\', bạn đồng ý với Điều khoản của chúng tôi. Số tiền sẽ được tính và đăng ký sẽ được gia hạn trong khoảng thời gian đã chọn và ở cùng mức giá cho đến khi bạn hủy đăng ký trong cài đặt Google Play.\n\nNó không phải là truy cập không giới hạn. Kế hoạch là nhằm mục đích sử dụng cá nhân. Nếu bạn vượt quá hạn ngạch, quyền truy cập tài khoản của bạn có thể bị hạn chế hoặc tần suất yêu cầu giảm.";
+
+  static String m2(value) => "3 ngày miễn phí, sau đó ${value}/tuần";
+
+  static String m3(value) => "${value}/năm, tự động là mới";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -37,14 +39,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Câu hỏi tiếp"),
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Gửi tin nhắn..."),
-        "chat_title": MessageLookupByLibrary.simpleMessage("Vega AI"),
         "chat_wait_response": MessageLookupByLibrary.simpleMessage(
             "Vui lòng đợi phản hồi của bot trước khi đặt câu hỏi tiếp..."),
-        "free_chat_title": m0,
-        "free_chat_title_0":
-            MessageLookupByLibrary.simpleMessage("Miễn phí 0 tin nhắn"),
-        "free_chat_title_1":
-            MessageLookupByLibrary.simpleMessage("Miễn phí 1 tin nhắn"),
         "home_conversation_delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "home_conversation_empty":
             MessageLookupByLibrary.simpleMessage("Không tìm thấy lịch sử."),
@@ -77,11 +73,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Không quảng cáo"),
         "premium_feature_4_desc": MessageLookupByLibrary.simpleMessage(
             "Không hiện quảng cáo trong khi dùng ứng dụng"),
-        "premium_promotion": m1,
+        "premium_promotion": m0,
         "premium_purchase": MessageLookupByLibrary.simpleMessage("Mua"),
         "premium_purchase_ads":
             MessageLookupByLibrary.simpleMessage("Xem quảng cáo"),
-        "premium_purchase_term": m2,
+        "premium_purchase_term": m1,
         "premium_purchase_try_for_free":
             MessageLookupByLibrary.simpleMessage("Thử miễn phí"),
         "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),
@@ -89,7 +85,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_title_hint_1": MessageLookupByLibrary.simpleMessage(
             "Bạn sẽ có toàn quyền sử dụng ứng dụng của chúng tôi với giới hạn cao. Hủy bỏ bất cứ lúc nào"),
         "premium_week": MessageLookupByLibrary.simpleMessage("Gói tuần"),
+        "premium_week_desc": m2,
         "premium_year": MessageLookupByLibrary.simpleMessage("Gói năm"),
+        "premium_year_desc": m3,
         "question_remove_all_conversation": MessageLookupByLibrary.simpleMessage(
             "Bạn có chắc chắn muốn xóa tất cả dữ liệu, cuộc trò chuyện và tin nhắn không. Bạn không thể hoàn tác hành động này"),
         "setting_clear_history":

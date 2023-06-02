@@ -1,4 +1,5 @@
 import 'package:chat_bot/main_view_model.dart';
+import 'package:chat_bot/models/user.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/utils/app_navigator.dart';
@@ -50,7 +51,7 @@ class _SettingScreenState extends BaseState<SettingScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
               child: ElevatedButton(
-                onPressed: () { AppNavigator.goToPremiumScreen(true);} ,
+                onPressed: () { AppNavigator.goToPremiumScreen(User.instance.freeMessageLeft == 0);} ,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -129,7 +129,7 @@ class AppStyle {
   }
 
   // static ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.light);
-  static ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: HexColor("#471859"), brightness: Brightness.light);
+  static ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: HexColor("#471859"), brightness: Brightness.light, background: Colors.white);
   // static ColorScheme colorSchemeDark = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 106, 106), brightness: Brightness.dark);
   static ColorScheme colorSchemeDark = ColorScheme.fromSeed(seedColor: HexColor("#471859"), brightness: Brightness.dark);
 

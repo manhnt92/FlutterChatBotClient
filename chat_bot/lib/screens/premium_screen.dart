@@ -1,4 +1,5 @@
 import 'package:chat_bot/main_view_model.dart';
+import 'package:chat_bot/models/user.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/utils/app_iap.dart';
@@ -33,6 +34,12 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
     if (Utils.isMobile) {
       _loadRewardAd(show: false);
     }
+    var viewModel = context.read<AppIAP>();
+    if (viewModel.products.isNotEmpty) {
+      _selectedIndex = 0;
+    } else {
+      _selectedIndex = _adsIndex;
+    }
   }
 
   @override
@@ -46,11 +53,6 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
     ]);
     //subs
     var viewModel = context.watch<AppIAP>();
-    if (viewModel.products.isNotEmpty) {
-      _selectedIndex = 0;
-    } else {
-      _selectedIndex = _adsIndex;
-    }
     for (int i = 0; i < viewModel.products.length; i++) {
       children.add(Subscription(
         onTap: () => onSubscriptionSelected(i),
@@ -73,14 +75,16 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
         onPressed: onSubscription,
         child: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
-          child: Text(_getPurchaseBtString(), style: AppStyle.headline6B),
+          child: Text(_getPurchaseBtString(), textAlign: TextAlign.center, style: AppStyle.headline6B),
         ),
       ),
       Container(height: 10),
-      Center(child: InkWell(
-          onTap: () { },
-          child: Text(S.current.setting_restore_purchase, style: AppStyle.body2.apply(decoration: TextDecoration.underline)))
-      ),
+      // Center(child: InkWell(
+      //     onTap: () {
+      //       viewModel.restorePurchases();
+      //     },
+      //     child: Text(S.current.setting_restore_purchase, style: AppStyle.body2.apply(decoration: TextDecoration.underline)))
+      // ),
       Container(height: 10),
       SubscriptionTerm(term: _getPurchaseBtString())
     ]);
@@ -135,6 +139,7 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
   void onSubscriptionSelected(int index) {
     setState(() {
       _selectedIndex = index;
+      debugPrint("on subscription selected: $_selectedIndex");
     });
   }
 
@@ -176,15 +181,14 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
     if (_rewardedAd == null) {
       _loadRewardAd();
     } else {
-      int userId = context.read<MainViewModel>().userId;
+      int userId = User.instance.userId;
       _rewardedAd?.setServerSideOptions(ServerSideVerificationOptions(
         userId: userId.toString(),
         customData: userId.toString()
       ));
-      _rewardedAd?.show(
-          onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
-
-          }
+      _rewardedAd?.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
+          AppNavigator.goBack();
+        }
       );
     }
   }
@@ -195,13 +199,16 @@ class Subscription extends BaseStatelessWidget {
 
   final VoidCallback onTap;
   final bool isSelected;
-  final String promotion = "";
+  String promotion = "";
   final ProductDetails detail;
 
-  const Subscription({Key? key, required this.onTap, required this.isSelected, required this.detail}) : super(key: key);
+  Subscription({Key? key, required this.onTap, required this.isSelected, required this.detail}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String title = detail.id == AppIAP.kYearSubscriptionId ? S.current.premium_year : S.current.premium_week;
+    String desc = detail.id == AppIAP.kYearSubscriptionId ? S.current.premium_year_desc(detail.price) : S.current.premium_week_desc(detail.price);
+    promotion = detail.id == AppIAP.kYearSubscriptionId ? "Save 85%": "";
     return InkWell(
       customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       onTap: onTap,
@@ -222,8 +229,8 @@ class Subscription extends BaseStatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(detail.title, style: AppStyle.body1B),
-                      Text("${detail.price}, ${detail.description}", style: AppStyle.body2),
+                      Text(title, style: AppStyle.body1B),
+                      Text(desc, style: AppStyle.body2),
                     ]
                 ),
               ),

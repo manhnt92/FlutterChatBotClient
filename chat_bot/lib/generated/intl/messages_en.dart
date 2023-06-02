@@ -20,12 +20,14 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(value) => "Free ${value} Messages";
+  static String m0(value) => "(Save ${value}%)";
 
-  static String m1(value) => "(Save ${value}%)";
-
-  static String m2(value) =>
+  static String m1(value) =>
       "By clicking \'${value}\', you agree to our Terms. The amount will be charged, and the subscription will be extended for the selected period of time and at the same price until you cancel it int the Google Play settings.\n\nIt\'s not unlimited access. Plan is purposed for personal use. If you exceed the quota your account access may be limited or requests frequency decreased.";
+
+  static String m2(value) => "First 3 days free, then ${value}/week";
+
+  static String m3(value) => "${value}/year, auto renewable";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -36,14 +38,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Next Question"),
         "chat_send_message_hint":
             MessageLookupByLibrary.simpleMessage("Send a message..."),
-        "chat_title": MessageLookupByLibrary.simpleMessage("VegaAI Premium"),
         "chat_wait_response": MessageLookupByLibrary.simpleMessage(
             "Please wait for bot response before asking the next question..."),
-        "free_chat_title": m0,
-        "free_chat_title_0":
-            MessageLookupByLibrary.simpleMessage("Free 0 Message"),
-        "free_chat_title_1":
-            MessageLookupByLibrary.simpleMessage("Free 1 Message"),
         "home_conversation_delete":
             MessageLookupByLibrary.simpleMessage("Delete"),
         "home_conversation_empty":
@@ -60,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_title": MessageLookupByLibrary.simpleMessage("Home"),
         "premium_ads": MessageLookupByLibrary.simpleMessage("Reward Ads"),
         "premium_ads_price": MessageLookupByLibrary.simpleMessage(
-            "Watch ads to get 1 free chat"),
+            "Watch ads to get a free chat"),
         "premium_feature_1":
             MessageLookupByLibrary.simpleMessage("Powered by GPT4"),
         "premium_feature_1_desc":
@@ -75,11 +71,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium_feature_4": MessageLookupByLibrary.simpleMessage("No Ads"),
         "premium_feature_4_desc":
             MessageLookupByLibrary.simpleMessage("Enjoy app without ads"),
-        "premium_promotion": m1,
+        "premium_promotion": m0,
         "premium_purchase": MessageLookupByLibrary.simpleMessage("Purchase"),
         "premium_purchase_ads":
             MessageLookupByLibrary.simpleMessage("Watch ads"),
-        "premium_purchase_term": m2,
+        "premium_purchase_term": m1,
         "premium_purchase_try_for_free":
             MessageLookupByLibrary.simpleMessage("Try for free"),
         "premium_title": MessageLookupByLibrary.simpleMessage("Premium"),
@@ -87,8 +83,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("GO PREMIUM"),
         "premium_title_hint_1": MessageLookupByLibrary.simpleMessage(
             "You will get full access to our chatbot with high limits. Cancel anytime"),
-        "premium_week": MessageLookupByLibrary.simpleMessage("Weekly"),
-        "premium_year": MessageLookupByLibrary.simpleMessage("Yearly"),
+        "premium_week": MessageLookupByLibrary.simpleMessage("1 Week"),
+        "premium_week_desc": m2,
+        "premium_year": MessageLookupByLibrary.simpleMessage("1 Year"),
+        "premium_year_desc": m3,
         "question_remove_all_conversation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete all the data, chats and messages. You cannot undo this action"),
         "setting_clear_history":

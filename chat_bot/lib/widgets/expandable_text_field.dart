@@ -12,9 +12,9 @@ class ExpandableTextField extends StatefulWidget {
   final Future<bool> Function(String)? sendMessageCallback;
   final VoidCallback? newConversationCallback;
   final VoidCallback? clearSuggestContentCallback;
-  String? suggestContent;
+  final String? suggestContent;
 
-  ExpandableTextField({super.key, this.sendMessageCallback, this.clickCallback, this.newConversationCallback, this.suggestContent, this.clearSuggestContentCallback});
+  const ExpandableTextField({super.key, this.sendMessageCallback, this.clickCallback, this.newConversationCallback, this.suggestContent, this.clearSuggestContentCallback});
 
   @override
   State<StatefulWidget> createState() => _ExpandableTextFieldState();
@@ -119,6 +119,11 @@ class _ExpandableTextFieldState extends State<ExpandableTextField>  {
       _messageController.text = widget.suggestContent!;
       _messageController.selection = TextSelection.fromPosition(TextPosition(offset: _messageController.text.length));
       _currentChatLength = "${_messageController.text.length}/${Utils.chatMaxLength}";
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (widget.clearSuggestContentCallback != null) {
+          widget.clearSuggestContentCallback!();
+        }
+      });
     }
     return Column(
       children: <Widget>[

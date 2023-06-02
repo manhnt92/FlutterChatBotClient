@@ -17,11 +17,6 @@
 
   "chat_history_title": "History",
 
-  "free_chat_title": "Free {value} Messages",
-  "@free_chat_title": {"placeholders": {"value": {"type": "int"}}},
-  "free_chat_title_1": "Free 1 Message",
-  "free_chat_title_0": "Free 0 Message",
-  "chat_title": "VegaAI Premium",
   "chat_send_message_hint": "Send a message...",
   "chat_wait_response" : "Please wait for bot response before asking the next question...",
   "chat_next_question": "Next Question",
@@ -43,10 +38,14 @@
   "premium_title": "Premium",
   "premium_title_hint": "GO PREMIUM",
   "premium_title_hint_1": "You will get full access to our chatbot with high limits. Cancel anytime",
-  "premium_week": "Weekly",
-  "premium_year": "Yearly",
+  "premium_week": "1 Week",
+  "premium_week_desc": "First 3 days free, then {value}/week",
+  "@premium_week_desc": {"placeholders": {"value": {"type": "String"}}},
+  "premium_year": "1 Year",
+  "premium_year_desc": "{value}/year, auto renewable",
+  "@premium_year_desc": {"placeholders": {"value": {"type": "String"}}},
   "premium_ads": "Reward Ads",
-  "premium_ads_price": "Watch ads to get 1 free chat",
+  "premium_ads_price": "Watch ads to get a free chat",
   "premium_promotion": "(Save {value}%)",
   "@premium_promotion": {
     "placeholders": {

@@ -61,11 +61,12 @@ const PBUser$json = const {
     const {'1': 'dbId', '3': 1, '4': 1, '5': 5, '10': 'dbId'},
     const {'1': 'freeMsgLeft', '3': 2, '4': 1, '5': 5, '10': 'freeMsgLeft'},
     const {'1': 'isPurchased', '3': 3, '4': 1, '5': 8, '10': 'isPurchased'},
+    const {'1': 'currentPackage', '3': 4, '4': 1, '5': 9, '10': 'currentPackage'},
   ],
 };
 
 /// Descriptor for `PBUser`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pBUserDescriptor = $convert.base64Decode('CgZQQlVzZXISEgoEZGJJZBgBIAEoBVIEZGJJZBIgCgtmcmVlTXNnTGVmdBgCIAEoBVILZnJlZU1zZ0xlZnQSIAoLaXNQdXJjaGFzZWQYAyABKAhSC2lzUHVyY2hhc2Vk');
+final $typed_data.Uint8List pBUserDescriptor = $convert.base64Decode('CgZQQlVzZXISEgoEZGJJZBgBIAEoBVIEZGJJZBIgCgtmcmVlTXNnTGVmdBgCIAEoBVILZnJlZU1zZ0xlZnQSIAoLaXNQdXJjaGFzZWQYAyABKAhSC2lzUHVyY2hhc2VkEiYKDmN1cnJlbnRQYWNrYWdlGAQgASgJUg5jdXJyZW50UGFja2FnZQ==');
 @$core.Deprecated('Use pBChatDescriptor instead')
 const PBChat$json = const {
   '1': 'PBChat',
@@ -131,3 +132,15 @@ const PBDailyLimit$json = const {
 
 /// Descriptor for `PBDailyLimit`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List pBDailyLimitDescriptor = $convert.base64Decode('CgxQQkRhaWx5TGltaXQSHAoJaXNMaW1pdGVkGAEgASgIUglpc0xpbWl0ZWQ=');
+@$core.Deprecated('Use pBErrorMessageDescriptor instead')
+const PBErrorMessage$json = const {
+  '1': 'PBErrorMessage',
+  '2': const [
+    const {'1': 'messageType', '3': 1, '4': 1, '5': 5, '10': 'messageType'},
+    const {'1': 'messageTitle', '3': 2, '4': 1, '5': 9, '10': 'messageTitle'},
+    const {'1': 'messageContent', '3': 3, '4': 1, '5': 9, '10': 'messageContent'},
+  ],
+};
+
+/// Descriptor for `PBErrorMessage`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pBErrorMessageDescriptor = $convert.base64Decode('Cg5QQkVycm9yTWVzc2FnZRIgCgttZXNzYWdlVHlwZRgBIAEoBVILbWVzc2FnZVR5cGUSIgoMbWVzc2FnZVRpdGxlGAIgASgJUgxtZXNzYWdlVGl0bGUSJgoObWVzc2FnZUNvbnRlbnQYAyABKAlSDm1lc3NhZ2VDb250ZW50');

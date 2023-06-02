@@ -1,5 +1,6 @@
 import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/models/aiapp.pb.dart';
+import 'package:chat_bot/models/user.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
 import 'package:chat_bot/models/qa_message.dart';
@@ -53,17 +54,6 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var chatVm = context.watch<ChatViewModel>();
-    var mainVm = context.watch<MainViewModel>();
-    String chatTitle;
-    if (mainVm.isPurchased) {
-      chatTitle = S.current.chat_title;
-    } else if (mainVm.freeMessageLeft == 1) {
-      chatTitle = S.current.free_chat_title_1;
-    } else if (mainVm.freeMessageLeft == 0) {
-      chatTitle = S.current.free_chat_title_0;
-    } else {
-      chatTitle = S.current.free_chat_title(mainVm.freeMessageLeft);
-    }
     return WillPopScope(
       onWillPop: () async {
         if (!_isSuggest) {
@@ -73,7 +63,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(_isSuggest ? S.current.home_title : chatTitle),
+        appBar: AppBar(title: Text(_isSuggest ? S.current.home_title : ""),
           leading: _isSuggest ? null : InkWell(
             onTap : () => updateUI(true),
             child: const Icon(Icons.arrow_back),
@@ -372,7 +362,7 @@ class _HomeState extends BaseState<HomeScreen> with TickerProviderStateMixin {
     future.then((success) {
       if (!success) {
         Future.delayed(const Duration(milliseconds: 500), () {
-          AppNavigator.goToPremiumScreen(true);
+          AppNavigator.goToPremiumScreen(User.instance.freeMessageLeft == 0);
         });
       }
     });

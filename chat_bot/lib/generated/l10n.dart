@@ -210,46 +210,6 @@ class S {
     );
   }
 
-  /// `Free {value} Messages`
-  String free_chat_title(int value) {
-    return Intl.message(
-      'Free $value Messages',
-      name: 'free_chat_title',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Free 1 Message`
-  String get free_chat_title_1 {
-    return Intl.message(
-      'Free 1 Message',
-      name: 'free_chat_title_1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Free 0 Message`
-  String get free_chat_title_0 {
-    return Intl.message(
-      'Free 0 Message',
-      name: 'free_chat_title_0',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `VegaAI Premium`
-  String get chat_title {
-    return Intl.message(
-      'VegaAI Premium',
-      name: 'chat_title',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Send a message...`
   String get chat_send_message_hint {
     return Intl.message(
@@ -440,23 +400,43 @@ class S {
     );
   }
 
-  /// `Weekly`
+  /// `1 Week`
   String get premium_week {
     return Intl.message(
-      'Weekly',
+      '1 Week',
       name: 'premium_week',
       desc: '',
       args: [],
     );
   }
 
-  /// `Yearly`
+  /// `First 3 days free, then {value}/week`
+  String premium_week_desc(String value) {
+    return Intl.message(
+      'First 3 days free, then $value/week',
+      name: 'premium_week_desc',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `1 Year`
   String get premium_year {
     return Intl.message(
-      'Yearly',
+      '1 Year',
       name: 'premium_year',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `{value}/year, auto renewable`
+  String premium_year_desc(String value) {
+    return Intl.message(
+      '$value/year, auto renewable',
+      name: 'premium_year_desc',
+      desc: '',
+      args: [value],
     );
   }
 
@@ -470,10 +450,10 @@ class S {
     );
   }
 
-  /// `Watch ads to get 1 free chat`
+  /// `Watch ads to get a free chat`
   String get premium_ads_price {
     return Intl.message(
-      'Watch ads to get 1 free chat',
+      'Watch ads to get a free chat',
       name: 'premium_ads_price',
       desc: '',
       args: [],

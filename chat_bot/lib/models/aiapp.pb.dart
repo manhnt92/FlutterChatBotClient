@@ -221,6 +221,7 @@ class PBUser extends $pb.GeneratedMessage {
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dbId', $pb.PbFieldType.O3, protoName: 'dbId')
     ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'freeMsgLeft', $pb.PbFieldType.O3, protoName: 'freeMsgLeft')
     ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPurchased', protoName: 'isPurchased')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'currentPackage', protoName: 'currentPackage')
     ..hasRequiredFields = false
   ;
 
@@ -229,6 +230,7 @@ class PBUser extends $pb.GeneratedMessage {
     $core.int? dbId,
     $core.int? freeMsgLeft,
     $core.bool? isPurchased,
+    $core.String? currentPackage,
   }) {
     final _result = create();
     if (dbId != null) {
@@ -239,6 +241,9 @@ class PBUser extends $pb.GeneratedMessage {
     }
     if (isPurchased != null) {
       _result.isPurchased = isPurchased;
+    }
+    if (currentPackage != null) {
+      _result.currentPackage = currentPackage;
     }
     return _result;
   }
@@ -289,6 +294,15 @@ class PBUser extends $pb.GeneratedMessage {
   $core.bool hasIsPurchased() => $_has(2);
   @$pb.TagNumber(3)
   void clearIsPurchased() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get currentPackage => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set currentPackage($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasCurrentPackage() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCurrentPackage() => clearField(4);
 }
 
 class PBChat extends $pb.GeneratedMessage {
@@ -625,5 +639,80 @@ class PBDailyLimit extends $pb.GeneratedMessage {
   $core.bool hasIsLimited() => $_has(0);
   @$pb.TagNumber(1)
   void clearIsLimited() => clearField(1);
+}
+
+class PBErrorMessage extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PBErrorMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.aiapp'), createEmptyInstance: create)
+    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messageType', $pb.PbFieldType.O3, protoName: 'messageType')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messageTitle', protoName: 'messageTitle')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messageContent', protoName: 'messageContent')
+    ..hasRequiredFields = false
+  ;
+
+  PBErrorMessage._() : super();
+  factory PBErrorMessage({
+    $core.int? messageType,
+    $core.String? messageTitle,
+    $core.String? messageContent,
+  }) {
+    final _result = create();
+    if (messageType != null) {
+      _result.messageType = messageType;
+    }
+    if (messageTitle != null) {
+      _result.messageTitle = messageTitle;
+    }
+    if (messageContent != null) {
+      _result.messageContent = messageContent;
+    }
+    return _result;
+  }
+  factory PBErrorMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PBErrorMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PBErrorMessage clone() => PBErrorMessage()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PBErrorMessage copyWith(void Function(PBErrorMessage) updates) => super.copyWith((message) => updates(message as PBErrorMessage)) as PBErrorMessage; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static PBErrorMessage create() => PBErrorMessage._();
+  PBErrorMessage createEmptyInstance() => create();
+  static $pb.PbList<PBErrorMessage> createRepeated() => $pb.PbList<PBErrorMessage>();
+  @$core.pragma('dart2js:noInline')
+  static PBErrorMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PBErrorMessage>(create);
+  static PBErrorMessage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get messageType => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set messageType($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMessageType() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMessageType() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get messageTitle => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set messageTitle($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMessageTitle() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessageTitle() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get messageContent => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set messageContent($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasMessageContent() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearMessageContent() => clearField(3);
 }
 
