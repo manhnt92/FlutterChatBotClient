@@ -42,7 +42,7 @@ class AppNavigator {
   };
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    return CupertinoPageRoute(builder: (context) => _routes[settings.name]!(context, settings.arguments));
+    return CupertinoPageRoute(settings: settings, builder: (context) => _routes[settings.name]!(context, settings.arguments));
   }
 
   static Future<dynamic>? goToConversationsScreen() {
@@ -62,13 +62,7 @@ class AppNavigator {
   }
 
   static void goToPremiumScreen(bool showAdsOption) {
-    if (navigatorKey.currentContext != null) {
-      String name = ModalRoute.of(navigatorKey.currentContext!)?.settings.name ?? "";
-      if (name == "/premium") {
-        return;
-      }
-    }
-    navigatorKey.currentState?.pushNamed('/premium', arguments: showAdsOption);
+    navigatorKey.currentState?.pushNamedIfNotCurrent('/premium', arguments: showAdsOption);
   }
 
   static void goToContactUs() async {
@@ -112,6 +106,27 @@ class AppNavigator {
 
   static void goBack() {
     navigatorKey.currentState?.pop();
+  }
+
+}
+
+extension NavigatorStateExtension on NavigatorState {
+
+  void pushNamedIfNotCurrent( String routeName, {Object? arguments} ) {
+    if (!isCurrent(routeName)) {
+      pushNamed( routeName, arguments: arguments );
+    }
+  }
+
+  bool isCurrent(String routeName) {
+    bool isCurrent = false;
+    popUntil( (route) {
+      if (route.settings.name == routeName) {
+        isCurrent = true;
+      }
+      return true;
+    } );
+    return isCurrent;
   }
 
 }

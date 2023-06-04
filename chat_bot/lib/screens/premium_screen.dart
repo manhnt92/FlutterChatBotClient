@@ -1,4 +1,3 @@
-import 'package:chat_bot/main_view_model.dart';
 import 'package:chat_bot/models/user.dart';
 import 'package:chat_bot/screens/base.dart';
 import 'package:chat_bot/generated/l10n.dart';
@@ -40,6 +39,9 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
     } else {
       _selectedIndex = _adsIndex;
     }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
+    });
   }
 
   @override
@@ -72,10 +74,20 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
     children.addAll([
       const SubscriptionFeatures(),
       ElevatedButton(
+        style : ButtonStyle(
+          overlayColor: MaterialStateProperty.resolveWith((states) {
+            return states.contains(MaterialState.pressed) ? Theme.of(context).primaryColor : null;
+          }),
+          backgroundColor: MaterialStateProperty.resolveWith((states) {
+            return Theme.of(context).primaryColor.withAlpha(180);
+          })
+        ),
+        // style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor.withAlpha(180),
+        //   foregroundColor: Theme.of(context).primaryColor),
         onPressed: onSubscription,
         child: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
-          child: Text(_getPurchaseBtString(), textAlign: TextAlign.center, style: AppStyle.headline6B),
+          child: Text(_getPurchaseBtString(), textAlign: TextAlign.center, style: AppStyle.headline6B.apply(color: Colors.white)),
         ),
       ),
       Container(height: 10),
@@ -165,6 +177,9 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
           );
           debugPrint('$ad loaded.');
           _rewardedAd = ad;
+          _rewardedAd?.setServerSideOptions(ServerSideVerificationOptions(
+              customData: User.instance.userId.toString()
+          ));
           if (show) {
             _showRewardAd();
           }
@@ -179,12 +194,10 @@ class _PremiumScreenState extends BaseState<PremiumScreen> {
 
   void _showRewardAd() {
     if (_rewardedAd == null) {
-      _loadRewardAd();
+      _loadRewardAd(show: true);
     } else {
-      int userId = User.instance.userId;
       _rewardedAd?.setServerSideOptions(ServerSideVerificationOptions(
-        userId: userId.toString(),
-        customData: userId.toString()
+        customData: User.instance.userId.toString()
       ));
       _rewardedAd?.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
           AppNavigator.goBack();
@@ -239,16 +252,16 @@ class Subscription extends BaseStatelessWidget {
                 child: Positioned(
                   top: 0.0, right: 0.0, child: Container(
                     decoration: ShapeDecoration(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).primaryColor.withAlpha(180),
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(15), bottomLeft: Radius.circular(15)))
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
                       child: Text(promotion, style: AppStyle.body2.apply(color: Colors.white)),
                     ),
-                    )
                   )
-                ),
+                )
+              ),
             ],
           ),
         ),
@@ -307,6 +320,7 @@ class SubscriptionFeatures extends BaseStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Column(
@@ -317,7 +331,7 @@ class SubscriptionFeatures extends BaseStatelessWidget {
           Container(height: 5),
           _featureItem(const Icon(Icons.trending_up), S.current.premium_feature_2, S.current.premium_feature_2_desc),
           Container(height: 5),
-          _featureItem(Image.asset("assets/images/ic_infinite.png"), S.current.premium_feature_3, S.current.premium_feature_3_desc),
+          _featureItem(Image.asset(isDarkMode ? "assets/images/ic_infinite_white.png" : "assets/images/ic_infinite.png"), S.current.premium_feature_3, S.current.premium_feature_3_desc),
           Container(height: 5),
           _featureItem(const Icon(Icons.not_interested), S.current.premium_feature_4, S.current.premium_feature_4_desc),
         ]

@@ -84,9 +84,7 @@ class AppIAP with ChangeNotifier {
           debugPrint("error : ${purchaseDetails.error!}");
           _purchasePending = false;
         } else if (purchaseDetails.status == PurchaseStatus.purchased || purchaseDetails.status == PurchaseStatus.restored) {
-          if (purchaseDetails.purchaseID != null) {
-            AppWebSocket.instance.sendIAP(purchaseDetails.purchaseID!, purchaseDetails.productID);
-          }
+          AppWebSocket.instance.sendIAP(purchaseDetails.verificationData.serverVerificationData, purchaseDetails.productID);
         }
         if (Utils.isAndroid) {
           if (!_kAutoConsume && _isConsumable(purchaseDetails.productID)) {
